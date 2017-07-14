@@ -54,7 +54,7 @@
 	</servlet-mapping>
 
 	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
+		<welcome-file>console</welcome-file>
 	</welcome-file-list>
 
 	<error-page>

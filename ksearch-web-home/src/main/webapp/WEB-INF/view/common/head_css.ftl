@@ -18,5 +18,5 @@
 <!--[if lte IE 8]>
   <link rel="stylesheet" href="/assets/css/ace-ie.min.css" />
 <![endif]-->
-
+<link rel="stylesheet" href="/assets/js/bootstrap-table/bootstrap-table.min.css" />
 <!-- inline styles related to this page -->

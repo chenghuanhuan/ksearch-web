@@ -1,6 +1,6 @@
 <div class="navbar-container" id="navbar-container">
     <div class="navbar-header pull-left">
-        <a href="#" class="navbar-brand">
+        <a href="/console" class="navbar-brand">
             <small>
                 <i class="icon-leaf"></i>
                 K-Search

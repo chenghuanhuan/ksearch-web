@@ -47,3 +47,5 @@ window.jQuery || document.write("<script src='/assets/js/jquery-1.10.2.min.js'>"
 
 <script src="/assets/js/ace-elements.min.js"></script>
 <script src="/assets/js/ace.min.js"></script>
+<script src="/assets/js/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="/assets/js/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
