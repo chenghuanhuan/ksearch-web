@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.1.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task-4.1.xsd">
+
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <property name="name" value="${app_name}" />
+        <property name="url" value="${ksearch.jdbc.url}" />
+        <property name="username" value="${ksearch.jdbc.username}" />
+        <property name="password" value="${ksearch.jdbc.password}" />
+        <property name="initialSize" value="${ksearch.jdbc.initSize}" />
+        <property name="maxActive" value="${ksearch.jdbc.maxActive}" />
+        <property name="maxIdle" value="${ksearch.jdbc.maxIdle}" />
+        <property name="minIdle" value="${ksearch.jdbc.minIdle}" />
+        <property name="maxWait" value="${ksearch.jdbc.maxWait}" />
+        <property name="useUnfairLock" value="false" />
+        <property name="removeAbandoned" value="false" />
+        <property name="removeAbandonedTimeout" value="180" />
+        <property name="validationQuery" value="SELECT 1;" />
+        <property name="testWhileIdle" value="true" />
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <property name="minEvictableIdleTimeMillis" value="600000" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+        <property name="poolPreparedStatements" value="true" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="-1" />
+        <property name="filters" value="filter:wall" />
+    </bean>
+
+    <!-- 开启事务注解驱动 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <bean id="transactionTemplate"
+          class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="transactionManager" />
+    </bean>
+
+    <bean id="fortSqlSessionFactory" class="com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:META-INF/mybatis-config.xml"/>
+        <property name="dataSource" ref="dataSource" />
+        <property name="mapperLocations" value="classpath*:META-INF/mapper/*.xml"/>
+        <property name="typeAliasesPackage" value="la.kaike.ksearch.model.dbo" />
+
+        <property name="plugins">
+            <array>
+                <!-- 分页插件配置 -->
+                <bean id="paginationInterceptor" class="com.baomidou.mybatisplus.plugins.PaginationInterceptor">
+                </bean>
+            </array>
+        </property>
+        <!--<property name="globalConfig" ref="globalConfig"/>-->
+    </bean>
+
+    <bean id="globalConfig" class="com.baomidou.mybatisplus.entity.GlobalConfiguration">
+        <!--
+            AUTO->`0`("数据库ID自增")
+             INPUT->`1`(用户输入ID")
+            ID_WORKER->`2`("全局唯一ID")
+            UUID->`3`("全局唯一ID")
+        -->
+        <property name="idType" value="2" />
+        <!--
+            MYSQL->`mysql`
+            ORACLE->`oracle`
+            DB2->`db2`
+            H2->`h2`
+            HSQL->`hsql`
+            SQLITE->`sqlite`
+            POSTGRE->`postgresql`
+            SQLSERVER2005->`sqlserver2005`
+            SQLSERVER->`sqlserver`
+        -->
+        <!-- Oracle需要添加该项 -->
+        <!-- <property name="dbType" value="oracle" /> -->
+        <!-- 全局表为下划线命名设置 true -->
+        <!-- <property name="dbColumnUnderline" value="true" /> -->
+        <property name="metaObjectHandler">
+            <bean class="la.kaike.ksearch.util.common.MyMetaObjectHandler" />
+        </property>
+    </bean>
+
+    <!-- 自动扫描映射器   	-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="la.kaike.ksearch.biz.dal.mapper" />
+        <property name="sqlSessionFactoryBeanName" value="fortSqlSessionFactory" />
+        <!--         <property name="markerInterface" value="com.qccr.superapi.core.general.BaseMapper"/> -->
+    </bean>
+</beans>
