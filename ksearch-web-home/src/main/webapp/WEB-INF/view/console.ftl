@@ -171,8 +171,8 @@
 
                                         <div class="infobox infobox-blue2  ">
                                             <div class="infobox-progress">
-                                                <div class="easy-pie-chart percentage" data-percent="42" data-size="46">
-                                                    <span class="percent">42</span>%
+                                                <div class="easy-pie-chart percentage" id="successfulShardsPercent" data-percent="0" data-size="46">
+
                                                 </div>
                                             </div>
 
@@ -328,7 +328,10 @@
 								}else if (t.status=="red"){
 									cls = "danger";
 								}
-								html +='集群：'+'<button class="btn btn-'+cls+'">'+t.name+'</button>&nbsp;';
+								var content ='<span style=\'width: 45px;\' class=\'label label-sm label-success arrowed\'>green</span>'+ ':最健康的状态，说明所有的分片包括备份都可用</br>'+
+										'<span style=\'width: 45px;\' class=\'label label-sm label-yellow arrowed\'>yellow</span>:基本的分片可用，但是备份不可用（或者是没有备份）</br>'+
+										'<span style=\'width: 45px;\'  class=\'label label-sm label-danger arrowed\'>red</span>:部分的分片可用，表明分片有一部分损坏。此时执行查询部分数据仍然可以查到，遇到这种情况，还是赶快解决比较好</br>';
+								html +='集群：'+'<button data-trigger="hover" data-rel="popover" class="btn btn-'+cls+' tooltip-"'+cls+' data-content="'+content+'">'+t.name+'</button>&nbsp;';
 								html +='节点：';
 								var nodes = t.nodes;
 
@@ -357,25 +360,6 @@
 
 
 
-
-
-
-
-				$('.easy-pie-chart.percentage').each(function(){
-					var $box = $(this).closest('.infobox');
-					var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
-					var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
-					var size = parseInt($(this).data('size')) || 50;
-					$(this).easyPieChart({
-						barColor: barColor,
-						trackColor: trackColor,
-						scaleColor: false,
-						lineCap: 'butt',
-						lineWidth: parseInt(size/10),
-						animate: /msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()) ? false : 1000,
-						size: size
-					});
-				})
 
 				$('.sparkline').each(function(){
 					var $box = $(this).closest('.infobox');
@@ -518,10 +502,31 @@
             function initClusterStatistics(clusterName) {
                 var ajax = new $ax("/console/cluster/statistics", function (data) {
                     if (data.status===true) {
-						var value = data.data;
-						for (var v in value){
-						   $("#"+v).html(value[v]);
-						}
+                        var value = data.data;
+                        for (var v in value) {
+                            $("#" + v).html(value[v]);
+                        }
+
+                        var html = '<span class="percent">'+value.successfulShards+'</span>%';
+                        var successfulShardsPercent = $("#successfulShardsPercent").attr("data-percent",value.successfulShards);
+                        successfulShardsPercent.html(html);
+                        // 百分比图
+                        $('.easy-pie-chart.percentage').each(function () {
+                            var $box = $(this).closest('.infobox');
+                            var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
+                            var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
+                            var size = parseInt($(this).data('size')) || 50;
+                            $(this).easyPieChart({
+                                barColor: barColor,
+                                trackColor: trackColor,
+                                scaleColor: false,
+                                lineCap: 'butt',
+                                lineWidth: parseInt(size / 10),
+                                animate: /msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()) ? false : 1000,
+                                size: size
+                            });
+                        });
+
                     }
                 }, function (data) {
 
