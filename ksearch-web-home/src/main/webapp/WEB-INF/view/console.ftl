@@ -152,8 +152,8 @@
 											</div>
 
 											<div class="infobox-data">
-												<span class="infobox-data-number">32</span>
-												<div class="infobox-content">2个评论</div>
+												<span class="infobox-data-number" id="nodeSize"></span>
+												<div class="infobox-content">节点</div>
 											</div>
 											<#--<div class="stat stat-success">8%</div>-->
 										</div>
@@ -164,10 +164,27 @@
 											</div>
 
 											<div class="infobox-data">
-												<span class="infobox-data-number">11</span>
-												<div class="infobox-content">新粉丝</div>
+												<span class="infobox-data-number" id="totalShards"></span>
+												<div class="infobox-content">总分片数</div>
 											</div>
 										</div>
+
+                                        <div class="infobox infobox-blue2  ">
+                                            <div class="infobox-progress">
+                                                <div class="easy-pie-chart percentage" data-percent="42" data-size="46">
+                                                    <span class="percent">42</span>%
+                                                </div>
+                                            </div>
+
+                                            <div class="infobox-data">
+                                                <span class="infobox-text" id="successfulShards"></span>
+
+                                                <div class="infobox-content">
+                                                    <#--<span class="bigger-110">~</span>-->
+                                                    可用分片数
+                                                </div>
+                                            </div>
+                                        </div>
 
 										<div class="infobox infobox-pink  ">
 											<div class="infobox-icon">
@@ -175,8 +192,8 @@
 											</div>
 
 											<div class="infobox-data">
-												<span class="infobox-data-number">8</span>
-												<div class="infobox-content">新订单</div>
+												<span class="infobox-data-number" id="indices"></span>
+												<div class="infobox-content">索引个数</div>
 											</div>
 										</div>
 
@@ -186,8 +203,8 @@
 											</div>
 
 											<div class="infobox-data">
-												<span class="infobox-data-number">7</span>
-												<div class="infobox-content">调查</div>
+												<span class="infobox-data-number" id="documents"></span>
+												<div class="infobox-content">文档个数</div>
 											</div>
 										</div>
 
@@ -197,27 +214,12 @@
 											</div>
 
 											<div class="infobox-data">
-												<span class="infobox-data-number">6,251</span>
-												<div class="infobox-content">页面查看次数</div>
+												<span class="infobox-data-number" id="size"></span>
+												<div class="infobox-content">占用空间</div>
 											</div>
 										</div>
 
-										<div class="infobox infobox-blue2  ">
-											<div class="infobox-progress">
-												<div class="easy-pie-chart percentage" data-percent="42" data-size="46">
-													<span class="percent">42</span>%
-												</div>
-											</div>
 
-											<div class="infobox-data">
-												<span class="infobox-text">交易使用</span>
-
-												<div class="infobox-content">
-													<span class="bigger-110">~</span>
-													剩余58GB
-												</div>
-											</div>
-										</div>
 
 										<#--<div class="space-6"></div>-->
 
@@ -336,6 +338,12 @@
                             });
 							html+='</p>';
 							$("#cluster_info").html(html);
+
+							// 初始化健康信息
+                            initClusterHealth(datalist[0].name);
+                            $("#nodeSize").html(datalist[0].nodes.length);
+
+                            initClusterStatistics(datalist[0].name);
 						}
                     }
                 }, function (data) {
@@ -347,60 +355,9 @@
                 $('[data-rel=tooltip]').tooltip();
                 $('[data-rel=popover]').popover({html:true});
 
-                /**
-				 * 健康状况
-                 */
-                $('#cluster_health_table').bootstrapTable({
-                    striped:true,
-                    classes:"table table-no-bordered",
-                    showHeader:false,
-                    //cardView:true,
-                    url:"/console/cluster/health",
-                    columns: [{
-                        field: 'name',
-                        title: '参数'
-                    }, {
-                        field: 'value',
-                        title: '值'
-                    }]
-                });
 
 
 
-                $('#indices_table').bootstrapTable({
-                    striped:true,
-                    classes:"table table-no-bordered",
-                    //showHeader:false,
-                    //cardView:true,
-                    columns: [{
-                        field: 'index',
-                        title: '索引'
-                    }, {
-                        field: 'doc',
-                        title: '文档'
-                    }, {
-                        field: 'primarySize',
-                        title: '主节点大小'
-                    }, {
-                        field: 'shard',
-                        title: '主节点个数'
-                    }, {
-                        field: 'replicas',
-                        title: '副节点个数'
-                    }, {
-                        field: 'status',
-                        title: '状态'
-                    }],
-                    data: [{
-                        id: 1,
-                        name: 'Item 1',
-                        price: '$1'
-                    }, {
-                        id: 2,
-                        name: 'Item 2',
-                        price: '$2'
-                    }]
-                });
 
 
 
@@ -506,6 +463,72 @@
 
 
 			})
+
+            /**
+             * 健康状况
+             */
+			function initClusterHealth(clusterName) {
+
+                $('#cluster_health_table').bootstrapTable({
+                    striped:true,
+                    classes:"table table-no-bordered",
+                    showHeader:false,
+                    //cardView:true,
+                    url:"/console/cluster/health",
+                    columns: [{
+                        field: 'name',
+                        title: '参数'
+                    }, {
+                        field: 'value',
+                        title: '值'
+                    }]
+                });
+
+                $('#indices_table').bootstrapTable({
+                    striped:true,
+                    classes:"table table-no-bordered",
+                    //showHeader:false,
+                    //cardView:true,
+                    url:"/console/cluster/indeices",
+                    columns: [{
+                        field: 'indexName',
+                        title: '索引'
+                    }, {
+                        field: 'docs',
+                        title: '文档'
+                    }, {
+                        field: 'primarySize',
+                        title: '主节点大小'
+                    }, {
+                        field: 'shards',
+                        title: '主节点个数'
+                    }, {
+                        field: 'replicas',
+                        title: '副节点个数'
+                    }, {
+                        field: 'status',
+                        title: '状态'
+                    }]
+                });
+            }
+
+            /**
+			 * 数据统计
+             */
+            function initClusterStatistics(clusterName) {
+                var ajax = new $ax("/console/cluster/statistics", function (data) {
+                    if (data.status===true) {
+						var value = data.data;
+						for (var v in value){
+						   $("#"+v).html(value[v]);
+						}
+                    }
+                }, function (data) {
+
+                });
+
+                ajax.start();
+            }
 		</script>
 		<div style="text-align:center;">
 </div>

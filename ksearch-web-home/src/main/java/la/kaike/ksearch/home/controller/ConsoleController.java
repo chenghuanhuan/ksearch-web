@@ -8,9 +8,7 @@ import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.home.base.BaseController;
 import la.kaike.ksearch.model.Response;
 import la.kaike.ksearch.model.bo.ClusterHealthBO;
-import la.kaike.ksearch.model.vo.elastic.ClusterHealthListVO;
-import la.kaike.ksearch.model.vo.elastic.ClusterVO;
-import la.kaike.ksearch.model.vo.elastic.NodeStatsVO;
+import la.kaike.ksearch.model.vo.elastic.*;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.elasticsearch.action.admin.cluster.node.stats.NodeStats;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
@@ -94,6 +92,20 @@ public class ConsoleController extends BaseController{
         List<ClusterVO> clusterVOList = new ArrayList<>();
         clusterVOList.add(clusterVO);
         return succeed(clusterVOList);
+    }
+
+    @RequestMapping("/cluster/statistics")
+    @ResponseBody
+    public Response clusterStatistics(){
+        ClusterStatisticsVO clusterStatisticsVO = elasticSearchService.clusterStatistics("");
+        return succeed(clusterStatisticsVO);
+    }
+
+    @RequestMapping("/cluster/indeices")
+    @ResponseBody
+    public Response indicesList(){
+        List<IndicesVO> indicesVOList = elasticSearchService.getIndicesVO("");
+        return succeed(indicesVOList);
     }
 
 }

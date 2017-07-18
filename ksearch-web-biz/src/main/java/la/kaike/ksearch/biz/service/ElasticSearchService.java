@@ -5,7 +5,11 @@
 package la.kaike.ksearch.biz.service;
 
 import la.kaike.ksearch.model.bo.ClusterHealthBO;
+import la.kaike.ksearch.model.vo.elastic.ClusterStatisticsVO;
+import la.kaike.ksearch.model.vo.elastic.IndicesVO;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
+
+import java.util.List;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -24,4 +28,13 @@ public interface ElasticSearchService {
      * 获取节点信息
      */
     NodesStatsResponse nodeStats(String clusterName);
+
+    /**
+     * 获取统计信息
+     * @param clusterName
+     * @return
+     */
+    ClusterStatisticsVO clusterStatistics(String clusterName);
+
+    List<IndicesVO> getIndicesVO(String clusterName);
 }

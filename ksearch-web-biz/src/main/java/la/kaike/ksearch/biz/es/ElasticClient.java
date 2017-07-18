@@ -6,7 +6,11 @@ package la.kaike.ksearch.biz.es;
 
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
+import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
+import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
+import org.elasticsearch.client.ClusterAdminClient;
 import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.cluster.metadata.MetaData;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
@@ -62,20 +66,56 @@ public class ElasticClient {
         transportClient.close();
     }
 
+    /**
+     * 获取健康状况信息
+     * @return
+     */
     public  ClusterHealthResponse getClusterHealth(){
         ClusterHealthResponse response = transportClient.admin().cluster().prepareHealth().execute().actionGet();
         System.out.println(response);
         return response;
     }
 
-    public  NodesStatsResponse getNodeState(){
-        NodesStatsResponse response = transportClient.admin().cluster().prepareNodesStats().execute().actionGet();
+    /**
+     * 获取节点状态信息
+     * @return
+     */
+    public  NodesStatsResponse getNodeStats(){
+        NodesStatsResponse response = getClusterAdminClient().prepareNodesStats().execute().actionGet();
         return response;
     }
 
+    public MetaData getMetadata(){
+        //IndicesStatsResponse statsResponse = transportClient.admin().indices().prepareStats().execute().actionGet();
+        //GetSettingsResponse response = transportClient.admin().indices().prepareGetSettings().execute().actionGet();
+       // System.out.println(response.getSetting("product",""));
+        //"index.number_of_shards" -> "5"
+        //"index.number_of_replicas" -> "1"
+        //"index.creation_date" -> "1498813262911"
+        //"index.provided_name" -> "website"
+        //"index.uuid" -> "6BUJ_EefQXa6VYRrIQKBGQ"
+        //"index.version.created" -> "5040399"
+        ClusterStateResponse clusterStateResponse = getClusterAdminClient().prepareState().get();
+        MetaData metaData = clusterStateResponse.getState().getMetaData();
+        return metaData;
+    }
+
+    private ClusterAdminClient getClusterAdminClient(){
+        return transportClient.admin().cluster();
+    }
+
+    /**
+     * 获取状态信息
+     * @return
+     */
+    public IndicesStatsResponse getStats(){
+       IndicesStatsResponse response = transportClient.admin().indices().prepareStats().execute().actionGet();
+       return response;
+    }
 
     public static void main(String[] args) {
-
+        IndicesStatsResponse response = ElasticClient.newInstance().getStats();
+        System.out.println(ElasticClient.newInstance().getMetadata());
     }
 
 }

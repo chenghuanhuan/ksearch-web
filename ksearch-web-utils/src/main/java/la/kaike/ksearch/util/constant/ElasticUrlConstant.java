@@ -10,6 +10,4 @@ package la.kaike.ksearch.util.constant;
  */
 public interface ElasticUrlConstant {
 
-    String CLUSTER_HEALTH = "/_cluster/health";
-
 }
