@@ -128,10 +128,12 @@
 								<!-- PAGE CONTENT BEGINS -->
 
 								<div class="row">
-                                    <div class="col-xs-12">
+                                    <div class="col-xs-12" id="cluster_info">
                                         <#--<h3 class="header smaller lighter grey">集群</h3>-->
-                                        <p style="text-align: center;">
+                                        <p>
+											集群：
                                             <button class="btn">Default </button>
+											节点：
                                             <button class="btn btn-primary">Primary</button>
                                             <button class="btn btn-info">Info</button>
                                             <button class="btn btn-success">Success</button>
@@ -309,28 +311,61 @@
 		<script type="text/javascript">
 			jQuery(function($) {
 
+                /**
+                 * 集群信息
+                 */
+                var ajax = new $ax("/console/cluster/state/nodes", function (data) {
+                    if (data.status===true) {
+						var datalist = data.data;
+						if (datalist.length>0){
+						    var html ='<p>';
+							$.each(datalist,function (i,t) {
+							    var cls = "success";
+							    if (t.status=="yellow"){
+							        cls = "warning";
+								}else if (t.status=="red"){
+									cls = "danger";
+								}
+								html +='集群：'+'<button class="btn btn-'+cls+'">'+t.name+'</button>&nbsp;';
+								html +='节点：';
+								var nodes = t.nodes;
+
+								$.each(nodes,function (j,d) {
+									html +='<button data-rel="tooltip" title="'+d.transport_address+'" class="btn btn-xs btn-primary tooltip-success">'+d.name+'</button>&nbsp;';
+                                });
+                            });
+							html+='</p>';
+							$("#cluster_info").html(html);
+						}
+                    }
+                }, function (data) {
+
+                });
+                ajax.start();
+
+                // 初始化tooltip
+                $('[data-rel=tooltip]').tooltip();
+                $('[data-rel=popover]').popover({html:true});
+
+                /**
+				 * 健康状况
+                 */
                 $('#cluster_health_table').bootstrapTable({
                     striped:true,
                     classes:"table table-no-bordered",
                     showHeader:false,
                     //cardView:true,
+                    url:"/console/cluster/health",
                     columns: [{
-                        field: 'id',
+                        field: 'name',
                         title: '参数'
                     }, {
-                        field: 'name',
+                        field: 'value',
                         title: '值'
-                    }],
-                    data: [{
-                        id: 1,
-                        name: 'Item 1',
-                        price: '$1'
-                    }, {
-                        id: 2,
-                        name: 'Item 2',
-                        price: '$2'
                     }]
                 });
+
+
 
                 $('#indices_table').bootstrapTable({
                     striped:true,

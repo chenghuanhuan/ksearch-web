@@ -1,14 +1,17 @@
 package la.kaike.ksearch.home.base;
 
 import com.baomidou.mybatisplus.plugins.Page;
+import la.kaike.ksearch.model.Response;
 import la.kaike.ksearch.model.page.PageInfoBT;
 import la.kaike.ksearch.util.support.HttpKit;
-import la.kaike.ksearch.util.tips.SuccessTip;
 import la.kaike.ksearch.util.util.FileUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -18,13 +21,14 @@ import java.io.UnsupportedEncodingException;
 
 public class BaseController {
 
-    protected static String SUCCESS = "SUCCESS";
-    protected static String ERROR = "ERROR";
+    private static final Logger logger       = LoggerFactory.getLogger(BaseController.class);
 
-    protected static String REDIRECT = "redirect:";
-    protected static String FORWARD = "forward:";
 
-    protected static SuccessTip SUCCESS_TIP = new SuccessTip();
+    private static final String SYSTEM_ERROR = "系统异常";
+
+    private static final String SUCCESS_MSG  = "处理成功";
+
+    private static final String FAILED_MSG   = "处理失败";
 
     protected HttpServletRequest getHttpServletRequest() {
         return HttpKit.getRequest();
@@ -110,5 +114,70 @@ public class BaseController {
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentDispositionFormData("attachment", dfileName);
         return new ResponseEntity<byte[]>(fileBytes, headers, HttpStatus.CREATED);
+    }
+
+
+
+    /**
+     * @return
+     * @date: 2016年8月16日 下午4:22:06
+     */
+    public static Response succeed() {
+        return getResponseData(true, null, SUCCESS_MSG);
+    }
+
+    /**
+     * @param returnData
+     * @return
+     * @date: 2016年8月16日 下午4:22:09
+     */
+    public static Response succeed(Object returnData) {
+        return getResponseData(true, returnData, SUCCESS_MSG);
+    }
+
+    /**
+     * @return
+     * @date: 2016年8月16日 下午4:22:11
+     */
+    public static Response failed() {
+        return getResponseData(false, null, FAILED_MSG);
+    }
+
+    /**
+     * @param msg
+     * @return
+     * @date: 2016年8月16日 下午4:22:14
+     */
+    public static Response failed(String msg) {
+        return getResponseData(false, null, msg);
+    }
+
+    /**
+     * @param msg
+     * @return
+     * @date: 2016年8月16日 下午4:22:14
+     */
+    public static Response failed(String msg, Object data) {
+        return getResponseData(false, data, msg);
+    }
+
+
+    private static Response getResponseData(boolean status, Object data, String message) {
+        Response obj = new Response();
+        obj.setStatus(status);
+        obj.setData(data);
+        obj.setMsg(message);
+        return obj;
+    }
+
+    /**
+     * @param ex
+     * @return
+     * @date: 2016年8月16日 下午4:16:05
+     */
+    @ExceptionHandler(Exception.class)
+    public Response handleException(Exception ex) {
+        logger.error("system error", ex);
+        return failed(SYSTEM_ERROR + "，原因:" + ex.getMessage());
     }
 }

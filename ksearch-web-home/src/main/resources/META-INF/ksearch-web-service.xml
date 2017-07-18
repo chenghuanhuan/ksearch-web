@@ -17,5 +17,6 @@
     <!--expose-proxy表示是否要将当前的代理对象放入AopContext中 -->
     <aop:aspectj-autoproxy expose-proxy="true"/>
     <context:component-scan base-package="la.kaike.ksearch" />
-     <import resource="spring-mybatis.xml"/>
+    <import resource="spring-mybatis.xml"/>
+    <import resource="classpath*:disconf-client.xml"/>
 </beans>
