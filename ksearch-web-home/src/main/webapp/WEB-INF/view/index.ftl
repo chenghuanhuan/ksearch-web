@@ -209,7 +209,7 @@
                         field: 'operate',
                         title: '操作',
                         align: 'center',
-                        //events: operateEvents,
+                        events: operateEvents,
                         width:165,
                         formatter: function (value, row, index) {
 							var btns = '<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">'
@@ -221,7 +221,7 @@
                                     +'<i class="icon-edit bigger-120"></i>'
                                     +'</button>'
 
-                                    +'<button class="btn btn-xs btn-danger tooltip-danger" data-rel="tooltip" title="删除">'
+                                    +'<button class="btn btn-xs btn-danger tooltip-danger del" data-rel="tooltip" title="删除">'
                                     +'<i class="icon-trash bigger-120"></i>'
                                     +'</button>'
 
@@ -364,6 +364,20 @@
                     }]
                 });
             }
+
+            window.operateEvents = {
+                'click .del': function (e, value, row, index) {
+                    bootbox.confirm({
+                        size: "small",
+                        message: "确定要删除索引吗？删除后将无法恢复，请谨慎操作！！！",
+                        callback: function(result){
+                            if (result===true){
+
+                            }
+                        }
+                    })
+                }
+            };
 
 		</script>
 
