@@ -50,3 +50,5 @@ window.jQuery || document.write("<script src='/assets/js/jquery-1.10.2.min.js'>"
 <script src="/assets/js/bootstrap-table/bootstrap-table.min.js"></script>
 <script src="/assets/js/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
 <script src="/assets/js/common/ajax-object.js"></script>
+<script src="/assets/js/bootbox.min.js"></script>
+<script src="assets/js/fuelux/fuelux.spinner.min.js"></script>

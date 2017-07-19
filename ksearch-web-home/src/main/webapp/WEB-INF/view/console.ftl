@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>控制台 - Bootstrap后台管理系统模版Ace下载</title>
+		<title>控制台</title>
 		<meta name="keywords" content="" />
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,10 +22,7 @@
 	</head>
 
 	<body>
-		<div class="navbar navbar-default" id="navbar">
-			<script type="text/javascript">
-				try{ace.settings.check('navbar' , 'fixed')}catch(e){}
-			</script>
+
 
 		<#include "/common/head_bar.ftl"/>
 
@@ -112,7 +109,7 @@
 					</div>
 
 					<div class="page-content">
-						<div class="page-header">
+					<#--	<div class="page-header">
 							<h1>
 								控制台
 								<small>
@@ -120,7 +117,8 @@
 									 查看
 								</small>
 							</h1>
-						</div><!-- /.page-header -->
+						</div>-->
+						<!-- /.page-header -->
 
 						<div class="row">
 
@@ -476,10 +474,10 @@
                         title: '主节点大小'
                     }, {
                         field: 'shards',
-                        title: '主节点个数'
+                        title: '主分片个数'
                     }, {
                         field: 'replicas',
-                        title: '副节点个数'
+                        title: '副分片个数'
                     }, {
                         field: 'status',
                         title: '状态'
