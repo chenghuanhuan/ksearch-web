@@ -129,15 +129,6 @@
 
 								<div class="row">
                                     <div class="col-xs-12" id="cluster_info">
-                                        <#--<h3 class="header smaller lighter grey">集群</h3>-->
-                                        <p>
-											集群：
-                                            <button class="btn">Default </button>
-											节点：
-                                            <button class="btn btn-primary">Primary</button>
-                                            <button class="btn btn-info">Info</button>
-                                            <button class="btn btn-success">Success</button>
-                                        </p>
                                     </div>
 								</div>
                                 <div class="hr hr32 hr-dotted"></div>
@@ -332,7 +323,7 @@
 										'<span style=\'width: 45px;\' class=\'label label-sm label-yellow arrowed\'>yellow</span>:基本的分片可用，但是备份不可用（或者是没有备份）</br>'+
 										'<span style=\'width: 45px;\'  class=\'label label-sm label-danger arrowed\'>red</span>:部分的分片可用，表明分片有一部分损坏。此时执行查询部分数据仍然可以查到，遇到这种情况，还是赶快解决比较好</br>';
 								html +='集群：'+'<button data-trigger="hover" data-rel="popover" class="btn btn-'+cls+' tooltip-"'+cls+' data-content="'+content+'">'+t.name+'</button>&nbsp;';
-								html +='节点：';
+								html +='&nbsp;节点：';
 								var nodes = t.nodes;
 
 								$.each(nodes,function (j,d) {
