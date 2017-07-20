@@ -5,31 +5,34 @@
 package la.kaike.ksearch.biz.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
 import la.kaike.ksearch.biz.es.ElasticClient;
 import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.model.bo.ClusterHealthBO;
 import la.kaike.ksearch.model.vo.elastic.ClusterStatisticsVO;
 import la.kaike.ksearch.model.vo.elastic.IndicesVO;
 import la.kaike.ksearch.model.vo.index.AddIndexVO;
+import la.kaike.ksearch.model.vo.index.CloseIndexVO;
 import la.kaike.ksearch.model.vo.index.DelIndexVO;
 import la.kaike.ksearch.model.vo.index.RefreshIndexVO;
 import la.kaike.ksearch.util.constant.IndexSettingConstant;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
+import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
 import org.elasticsearch.action.admin.indices.stats.IndexStats;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
 import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.cluster.block.ClusterBlock;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
 import org.elasticsearch.cluster.metadata.MetaData;
+import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.unit.ByteSizeValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -91,6 +94,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     public List<IndicesVO> getIndicesVO(String clusterName) {
         List<IndicesVO> indicesVOList = new ArrayList<>();
 
+        /** 正在使用的索引 ***/
         IndicesStatsResponse clusterStatsResponse = ElasticClient.newInstance().getStats();
         MetaData metadata = ElasticClient.newInstance().getMetadata();
         Map<String, IndexStats> indexStatsMap = clusterStatsResponse.getIndices();
@@ -115,6 +119,25 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
                 indicesVOList.add(indicesVO);
             }
         }
+
+
+        /** 获取已关闭的索引 */
+
+        ClusterStateResponse clusterStateResponse = ElasticClient.newInstance().getClusterState();
+        ImmutableOpenMap<String,Set<ClusterBlock>> immutableOpenMap =  clusterStateResponse.getState().getBlocks().indices();
+        Iterator<ObjectObjectCursor<String, Set<ClusterBlock>>> iterator = immutableOpenMap.iterator();
+        while (iterator.hasNext()) {
+            ObjectObjectCursor<String,Set<ClusterBlock>> objectObjectCursor = iterator.next();
+
+            IndicesVO indicesVO = new IndicesVO();
+
+            Set<ClusterBlock> clusterBlockSet = objectObjectCursor.value;
+            ClusterBlock clusterBlock = clusterBlockSet.iterator().next();
+            indicesVO.setIndexName(objectObjectCursor.key);
+            indicesVO.setStatus(clusterBlock.status().name());
+            indicesVOList.add(indicesVO);
+        }
+
         return indicesVOList;
     }
 
@@ -136,7 +159,12 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
     @Override
     public void refreshIndex(RefreshIndexVO refreshIndexVO) {
-        ElasticClient.newInstance().getIndicesAdminClient().prepareRefresh(refreshIndexVO.getIndices().toArray(new String[]{}));
+        ElasticClient.newInstance().getIndicesAdminClient().prepareRefresh(refreshIndexVO.getIndices().toArray(new String[]{})).get();
+    }
+
+    @Override
+    public void closeIndex(CloseIndexVO closeIndexVO) {
+        ElasticClient.newInstance().getIndicesAdminClient().prepareClose(closeIndexVO.getIndices().toArray(new String[]{})).get();
     }
 
 

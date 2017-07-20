@@ -11,7 +11,7 @@ package la.kaike.ksearch.model.vo.elastic;
 public class IndicesVO {
 
     private String indexName;
-    private long docs;
+    private Long docs;
     private String primarySize;
     private Integer shards;
     private Integer replicas;
@@ -26,11 +26,11 @@ public class IndicesVO {
         this.indexName = indexName;
     }
 
-    public long getDocs() {
+    public Long getDocs() {
         return docs;
     }
 
-    public void setDocs(long docs) {
+    public void setDocs(Long docs) {
         this.docs = docs;
     }
 

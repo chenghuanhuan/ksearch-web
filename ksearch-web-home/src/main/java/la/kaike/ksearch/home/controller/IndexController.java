@@ -8,6 +8,7 @@ import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.home.base.BaseController;
 import la.kaike.ksearch.model.Response;
 import la.kaike.ksearch.model.vo.index.AddIndexVO;
+import la.kaike.ksearch.model.vo.index.CloseIndexVO;
 import la.kaike.ksearch.model.vo.index.DelIndexVO;
 import la.kaike.ksearch.model.vo.index.RefreshIndexVO;
 import org.springframework.stereotype.Controller;
@@ -41,7 +42,7 @@ public class IndexController extends BaseController{
     @ResponseBody
     public Response add(AddIndexVO addIndexVO){
         elasticSearchService.addIndex(addIndexVO);
-        return succeed();
+        return succeed("添加索引成功");
     }
 
     /**
@@ -53,7 +54,7 @@ public class IndexController extends BaseController{
     @ResponseBody
     public Response del(DelIndexVO delIndexVO){
         elasticSearchService.delIndex(delIndexVO);
-        return succeed();
+        return succeed("删除索引成功！");
     }
 
 
@@ -66,6 +67,18 @@ public class IndexController extends BaseController{
     @ResponseBody
     public Response refresh(RefreshIndexVO refreshIndexVO){
         elasticSearchService.refreshIndex(refreshIndexVO);
-        return succeed();
+        return succeed("刷新索引成功！");
+    }
+
+    /**
+     * 关闭索引
+     * @param closeIndexVO
+     * @return
+     */
+    @RequestMapping("/close")
+    @ResponseBody
+    public Response refresh(CloseIndexVO closeIndexVO){
+        elasticSearchService.closeIndex(closeIndexVO);
+        return succeed("关闭索引成功！");
     }
 }

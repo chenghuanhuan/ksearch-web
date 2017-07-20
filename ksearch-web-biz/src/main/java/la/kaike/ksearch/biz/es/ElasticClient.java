@@ -114,6 +114,15 @@ public class ElasticClient {
        return response;
     }
 
+    /**
+     * 集群状态信息
+     * @return
+     */
+    public ClusterStateResponse getClusterState(){
+        ClusterStateResponse clusterStateResponse = getClusterAdminClient().prepareState().execute().actionGet();
+        return clusterStateResponse;
+    }
+
     public IndicesAdminClient getIndicesAdminClient(){
         return getTransportClient().admin().indices();
     }

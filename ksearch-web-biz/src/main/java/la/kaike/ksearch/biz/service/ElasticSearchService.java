@@ -8,6 +8,7 @@ import la.kaike.ksearch.model.bo.ClusterHealthBO;
 import la.kaike.ksearch.model.vo.elastic.ClusterStatisticsVO;
 import la.kaike.ksearch.model.vo.elastic.IndicesVO;
 import la.kaike.ksearch.model.vo.index.AddIndexVO;
+import la.kaike.ksearch.model.vo.index.CloseIndexVO;
 import la.kaike.ksearch.model.vo.index.DelIndexVO;
 import la.kaike.ksearch.model.vo.index.RefreshIndexVO;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
@@ -62,4 +63,10 @@ public interface ElasticSearchService {
      * 刷新索引
      */
     void refreshIndex(RefreshIndexVO refreshIndexVO);
+
+    /**
+     * 关闭索引
+     * @param closeIndexVO
+     */
+    void closeIndex(CloseIndexVO closeIndexVO);
 }

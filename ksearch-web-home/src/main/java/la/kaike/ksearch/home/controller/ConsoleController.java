@@ -41,6 +41,10 @@ public class ConsoleController extends BaseController{
         return "console";
     }
 
+    /**
+     * 集群健康状况
+     * @return
+     */
     @RequestMapping("/cluster/health")
     @ResponseBody
     public Response clusterHealth(){
@@ -67,6 +71,10 @@ public class ConsoleController extends BaseController{
         return succeed(clusterHealthListVOList);
     }
 
+    /**
+     * 集群节点信息
+     * @return
+     */
     @RequestMapping("/cluster/state/nodes")
     @ResponseBody
     public Response clusterAndNode(){
@@ -94,6 +102,10 @@ public class ConsoleController extends BaseController{
         return succeed(clusterVOList);
     }
 
+    /**
+     * 集群统计信息
+     * @return
+     */
     @RequestMapping("/cluster/statistics")
     @ResponseBody
     public Response clusterStatistics(){
@@ -101,6 +113,10 @@ public class ConsoleController extends BaseController{
         return succeed(clusterStatisticsVO);
     }
 
+    /**
+     * 集群索引列表
+     * @return
+     */
     @RequestMapping("/cluster/indeices")
     @ResponseBody
     public Response indicesList(){

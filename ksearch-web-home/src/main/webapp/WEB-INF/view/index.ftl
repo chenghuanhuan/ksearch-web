@@ -204,7 +204,16 @@
                         title: '<span class="text-primary">副分片个数</span>'
                     }, {
                         field: 'status',
-                        title: '<span class="text-primary">状态</span>'
+                        title: '<span class="text-primary">状态</span>',
+                        formatter: function (value, row, index) {
+                            if (value === "OPEN"){
+                                var ret = '<span class="label label-sm label-success">'+value+'</span>';
+                                return ret;
+                            }else{
+                                var ret = '<span class="label label-sm label-default">'+value+'</span>';
+                                return ret;
+                            }
+                        }
                     }, {
                         field: 'operate',
                         title: '操作',
@@ -427,7 +436,7 @@
 
                     BootstrapDialog.confirm({
                         title: '提示',
-                        message: '确认要删除索引吗？删除后数据无法恢复，请确认后再操作！！！',
+                        message: '确认要删除索引:'+row.indexName+'吗？删除后数据无法恢复，请确认后再操作！！！',
                         type: BootstrapDialog.TYPE_DANGER, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
                         btnCancelLabel: '取消', // <-- Default value is 'Cancel',
                         btnOKLabel: '确定', // <-- Default value is 'OK',
@@ -458,7 +467,7 @@
 
                     BootstrapDialog.confirm({
                         title: '提示',
-                        message: '确认刷新？',
+                        message: '确认刷新索引：'+row.indexName+'吗？',
                         type: BootstrapDialog.TYPE_WARNING, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
                         btnCancelLabel: '取消', // <-- Default value is 'Cancel',
                         btnOKLabel: '确定', // <-- Default value is 'OK',
@@ -470,6 +479,37 @@
                                     // 成功
                                     if (data.status===true){
                                         new $myNotify().success("刷新成功");
+                                        // 刷新表格
+                                        $('#indices_table').bootstrapTable('refresh');
+                                    }else {
+                                        new $myNotify().danger(data.msg);
+                                    }
+                                },function (data) {
+
+                                });
+                                ajax.set("indices",row.indexName);
+                                ajax.set("clusterName","");
+                                ajax.start();
+                            }
+                        }
+                    });
+                },
+                'click .close-index': function (e, value, row, index) {
+
+                    BootstrapDialog.confirm({
+                        title: '提示',
+                        message: '确认关闭索引:'+row.indexName+'吗？',
+                        type: BootstrapDialog.TYPE_WARNING, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
+                        btnCancelLabel: '取消', // <-- Default value is 'Cancel',
+                        btnOKLabel: '确定', // <-- Default value is 'OK',
+                        btnOKClass: 'btn-warning', // <-- If you didn't specify it, dialog type will be used,
+                        callback: function(result) {
+                            // result will be true if button was click, while it will be false if users close the dialog directly.
+                            if(result) {
+                                var ajax = new $ax("/index/close", function (data) {
+                                    // 成功
+                                    if (data.status===true){
+                                        new $myNotify().success(data.data);
                                         // 刷新表格
                                         $('#indices_table').bootstrapTable('refresh');
                                     }else {
