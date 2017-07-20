@@ -267,28 +267,65 @@
                 // 添加索引
 
                 $("#addIndex").on(ace.click_event, function() {
-                    var form =$("#add_form").html();
 
-                    var dialog = bootbox.dialog({
-                        title:'添加索引',
-                        message: form,
-                        closeButton: true,
-                        buttons: {
-                            "保存": function () {
-                                
-                            },
-                            "关闭": function () {
-                                
-                            }
+                    BootstrapDialog.show({
+                        type:BootstrapDialog.TYPE_PRIMARY,
+                        title: '添加索引',
+                        closeByBackdrop: false,
+                        closeByKeyboard: false,
+                        //size:BootstrapDialog.SIZE_LARGE,
+                        message: function(dialog) {
+                            var form ='<div class="widget-main">'
+                                        +'<form class="form-horizontal" role="form">'
+                                            +'<div class="form-group">'
+                                                +'<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 索引名称 :</label>'
+                                                +'<div class="col-sm-10">'
+                                                     +'<input class="form-control input-mask-date" placeholder="请输入英文" type="text" id="form-field-mask-1" />'
+                                                +'</div>'
+                                            +'</div>'
+                                            +'<div class="form-group">'
+                                                +'<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 分片数 :</label>'
+                                                +'<div class="col-sm-4">'
+                                                    +'<input type="text" class="input-mini" id="spinner3" />'
+                                                +'</div>'
+                                                +'<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 副本数 :</label>'
+                                                +'<div class="col-sm-4">'
+                                                    +'<input type="text" class="input-mini" id="spinner2" />'
+                                                +'</div>'
+                                            +'</div>'
+                                        +'</form>'
+                                    +'</div>';
+                            return form;
                         },
-                        callback: function (result) {
-                            console.log('This was logged in the callback: ' + result);
+                        buttons: [{
+                            icon: 'icon-ok',
+                            label: '保存',
+                            cssClass: 'btn-success',
+                            autospin: true,
+                            action: function(dialogRef){
+                                dialogRef.enableButtons(false);
+                                dialogRef.setClosable(false);
+                                //dialogRef.getModalBody().html('Dialog closes in 5 seconds.');
+                                setTimeout(function(){
+                                    dialogRef.close();
+                                }, 5000);
+
+                                new $myNotify().warn("hhhh");
+
+
+                            }
+                        }, {
+                            icon:'icon-remove',
+                            label: '关闭',
+                            action: function(dialogRef){
+                                dialogRef.close();
+                            }
+                        }],
+                        onshown:function () {
+                            $('#spinner3').ace_spinner({value:1,min:1,max:100,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+                            $('#spinner2').ace_spinner({value:1,min:1,max:100,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
                         }
                     });
-
-                    $('#spinner3').ace_spinner({value:0,min:-100,max:100,step:10, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
-                    $('#spinner2').ace_spinner({value:0,min:-100,max:100,step:10, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
-
 
                 });
 
@@ -380,33 +417,5 @@
             };
 
 		</script>
-
-    <script type="text/html" id="add_form">
-
-
-        <form class="form-horizontal" role="form">
-            <div class="form-group">
-                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 索引名称 :</label>
-
-                <div class="col-sm-10">
-                    <input class="form-control input-mask-date" type="text" id="form-field-mask-1" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 分片数 :</label>
-
-                <div class="col-sm-4">
-                    <input type="text" class="input-mini" id="spinner3" />
-                </div>
-
-                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 副本数 :</label>
-
-                <div class="col-sm-4">
-                    <input type="text" class="input-mini" id="spinner2" />
-                </div>
-            </div>
-        </form>
-
-    </script>
 	</body>
 </html>

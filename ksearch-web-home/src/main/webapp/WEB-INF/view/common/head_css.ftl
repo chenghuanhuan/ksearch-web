@@ -20,3 +20,5 @@
 <![endif]-->
 <link rel="stylesheet" href="/assets/js/bootstrap-table/bootstrap-table.min.css" />
 <!-- inline styles related to this page -->
+
+<link rel="stylesheet" href="/assets/css/bootstrap-dialog/bootstrap-dialog.min.css" />
