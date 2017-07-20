@@ -66,5 +66,7 @@ public @interface Validate {
      * 枚举值列表，用逗号分割
      */
 	String enumValues() default "";
+
+	String desc() default "";
     
 }

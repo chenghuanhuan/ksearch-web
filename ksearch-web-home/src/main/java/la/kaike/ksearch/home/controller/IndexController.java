@@ -4,8 +4,17 @@
  */
 package la.kaike.ksearch.home.controller;
 
+import la.kaike.ksearch.biz.service.ElasticSearchService;
+import la.kaike.ksearch.home.base.BaseController;
+import la.kaike.ksearch.model.Response;
+import la.kaike.ksearch.model.vo.index.AddIndexVO;
+import la.kaike.ksearch.model.vo.index.DelIndexVO;
+import la.kaike.ksearch.model.vo.index.RefreshIndexVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -13,10 +22,50 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/index")
-public class IndexController {
+public class IndexController extends BaseController{
+
+    @Resource
+    private ElasticSearchService elasticSearchService;
 
     @RequestMapping
     public String index(){
         return "index";
+    }
+
+    /**
+     * 添加索引
+     * @param addIndexVO
+     * @return
+     */
+    @RequestMapping("/add")
+    @ResponseBody
+    public Response add(AddIndexVO addIndexVO){
+        elasticSearchService.addIndex(addIndexVO);
+        return succeed();
+    }
+
+    /**
+     * 删除索引
+     * @param delIndexVO
+     * @return
+     */
+    @RequestMapping("/del")
+    @ResponseBody
+    public Response del(DelIndexVO delIndexVO){
+        elasticSearchService.delIndex(delIndexVO);
+        return succeed();
+    }
+
+
+    /**
+     * 刷新索引
+     * @param refreshIndexVO
+     * @return
+     */
+    @RequestMapping("/refresh")
+    @ResponseBody
+    public Response refresh(RefreshIndexVO refreshIndexVO){
+        elasticSearchService.refreshIndex(refreshIndexVO);
+        return succeed();
     }
 }

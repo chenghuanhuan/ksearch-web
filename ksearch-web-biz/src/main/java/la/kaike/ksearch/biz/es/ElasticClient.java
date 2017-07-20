@@ -9,6 +9,7 @@ import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
 import org.elasticsearch.client.ClusterAdminClient;
+import org.elasticsearch.client.IndicesAdminClient;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.metadata.MetaData;
 import org.elasticsearch.common.settings.Settings;
@@ -58,7 +59,7 @@ public class ElasticClient {
         return client;
     }
 
-    public void setTransportClient(TransportClient transportClient) {
+    private void setTransportClient(TransportClient transportClient) {
         this.transportClient = transportClient;
     }
 
@@ -100,7 +101,7 @@ public class ElasticClient {
         return metaData;
     }
 
-    private ClusterAdminClient getClusterAdminClient(){
+    public ClusterAdminClient getClusterAdminClient(){
         return transportClient.admin().cluster();
     }
 
@@ -113,9 +114,16 @@ public class ElasticClient {
        return response;
     }
 
+    public IndicesAdminClient getIndicesAdminClient(){
+        return getTransportClient().admin().indices();
+    }
+
     public static void main(String[] args) {
         IndicesStatsResponse response = ElasticClient.newInstance().getStats();
         System.out.println(ElasticClient.newInstance().getMetadata());
     }
 
+    public TransportClient getTransportClient() {
+        return transportClient;
+    }
 }

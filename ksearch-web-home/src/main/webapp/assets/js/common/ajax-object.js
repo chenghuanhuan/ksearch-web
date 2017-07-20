@@ -4,7 +4,7 @@
 		this.type = "post";
 		this.data = {};
 		this.dataType = "json";
-		this.async = false;
+		//this.async = false;
 		this.success = success;
 		this.error = error;
 	};
@@ -23,7 +23,7 @@
 		        type: this.type,
 		        url: this.url,
 		        dataType: this.dataType,
-		        async: this.async,
+		        //async: this.async,
 		        data: this.data,
 				beforeSend: function(data) {
 					

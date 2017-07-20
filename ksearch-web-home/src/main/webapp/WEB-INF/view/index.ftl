@@ -213,11 +213,11 @@
                         width:165,
                         formatter: function (value, row, index) {
 							var btns = '<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">'
-                                    +'<button class="btn btn-xs btn-success tooltip-success" data-rel="tooltip" title="刷新">'
+                                    +'<button class="btn btn-xs btn-success tooltip-success refresh" data-rel="tooltip" title="刷新">'
                                     +'<i class="icon-ok bigger-120"></i>'
                                     +'</button>'
 
-                                    +'<button class="btn btn-xs btn-info tooltip-info" data-rel="tooltip" title="关闭">'
+                                    +'<button class="btn btn-xs btn-info tooltip-info close-index" data-rel="tooltip" title="关闭">'
                                     +'<i class="icon-edit bigger-120"></i>'
                                     +'</button>'
 
@@ -280,17 +280,17 @@
                                             +'<div class="form-group">'
                                                 +'<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 索引名称 :</label>'
                                                 +'<div class="col-sm-10">'
-                                                     +'<input class="form-control input-mask-date" placeholder="请输入英文" type="text" id="form-field-mask-1" />'
+                                                     +'<input class="form-control input-mask-date" placeholder="请输入英文或数字" type="text" id="index" />'
                                                 +'</div>'
                                             +'</div>'
                                             +'<div class="form-group">'
                                                 +'<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 分片数 :</label>'
                                                 +'<div class="col-sm-4">'
-                                                    +'<input type="text" class="input-mini" id="spinner3" />'
+                                                    +'<input type="text" class="input-mini" id="number_of_shards" />'
                                                 +'</div>'
                                                 +'<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 副本数 :</label>'
                                                 +'<div class="col-sm-4">'
-                                                    +'<input type="text" class="input-mini" id="spinner2" />'
+                                                    +'<input type="text" class="input-mini" id="number_of_replicas" />'
                                                 +'</div>'
                                             +'</div>'
                                         +'</form>'
@@ -301,17 +301,37 @@
                             icon: 'icon-ok',
                             label: '保存',
                             cssClass: 'btn-success',
-                            autospin: true,
+                            //autospin: true,
                             action: function(dialogRef){
-                                dialogRef.enableButtons(false);
-                                dialogRef.setClosable(false);
+                                //dialogRef.enableButtons(false);
+                                //dialogRef.setClosable(false);
                                 //dialogRef.getModalBody().html('Dialog closes in 5 seconds.');
-                                setTimeout(function(){
-                                    dialogRef.close();
-                                }, 5000);
+                                var index = $.trim($("#index").val());
+                                var number_of_shards = parseInt($("#number_of_shards").val());
+                                var number_of_replicas= parseInt($("#number_of_replicas").val());
 
-                                new $myNotify().warn("hhhh");
-
+                                // TODO 校验
+                                var ajax = new $ax("/index/add", function (data) {
+                                    // 成功
+                                    if (data.status===true){
+                                        new $myNotify().success("保存成功");
+                                        // 刷新表格
+                                        $('#indices_table').bootstrapTable('refresh');
+                                        // 关闭窗口
+                                        dialogRef.close();
+                                    }else {
+                                        new $myNotify().danger(data.msg);
+                                        dialogRef.enableButtons(true);
+                                        dialogRef.setClosable(true);
+                                    }
+                                },function (data) {
+                                    
+                                });
+                                ajax.set("index",index);
+                                ajax.set("numberOfShards",number_of_shards);
+                                ajax.set("numberOfReplicas",number_of_replicas);
+                                ajax.set("clusterName","");
+                                ajax.start();
 
                             }
                         }, {
@@ -322,8 +342,8 @@
                             }
                         }],
                         onshown:function () {
-                            $('#spinner3').ace_spinner({value:1,min:1,max:100,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
-                            $('#spinner2').ace_spinner({value:1,min:1,max:100,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+                            $('#number_of_shards').ace_spinner({value:1,min:1,max:100,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+                            $('#number_of_replicas').ace_spinner({value:1,min:1,max:100,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
                         }
                     });
 
@@ -404,15 +424,66 @@
 
             window.operateEvents = {
                 'click .del': function (e, value, row, index) {
-                    bootbox.confirm({
-                        size: "small",
-                        message: "确定要删除索引吗？删除后将无法恢复，请谨慎操作！！！",
-                        callback: function(result){
-                            if (result===true){
 
+                    BootstrapDialog.confirm({
+                        title: '提示',
+                        message: '确认要删除索引吗？删除后数据无法恢复，请确认后再操作！！！',
+                        type: BootstrapDialog.TYPE_DANGER, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
+                        btnCancelLabel: '取消', // <-- Default value is 'Cancel',
+                        btnOKLabel: '确定', // <-- Default value is 'OK',
+                        btnOKClass: 'btn-danger', // <-- If you didn't specify it, dialog type will be used,
+                        callback: function(result) {
+                            // result will be true if button was click, while it will be false if users close the dialog directly.
+                            if(result) {
+                                var ajax = new $ax("/index/del", function (data) {
+                                    // 成功
+                                    if (data.status===true){
+                                        new $myNotify().success("删除成功");
+                                        // 刷新表格
+                                        $('#indices_table').bootstrapTable('refresh');
+                                    }else {
+                                        new $myNotify().danger(data.msg);
+                                    }
+                                },function (data) {
+
+                                });
+                                ajax.set("indices",row.indexName);
+                                ajax.set("clusterName","");
+                                ajax.start();
                             }
                         }
-                    })
+                    });
+                },
+                'click .refresh': function (e, value, row, index) {
+
+                    BootstrapDialog.confirm({
+                        title: '提示',
+                        message: '确认刷新？',
+                        type: BootstrapDialog.TYPE_WARNING, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
+                        btnCancelLabel: '取消', // <-- Default value is 'Cancel',
+                        btnOKLabel: '确定', // <-- Default value is 'OK',
+                        btnOKClass: 'btn-warning', // <-- If you didn't specify it, dialog type will be used,
+                        callback: function(result) {
+                            // result will be true if button was click, while it will be false if users close the dialog directly.
+                            if(result) {
+                                var ajax = new $ax("/index/refresh", function (data) {
+                                    // 成功
+                                    if (data.status===true){
+                                        new $myNotify().success("刷新成功");
+                                        // 刷新表格
+                                        $('#indices_table').bootstrapTable('refresh');
+                                    }else {
+                                        new $myNotify().danger(data.msg);
+                                    }
+                                },function (data) {
+
+                                });
+                                ajax.set("indices",row.indexName);
+                                ajax.set("clusterName","");
+                                ajax.start();
+                            }
+                        }
+                    });
                 }
             };
 

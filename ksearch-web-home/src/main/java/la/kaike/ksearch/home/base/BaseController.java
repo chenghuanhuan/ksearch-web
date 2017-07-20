@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -176,6 +177,7 @@ public class BaseController {
      * @date: 2016年8月16日 下午4:16:05
      */
     @ExceptionHandler(Exception.class)
+    @ResponseBody
     public Response handleException(Exception ex) {
         logger.error("system error", ex);
         return failed(SYSTEM_ERROR + "，原因:" + ex.getMessage());

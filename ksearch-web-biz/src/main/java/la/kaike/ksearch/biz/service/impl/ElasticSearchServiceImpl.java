@@ -10,11 +10,15 @@ import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.model.bo.ClusterHealthBO;
 import la.kaike.ksearch.model.vo.elastic.ClusterStatisticsVO;
 import la.kaike.ksearch.model.vo.elastic.IndicesVO;
+import la.kaike.ksearch.model.vo.index.AddIndexVO;
+import la.kaike.ksearch.model.vo.index.DelIndexVO;
+import la.kaike.ksearch.model.vo.index.RefreshIndexVO;
 import la.kaike.ksearch.util.constant.IndexSettingConstant;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
 import org.elasticsearch.action.admin.indices.stats.IndexStats;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
+import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
 import org.elasticsearch.cluster.metadata.MetaData;
 import org.elasticsearch.common.settings.Settings;
@@ -113,4 +117,27 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         }
         return indicesVOList;
     }
+
+    @Override
+    public void addIndex(AddIndexVO addIndexVO) {
+        TransportClient client = ElasticClient.newInstance().getTransportClient();
+        client.admin().indices().prepareCreate(addIndexVO.getIndex()).setSettings(
+                Settings.builder()
+                        .put(IndexSettingConstant.NUMBER_OF_SHARDS,addIndexVO.getNumberOfShards())
+                        .put(IndexSettingConstant.NUMBER_OF_REPLICAS,addIndexVO.getNumberOfReplicas())
+        ).get();
+    }
+
+    @Override
+    public void delIndex(DelIndexVO delIndexVO) {
+        TransportClient client = ElasticClient.newInstance().getTransportClient();
+        client.admin().indices().prepareDelete(delIndexVO.getIndices().toArray(new String[]{})).get();
+    }
+
+    @Override
+    public void refreshIndex(RefreshIndexVO refreshIndexVO) {
+        ElasticClient.newInstance().getIndicesAdminClient().prepareRefresh(refreshIndexVO.getIndices().toArray(new String[]{}));
+    }
+
+
 }

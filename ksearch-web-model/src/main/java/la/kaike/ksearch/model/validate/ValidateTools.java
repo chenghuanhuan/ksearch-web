@@ -117,6 +117,10 @@ public class ValidateTools {
         Object value = FieldUtils.readField(field, req, true);
         //String name = req.getClass().getSimpleName() + "." + field.getName();
 		String name = field.getName();
+		String desc = validate.desc();
+		if ("".equals(desc)){
+			desc = name;
+		}
         // 设置默认值
         if (value == null && fieldValidator.getDefaultValue() != null) {
         	FieldUtils.writeField(field, req, fieldValidator.getDefaultValue(), true);
@@ -125,13 +129,13 @@ public class ValidateTools {
                 
     	// 较验字符串对象是否为blank
     	if (validate.isNotBlank() && value instanceof String && StringUtils.isBlank((String)value)) {
-        	return "parameter[" + name + "] can not blank"; 
+        	return "parameter[" + desc + "] can not blank";
         }
     	
     	// 当对象为空时，如果不是必传参数，则后面的校验不用做。
     	if (value == null) {
     		if (validate.required()) {
-    			return "parameter[" + name + "] is required";
+    			return "parameter[" + desc + "] is required";
     		} else {
     			return null;
     		}
@@ -140,55 +144,55 @@ public class ValidateTools {
     	// 较验最大长度
         if (validate.maxLength() > 0 && (value instanceof String || value instanceof List<?> || value.getClass().isArray())) {
         	if (value instanceof String && ((String)value).length() > validate.maxLength()) {
-    			return "parameter[" + name + "] length[" + ((String)value).length() + "] is greater than " + validate.maxLength();
+    			return "parameter[" + desc + "] length[" + ((String)value).length() + "] is greater than " + validate.maxLength();
         	}
         	if (value instanceof List<?> && ((List<?>)value).size() > validate.maxLength()) {
-        		return "parameter[" + name + "] size[" + ((List<?>)value).size() + "] is greater than " + validate.maxLength();
+        		return "parameter[" + desc + "] size[" + ((List<?>)value).size() + "] is greater than " + validate.maxLength();
         	}
         	if (value.getClass().isArray() && Array.getLength(value) > validate.maxLength()) {
-        		return "parameter[" + name + "] length[" + Array.getLength(value) + "] is greater than " + validate.maxLength();
+        		return "parameter[" + desc + "] length[" + Array.getLength(value) + "] is greater than " + validate.maxLength();
         	}
         }
         
         // 较验最小长度
         if (validate.minLength() >0 && (value instanceof String || value instanceof List<?> || value.getClass().isArray())) {
         	if (value instanceof String && ((String)value).length() < validate.minLength()) {
-    			return "parameter[" + name + "] length[" + ((String)value).length() + "] is less than " + validate.minLength();
+    			return "parameter[" + desc + "] length[" + ((String)value).length() + "] is less than " + validate.minLength();
         	}
         	if (value instanceof List<?> && ((List<?>)value).size() < validate.minLength()) {
-        		return "parameter[" + name + "] size[" + ((List<?>)value).size() + "] is less than " + validate.minLength();
+        		return "parameter[" + desc + "] size[" + ((List<?>)value).size() + "] is less than " + validate.minLength();
         	}
         	if (value.getClass().isArray() && Array.getLength(value) < validate.minLength()) {
-        		return "parameter[" + name + "] length[" + Array.getLength(value) + "] is less than " + validate.minLength();
+        		return "parameter[" + desc + "] length[" + Array.getLength(value) + "] is less than " + validate.minLength();
         	}
         }
         
         // 最大值校验，只较验数值类型
         if (fieldValidator.getMaxValue() != null && value instanceof Number && ((Number)value).doubleValue() > fieldValidator.getMaxValue().doubleValue()) {
-			return "parameter[" + name + "] value[" + value + "] is greater than " + validate.maxValue();
+			return "parameter[" + desc + "] value[" + value + "] is greater than " + validate.maxValue();
         }
         
         // 最小值校验，只较验数值类型
         if (fieldValidator.getMinValue() != null && value instanceof Number && ((Number)value).doubleValue() < fieldValidator.getMinValue().doubleValue()) {
-			return "parameter[" + name + "] value[" + value + "] is less than " + validate.minValue();
+			return "parameter[" + desc + "] value[" + value + "] is less than " + validate.minValue();
         }
         
         if (fieldValidator.getRegexpPattern() != null && value instanceof String) {
         	Matcher matcher = fieldValidator.getRegexpPattern().matcher((String)value);
         	if (!matcher.matches()) {
-        		return "parameter[" + name + "] value[" + value + "] format error, must regexp:" + validate.regexp();
+        		return "parameter[" + desc + "] value[" + value + "] format error, must regexp:" + validate.regexp();
         	}
         }
         
         if (fieldValidator.getTypePattern() != null && value instanceof String) {
         	Matcher matcher = fieldValidator.getTypePattern().matcher((String)value);
         	if (!matcher.matches()) {
-        		return "parameter[" + name + "] value[" + value + "] format error, must be " + validate.type();
+        		return "parameter[" + desc + "] value[" + value + "] format error, must be " + validate.type();
         	}
         }
         
         if (fieldValidator.getEnumValues() != null && !fieldValidator.getEnumValues().contains(value.toString())) {
-    		return "parameter[" + name + "] value[" + value + "] format error, must in " + fieldValidator.getEnumValues();
+    		return "parameter[" + desc + "] value[" + value + "] format error, must in " + fieldValidator.getEnumValues();
         }
 		return null;
     }
