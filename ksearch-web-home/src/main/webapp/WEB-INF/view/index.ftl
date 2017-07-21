@@ -9,7 +9,14 @@
 
 		<!-- basic styles -->
 		<#include "/common/head_css.ftl"/>
-
+        <style>
+            .modal-optimize .modal-dialog{
+                width: 500px;
+            }
+            .tags{
+                width:400px;
+            }
+        </style>
 		<!-- ace settings handler -->
 
 		<script src="assets/js/ace-extra.min.js"></script>
@@ -246,17 +253,14 @@
 
                                     +'<ul class="dropdown-menu dropdown-info pull-right">'
                                     +'  <li>'
-                                    +'   <a href="#">flush</a>'
+                                    +'   <a class="flush-index" href="#">flush</a>'
                                     +'  </li>'
 
                                     +'  <li>'
-                                    +'   <a href="#">优化</a>'
+                                    +'   <a class="optimize-index" href="#">优化</a>'
                                     +'  </li>'
                                     +'  <li>'
-                                    +'   <a href="#">新建别名</a>'
-                                    +'  </li>'
-                                    +'  <li>'
-                                    +'   <a href="#">清空缓存</a>'
+                                    +'   <a class="alias-index" href="#">新建别名</a>'
                                     +'  </li>'
                                     +'</ul>'
                             		+''
@@ -312,8 +316,8 @@
                             cssClass: 'btn-success',
                             //autospin: true,
                             action: function(dialogRef){
-                                //dialogRef.enableButtons(false);
-                                //dialogRef.setClosable(false);
+                                dialogRef.enableButtons(false);
+                                dialogRef.setClosable(false);
                                 //dialogRef.getModalBody().html('Dialog closes in 5 seconds.');
                                 var index = $.trim($("#index").val());
                                 var number_of_shards = parseInt($("#number_of_shards").val());
@@ -323,13 +327,14 @@
                                 var ajax = new $ax("/index/add", function (data) {
                                     // 成功
                                     if (data.status===true){
-                                        new $myNotify().success("保存成功");
+                                        //$myNotify.success("保存成功");
+                                        $myNotify.success("保存成功")
                                         // 刷新表格
                                         $('#indices_table').bootstrapTable('refresh');
                                         // 关闭窗口
                                         dialogRef.close();
                                     }else {
-                                        new $myNotify().danger(data.msg);
+                                        $myNotify.danger(data.msg);
                                         dialogRef.enableButtons(true);
                                         dialogRef.setClosable(true);
                                     }
@@ -433,95 +438,307 @@
 
             window.operateEvents = {
                 'click .del': function (e, value, row, index) {
+                    var msg = '确认要删除索引:<strong style="color: red;">'+row.indexName+'</strong>吗？删除后数据无法恢复，请确认后再操作！！！';
 
-                    BootstrapDialog.confirm({
-                        title: '提示',
-                        message: '确认要删除索引:'+row.indexName+'吗？删除后数据无法恢复，请确认后再操作！！！',
-                        type: BootstrapDialog.TYPE_DANGER, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
-                        btnCancelLabel: '取消', // <-- Default value is 'Cancel',
-                        btnOKLabel: '确定', // <-- Default value is 'OK',
-                        btnOKClass: 'btn-danger', // <-- If you didn't specify it, dialog type will be used,
-                        callback: function(result) {
-                            // result will be true if button was click, while it will be false if users close the dialog directly.
-                            if(result) {
-                                var ajax = new $ax("/index/del", function (data) {
-                                    // 成功
-                                    if (data.status===true){
-                                        new $myNotify().success("删除成功");
-                                        // 刷新表格
-                                        $('#indices_table').bootstrapTable('refresh');
-                                    }else {
-                                        new $myNotify().danger(data.msg);
-                                    }
-                                },function (data) {
+                    $myDialog.confirm(msg,BootstrapDialog.TYPE_DANGER,
+                            function(result) {
+                                // result will be true if button was click, while it will be false if users close the dialog directly.
+                                if(result) {
+                                    var ajax = new $ax("/index/del", function (data) {
+                                        // 成功
+                                        if (data.status===true){
+                                            $myNotify.success("删除成功");
+                                            // 刷新表格
+                                            $('#indices_table').bootstrapTable('refresh');
+                                        }else {
+                                            $myNotify.danger(data.msg);
+                                        }
+                                    },function (data) {
 
-                                });
-                                ajax.set("indices",row.indexName);
-                                ajax.set("clusterName","");
-                                ajax.start();
+                                    });
+                                    ajax.set("indices",row.indexName);
+                                    ajax.set("clusterName","");
+                                    ajax.start();
+                                }
                             }
-                        }
-                    });
+                    );
                 },
                 'click .refresh': function (e, value, row, index) {
 
-                    BootstrapDialog.confirm({
-                        title: '提示',
-                        message: '确认刷新索引：'+row.indexName+'吗？',
-                        type: BootstrapDialog.TYPE_WARNING, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
-                        btnCancelLabel: '取消', // <-- Default value is 'Cancel',
-                        btnOKLabel: '确定', // <-- Default value is 'OK',
-                        btnOKClass: 'btn-warning', // <-- If you didn't specify it, dialog type will be used,
-                        callback: function(result) {
-                            // result will be true if button was click, while it will be false if users close the dialog directly.
-                            if(result) {
-                                var ajax = new $ax("/index/refresh", function (data) {
+                    var msg = '确认刷新索引：<strong style="color: #ffb752;">'+row.indexName+'</strong>吗？';
+                    $myDialog.confirm(msg,BootstrapDialog.TYPE_WARNING,
+                            function(result) {
+                                // result will be true if button was click, while it will be false if users close the dialog directly.
+                                if(result) {
+                                    var ajax = new $ax("/index/refresh", function (data) {
+                                        // 成功
+                                        if (data.status===true){
+                                            $myNotify.success("刷新成功");
+                                            // 刷新表格
+                                            $('#indices_table').bootstrapTable('refresh');
+                                        }else {
+                                            $myNotify.danger(data.msg);
+                                        }
+                                    },function (data) {
+
+                                    });
+                                    ajax.set("indices",row.indexName);
+                                    ajax.set("clusterName","");
+                                    ajax.start();
+                                }
+                            }
+                    );
+                },
+                'click .close-index': function (e, value, row, index) {
+                    var msg = '确认关闭索引:<strong style="color: #ffb752;">'+row.indexName+'</strong>吗？';
+                    $myDialog.confirm(msg,BootstrapDialog.TYPE_WARNING,
+                            function(result) {
+                                // result will be true if button was click, while it will be false if users close the dialog directly.
+                                if(result) {
+                                    var ajax = new $ax("/index/close", function (data) {
+                                        // 成功
+                                        if (data.status===true){
+                                            $myNotify.success(data.data);
+                                            // 刷新表格
+                                            $('#indices_table').bootstrapTable('refresh');
+                                        }else {
+                                            $myNotify.danger(data.msg);
+                                        }
+                                    },function (data) {
+
+                                    });
+                                    ajax.set("indices",row.indexName);
+                                    ajax.set("clusterName","");
+                                    ajax.start();
+                                }
+                            }
+                    );
+                },
+                'click .flush-index': function (e, value, row, index) {
+
+                    var msg = '确认flush索引:<strong style="color: #ffb752;">'+row.indexName+'</strong>吗？';
+                    $myDialog.confirm(msg,BootstrapDialog.TYPE_WARNING,
+                            function(result) {
+                                // result will be true if button was click, while it will be false if users close the dialog directly.
+                                if(result) {
+                                    var ajax = new $ax("/index/flush", function (data) {
+                                        // 成功
+                                        if (data.status===true){
+                                            $myNotify.success(data.data);
+                                            // 刷新表格
+                                            $('#indices_table').bootstrapTable('refresh');
+                                        }else {
+                                            $myNotify.danger(data.msg);
+                                        }
+                                    },function (data) {
+                                    });
+                                    ajax.set("indices",row.indexName);
+                                    ajax.set("clusterName","");
+                                    ajax.start();
+                                }
+                            }
+                    );
+                },
+                'click .alias-index': function (e, value, row, index) {
+                    BootstrapDialog.show({
+                        type:BootstrapDialog.TYPE_PRIMARY,
+                        title: '优化',
+                        closeByBackdrop: false,
+                        closeByKeyboard: false,
+                        message: function(dialog) {
+                            var form ='<div class="widget-main">'
+                                    +'<form class="form-horizontal" role="form">'
+
+                                        +'<div class="form-group">'
+                                            +'<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 别名 :</label>'
+                                            +'<div class="col-sm-10">'
+                                                +'<input type="text" class="form-field-2" name="tags" id="aliases" value="fdf,fdfff,ll" placeholder="请输入别名，多个请使用回车键" />'
+                                            +'</div>'
+                                        +'</div>'
+
+                                    +'</form>'
+                                    +'</div>';
+                            return form;
+                        },
+                        buttons: [{
+                            icon: 'icon-ok',
+                            label: '保存',
+                            cssClass: 'btn-success',
+                            //autospin: true,
+                            action: function(dialogRef){
+                                var aliases = $.trim($("#aliases").val());
+                                if (!aliases){
+                                    $myNotify.danger("请输入别名，多个使用回车键。");
+                                }
+                                var index = row.indexName;
+                                dialogRef.enableButtons(false);
+                                dialogRef.setClosable(false);
+                                var ajax = new $ax("/index/addAlias", function (data) {
                                     // 成功
                                     if (data.status===true){
-                                        new $myNotify().success("刷新成功");
+                                        //$myNotify.success("保存成功");
+                                        $myNotify.success(data.msg)
                                         // 刷新表格
                                         $('#indices_table').bootstrapTable('refresh');
+                                        // 关闭窗口
+                                        //dialogRef.close();
                                     }else {
-                                        new $myNotify().danger(data.msg);
+                                        $myNotify.danger(data.msg);
+                                        dialogRef.enableButtons(true);
+                                        dialogRef.setClosable(true);
                                     }
                                 },function (data) {
 
                                 });
-                                ajax.set("indices",row.indexName);
+                                ajax.set("index",index);
+                                ajax.set("aliases",aliases)
                                 ajax.set("clusterName","");
                                 ajax.start();
+
                             }
+                        }, {
+                            icon:'icon-remove',
+                            label: '关闭',
+                            action: function(dialogRef){
+                                dialogRef.close();
+                            }
+                        }],
+                        onshown:function () {
+                            var tag_input = $('#aliases');
+                            var index = row.indexName;
+                            tag_input.tag(
+                                    {
+                                        placeholder:tag_input.attr('placeholder'),
+                                        //enable typeahead by specifying the source array
+                                        //source: ace.variable_US_STATES,//defined in ace.js >> ace.enable_search_ahead
+                                        afterRemove:function (e) {
+                                            // 删除提醒
+                                            var ajax = new $ax("/index/delAlias", function (data) {
+                                                // 成功
+                                                if (data.status===true){
+                                                    //$myNotify.success("保存成功");
+                                                    $myNotify.success(data.msg)
+                                                    // 刷新表格
+                                                    //$('#indices_table').bootstrapTable('refresh');
+                                                }else {
+                                                    $myNotify.danger(data.msg);
+                                                }
+                                            },function (data) {
+
+                                            });
+                                            ajax.set("index",index);
+                                            ajax.set("alias",e)
+                                            ajax.set("clusterName","");
+                                            ajax.start();
+                                        }
+                                    }
+                            );
+
                         }
                     });
                 },
-                'click .close-index': function (e, value, row, index) {
+                'click .optimize-index': function (e, value, row, index) {
 
-                    BootstrapDialog.confirm({
-                        title: '提示',
-                        message: '确认关闭索引:'+row.indexName+'吗？',
-                        type: BootstrapDialog.TYPE_WARNING, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
-                        btnCancelLabel: '取消', // <-- Default value is 'Cancel',
-                        btnOKLabel: '确定', // <-- Default value is 'OK',
-                        btnOKClass: 'btn-warning', // <-- If you didn't specify it, dialog type will be used,
-                        callback: function(result) {
-                            // result will be true if button was click, while it will be false if users close the dialog directly.
-                            if(result) {
-                                var ajax = new $ax("/index/close", function (data) {
+                    BootstrapDialog.show({
+                        type:BootstrapDialog.TYPE_PRIMARY,
+                        title: '优化',
+                        closeByBackdrop: false,
+                        closeByKeyboard: false,
+                        cssClass:'modal-optimize',
+                        message: function(dialog) {
+                            var form ='<div class="widget-main">'
+                                        +'<form class="form-horizontal" role="form">'
+                                            +'<div class="form-group">'
+                                                +'<label class="col-sm-5 control-label no-padding-right" for="form-field-1"> 最大索引段数 :</label>'
+                                                +'<div class="col-sm-7">'
+                                                    +'<input type="text" class="input-mini" id="max_num_segments" />'
+                                                +'</div>'
+                                            +'</div>'
+
+                                            +'<div class="form-group">'
+                                                +'<label class="col-sm-5 control-label no-padding-right" for="form-field-1"> 只删除被标记为删除的 :</label>'
+                                                +'<div class="col-sm-7">'
+                                                    +'<label>'
+                                                        +' <input id="only_expunge_deletes" class="ace ace-switch ace-switch-2" type="checkbox" />'
+                                                        +' <span class="lbl"></span>'
+                                                    +'</label>'
+                                                +'</div>'
+                                            +'</div>'
+
+                                            +'<div class="form-group">'
+                                                +'<label class="col-sm-5 control-label no-padding-right" for="form-field-1"> 优化后刷新 :</label>'
+                                                +'<div class="col-sm-7">'
+                                                    +'<label>'
+                                                        +' <input id="flush" class="ace ace-switch ace-switch-2" type="checkbox" checked/>'
+                                                        +' <span class="lbl"></span>'
+                                                    +'</label>'
+                                                +'</div>'
+                                            +'</div>'
+
+                                            +'<div class="form-group">'
+                                                +'<label class="col-sm-5 control-label no-padding-right" for="form-field-1"> 等待合并 :</label>'
+                                                +'<div class="col-sm-7">'
+                                                    +'<label>'
+                                                        +' <input id="wait_for_merge" class="ace ace-switch ace-switch-2" type="checkbox" />'
+                                                        +' <span class="lbl"></span>'
+                                                    +'</label>'
+                                                +'</div>'
+                                            +'</div>'
+                                        +'</form>'
+                                    +'</div>';
+                            return form;
+                        },
+                        buttons: [{
+                            icon: 'icon-ok',
+                            label: '保存',
+                            cssClass: 'btn-success',
+                            //autospin: true,
+                            action: function(dialogRef){
+                                dialogRef.enableButtons(false);
+                                dialogRef.setClosable(false);
+                                var index = row.indexName;
+
+                                var max_num_segments = parseInt($("#max_num_segments").val());
+                                var only_expunge_deletes= $("#only_expunge_deletes").prop("checked");
+                                var flush= $("#flush").prop("checked");
+                                var wait_for_merge= $("#wait_for_merge").prop("checked");
+
+                                // TODO 校验
+                                var ajax = new $ax("/index/optimize", function (data) {
                                     // 成功
                                     if (data.status===true){
-                                        new $myNotify().success(data.data);
+                                        //$myNotify.success("保存成功");
+                                        $myNotify.success(data.msg)
                                         // 刷新表格
                                         $('#indices_table').bootstrapTable('refresh');
+                                        // 关闭窗口
+                                        dialogRef.close();
                                     }else {
-                                        new $myNotify().danger(data.msg);
+                                        $myNotify.danger(data.msg);
+                                        dialogRef.enableButtons(true);
+                                        dialogRef.setClosable(true);
                                     }
                                 },function (data) {
 
                                 });
-                                ajax.set("indices",row.indexName);
+                                ajax.set("index",index);
+                                ajax.set("maxNumSegments",max_num_segments);
+                                ajax.set("onlyExpungeDeletes",only_expunge_deletes);
+                                ajax.set("flush",flush);
+                                ajax.set("waitForMerge",wait_for_merge);
                                 ajax.set("clusterName","");
                                 ajax.start();
+
                             }
+                        }, {
+                            icon:'icon-remove',
+                            label: '关闭',
+                            action: function(dialogRef){
+                                dialogRef.close();
+                            }
+                        }],
+                        onshown:function () {
+                            $('#max_num_segments').ace_spinner({value:1,min:1,max:100,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
                         }
                     });
                 }

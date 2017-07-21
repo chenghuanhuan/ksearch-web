@@ -24,7 +24,7 @@
 					<list>
 						<value>WriteMapNullValue</value>
 						<value>WriteDateUseDateFormat</value>
-						<value>WriteNullStringAsEmpty</value>
+						<!--<value>WriteNullStringAsEmpty</value>-->
 						<value>DisableCircularReferenceDetect</value>
 					</list>
 				</property>

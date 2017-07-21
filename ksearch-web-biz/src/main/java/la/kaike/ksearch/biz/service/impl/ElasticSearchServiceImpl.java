@@ -11,14 +11,12 @@ import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.model.bo.ClusterHealthBO;
 import la.kaike.ksearch.model.vo.elastic.ClusterStatisticsVO;
 import la.kaike.ksearch.model.vo.elastic.IndicesVO;
-import la.kaike.ksearch.model.vo.index.AddIndexVO;
-import la.kaike.ksearch.model.vo.index.CloseIndexVO;
-import la.kaike.ksearch.model.vo.index.DelIndexVO;
-import la.kaike.ksearch.model.vo.index.RefreshIndexVO;
+import la.kaike.ksearch.model.vo.index.*;
 import la.kaike.ksearch.util.constant.IndexSettingConstant;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
+import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequestBuilder;
 import org.elasticsearch.action.admin.indices.stats.IndexStats;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
 import org.elasticsearch.client.transport.TransportClient;
@@ -165,6 +163,37 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     @Override
     public void closeIndex(CloseIndexVO closeIndexVO) {
         ElasticClient.newInstance().getIndicesAdminClient().prepareClose(closeIndexVO.getIndices().toArray(new String[]{})).get();
+    }
+
+    @Override
+    public void flushIndex(FlushIndexVO flushIndexVO) {
+        ElasticClient.newInstance().getIndicesAdminClient().prepareFlush(flushIndexVO.getIndices().toArray(new String[]{})).get();
+    }
+
+    @Override
+    public void optimizeIndex(OptimizeIndexVO optimizeIndexVO) {
+        ElasticClient.newInstance().getTransportClient().admin().indices()
+                .prepareForceMerge(optimizeIndexVO.getIndex())
+                .setFlush(optimizeIndexVO.getFlush())
+                .setMaxNumSegments(optimizeIndexVO.getMaxNumSegments())
+                .setOnlyExpungeDeletes(optimizeIndexVO.getOnlyExpungeDeletes())
+                .get();
+    }
+
+    @Override
+    public void createAlias(CreateAliasVO aliasIndexVO) {
+        IndicesAliasesRequestBuilder builder = ElasticClient.newInstance().getIndicesAdminClient().prepareAliases();
+        String index = aliasIndexVO.getIndex();
+        for (String alias:aliasIndexVO.getAliases()){
+            builder.addAlias(index,alias);
+        }
+        builder.get();
+    }
+
+    @Override
+    public void delAlias(DelAliasVO delAliasVO) {
+        IndicesAliasesRequestBuilder builder = ElasticClient.newInstance().getIndicesAdminClient().prepareAliases();
+        builder.removeAlias(delAliasVO.getIndex(),delAliasVO.getAlias()).get();
     }
 
 

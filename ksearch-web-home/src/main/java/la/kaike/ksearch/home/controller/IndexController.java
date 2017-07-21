@@ -7,10 +7,7 @@ package la.kaike.ksearch.home.controller;
 import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.home.base.BaseController;
 import la.kaike.ksearch.model.Response;
-import la.kaike.ksearch.model.vo.index.AddIndexVO;
-import la.kaike.ksearch.model.vo.index.CloseIndexVO;
-import la.kaike.ksearch.model.vo.index.DelIndexVO;
-import la.kaike.ksearch.model.vo.index.RefreshIndexVO;
+import la.kaike.ksearch.model.vo.index.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -80,5 +77,54 @@ public class IndexController extends BaseController{
     public Response refresh(CloseIndexVO closeIndexVO){
         elasticSearchService.closeIndex(closeIndexVO);
         return succeed("关闭索引成功！");
+    }
+
+    /**
+     * flush
+     * @param flushIndexVO
+     * @return
+     */
+    @RequestMapping("/flush")
+    @ResponseBody
+    public Response flush(FlushIndexVO flushIndexVO){
+        elasticSearchService.flushIndex(flushIndexVO);
+        return succeed("flush成功！");
+    }
+
+    /**
+     * 优化索引
+     * @param optimizeIndexVO
+     * @return
+     */
+    @RequestMapping("/optimize")
+    @ResponseBody
+    public Response optimize(OptimizeIndexVO optimizeIndexVO){
+        elasticSearchService.optimizeIndex(optimizeIndexVO);
+        return succeed("优化成功！");
+    }
+
+
+    /**
+     * 添加别名
+     * @param createAliasVO
+     * @return
+     */
+    @RequestMapping("/addAlias")
+    @ResponseBody
+    public Response addAlias(CreateAliasVO createAliasVO){
+        elasticSearchService.createAlias(createAliasVO);
+        return succeed("添加别名成功！");
+    }
+
+    /**
+     * 删除别名
+     * @param delAliasVO
+     * @return
+     */
+    @RequestMapping("/delAlias")
+    @ResponseBody
+    public Response delAlias(DelAliasVO delAliasVO){
+        elasticSearchService.delAlias(delAliasVO);
+        return succeed("删除别名成功！");
     }
 }

@@ -7,10 +7,7 @@ package la.kaike.ksearch.biz.service;
 import la.kaike.ksearch.model.bo.ClusterHealthBO;
 import la.kaike.ksearch.model.vo.elastic.ClusterStatisticsVO;
 import la.kaike.ksearch.model.vo.elastic.IndicesVO;
-import la.kaike.ksearch.model.vo.index.AddIndexVO;
-import la.kaike.ksearch.model.vo.index.CloseIndexVO;
-import la.kaike.ksearch.model.vo.index.DelIndexVO;
-import la.kaike.ksearch.model.vo.index.RefreshIndexVO;
+import la.kaike.ksearch.model.vo.index.*;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
 
 import java.util.List;
@@ -69,4 +66,28 @@ public interface ElasticSearchService {
      * @param closeIndexVO
      */
     void closeIndex(CloseIndexVO closeIndexVO);
+
+    /**
+     * flush
+     * @param flushIndexVO
+     */
+    void flushIndex(FlushIndexVO flushIndexVO);
+
+    /**
+     * 优化索引
+     * @param optimizeIndexVO
+     */
+    void optimizeIndex(OptimizeIndexVO optimizeIndexVO);
+
+    /**
+     * 创建别名
+     * @param aliasIndexVO
+     */
+    void createAlias(CreateAliasVO aliasIndexVO);
+
+    /**
+     * 删除别名
+     * @param delAliasVO
+     */
+    void delAlias(DelAliasVO delAliasVO);
 }

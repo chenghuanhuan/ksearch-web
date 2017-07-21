@@ -16,44 +16,60 @@
             align: "center"
         }
     };
-    $myNotify.prototype = {
-            info:function (msg) {
-                var me = this;
-                var options = {message: msg};
-                settings.type = "info";
-                $.notify(
-                    options,
-                    settings
-                );
-            }
-            ,warn:function (msg) {
-            var me = this;
-            var options = {message: msg};
-            settings.type = "warning";
-            $.notify(
-                options,
-                settings
-            );
-            }
-            ,success:function (msg) {
-                var me = this;
-                var options = {message: msg};
-                settings.type = "success";
-                $.notify(
-                    options,
-                    settings
-                );
-            }
-            ,danger:function (msg) {
-            var me = this;
-            var options = {message: msg};
-            settings.type = "danger";
-            $.notify(
-                options,
-                settings
-            );
-        }
-    };
+
+    $myNotify.info=function (msg) {
+        var options = {message: msg};
+        settings.type = "info";
+        $.notify(
+            options,
+            settings
+        );
+    }
+
+    $myNotify.warn=function (msg) {
+        var me = this;
+        var options = {message: msg};
+        settings.type = "warning";
+        $.notify(
+            options,
+            settings
+        );
+    }
+    $myNotify.success=function (msg) {
+        var options = {message: msg};
+        settings.type = "success";
+        $.notify(
+            options,
+            settings
+        );
+    }
+
+
+    $myNotify.danger=function (msg) {
+        var options = {message: msg};
+        settings.type = "danger";
+        $.notify(
+            options,
+            settings
+        );
+    }
 
     window.$myNotify = $myNotify;
+
+
+
+    var $myDialog={};
+    $myDialog.confirm = function (message,type,callback) {
+        var css = type.substr("type-".length-1,type.length-1);
+        BootstrapDialog.confirm({
+            title: '提示',
+            message: message,
+            type: type,
+            btnCancelLabel: '取消',
+            btnOKLabel: '确定',
+            btnOKClass: 'btn-'+css,
+            callback: callback
+        });
+    }
+    window.$myDialog=$myDialog;
 } ());
