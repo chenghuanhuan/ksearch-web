@@ -336,6 +336,10 @@
                             $("#nodeSize").html(datalist[0].nodes.length);
 
                             initClusterStatistics(datalist[0].name);
+
+                            // 初始化tooltip
+                            $('[data-rel=tooltip]').tooltip();
+                            $('[data-rel=popover]').popover({html:true});
 						}
                     }
                 }, function (data) {
@@ -343,9 +347,7 @@
                 });
                 ajax.start();
 
-                // 初始化tooltip
-                $('[data-rel=tooltip]').tooltip();
-                $('[data-rel=popover]').popover({html:true});
+
 
 
 
