@@ -127,4 +127,34 @@ public class IndexController extends BaseController{
         elasticSearchService.delAlias(delAliasVO);
         return succeed("删除别名成功！");
     }
+
+    /**
+     * 添加类型
+     * @param addMappingVO
+     * @return
+     */
+    @RequestMapping("/addMapping")
+    @ResponseBody
+    public Response addMapping(AddMappingVO addMappingVO){
+        elasticSearchService.addMapping(addMappingVO);
+        return succeed("保存成功！");
+    }
+
+
+    /**
+     * 添加类型页面
+     * @return
+     */
+    @RequestMapping("/addTypeHtml")
+    public String addTypeHtml(){
+        return "addType";
+    }
+    /**
+     * 添加类型页面
+     * @return
+     */
+    @RequestMapping("/addTypeForm")
+    public String addTypeForm(){
+        return "addTypeForm";
+    }
 }

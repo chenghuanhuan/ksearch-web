@@ -90,4 +90,10 @@ public interface ElasticSearchService {
      * @param delAliasVO
      */
     void delAlias(DelAliasVO delAliasVO);
+
+    /**
+     * 添加mapping
+     * @param addMappingVO
+     */
+    void addMapping(AddMappingVO addMappingVO);
 }

@@ -22,3 +22,8 @@
 <!-- inline styles related to this page -->
 
 <link rel="stylesheet" href="/assets/css/bootstrap-dialog/bootstrap-dialog.min.css" />
+
+
+<#--<link rel="stylesheet" href="/assets/css/chosen.css" />-->
+
+<link rel="stylesheet" href="/assets/css/select2.css" />

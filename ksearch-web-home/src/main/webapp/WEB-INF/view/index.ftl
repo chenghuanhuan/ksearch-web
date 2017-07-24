@@ -16,6 +16,10 @@
             .tags{
                 width:400px;
             }
+
+            .modal-add-type .modal-dialog{
+                width: 1024px;
+            }
         </style>
 		<!-- ace settings handler -->
 
@@ -180,7 +184,8 @@
 		<#include "/common/foot_js.ftl"/>
 
 		<!-- inline scripts related to this page -->
-
+        <script src="/assets/js/fuelux/fuelux.wizard.min.js"></script>
+        <script src="/assets/js/jquery.nestable.min.js"></script>
 		<script type="text/javascript">
 			jQuery(function($) {
 
@@ -241,7 +246,7 @@
                                     +'<i class="icon-trash bigger-120"></i>'
                                     +'</button>'
 
-                                    +'<button class="btn btn-xs btn-warning tooltip-warning" data-rel="tooltip" title="新增类型">'
+                                    +'<button class="btn btn-xs btn-warning tooltip-warning addType" data-rel="tooltip" title="新增类型">'
                                     +'<i class="icon-flag bigger-120"></i>'
                                     +'</button>'
 
@@ -773,8 +778,127 @@
                             $('#max_num_segments').ace_spinner({value:1,min:1,max:100,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
                         }
                     });
+                },
+                'click .addType': function (e, value, row, index) {
+
+                    BootstrapDialog.show({
+                        type:BootstrapDialog.TYPE_PRIMARY,
+                        title: '数据结构',
+                        closeByBackdrop: false,
+                        closeByKeyboard: false,
+                        cssClass:'modal-add-type',
+                        message: $('<div class="row-fluid"></div>').load('/index/addTypeHtml'),
+                        onshown:function () {
+                            initAddType(row);
+                        }
+                    });
                 }
             };
+
+
+			function initAddType(row){
+
+                var $validation = false;
+                $('#fuelux-wizard').ace_wizard().on('change' , function(e, info){
+                    if(info.step == 1 && $validation) {
+                        if(!$('#validation-form').valid()) return false;
+                    }
+                }).on('finished', function(e) {
+                   alert();
+                }).on('stepclick', function(e){
+                    //return false;//prevent clicking on steps
+                });
+
+                // 拖拽
+                $('.dd').nestable();
+
+                $('.dd-handle a').on('mousedown', function(e){
+                    e.stopPropagation();
+                });
+
+
+
+                $("#add_mapping_btn").on("click",function () {
+                    BootstrapDialog.show({
+                        type:BootstrapDialog.TYPE_PRIMARY,
+                        title: '添加字段',
+                        closeByBackdrop: false,
+                        closeByKeyboard: false,
+                        cssClass:'modal-add-type',
+                        message: $('<div class="row-fluid"></div>').load('/index/addTypeForm'),
+                        buttons: [{
+                            icon: 'icon-ok',
+                            label: '保存',
+                            cssClass: 'btn-success',
+                            //autospin: true,
+                            action: function(dialogRef){
+                                var index=row.indexName;
+                                var type_name = $("#type_name").val();
+                                var pro_name = $("#pro_name").val();
+                                var analyzer = $("#analyzer").val();
+                                var pro_type = $("#pro_type").val();
+                                var null_value = $("#null_value").val();
+                                var pro_index = $("#pro_index").val();
+                                var include_in_all = $("#include_in_all").prop("checked");;
+                                var ajax = new $ax("/index/addMapping", function (data) {
+                                    // 成功
+                                    if (data.status===true){
+                                        $myNotify.success(data.msg)
+                                        // 关闭窗口
+                                        dialogRef.close();
+                                    }else {
+                                        $myNotify.danger(data.msg);
+                                        dialogRef.enableButtons(true);
+                                        dialogRef.setClosable(true);
+                                    }
+                                },function (data) {
+
+                                });
+                                var mappingsJsonObj = {};
+                                mappingsJsonObj["properties"]={};
+
+                                mappingsJsonObj["include_in_all"]=include_in_all;
+                                mappingsJsonObj["properties"][""+pro_name]={
+                                    type:pro_type,
+                                    analyzer:analyzer,
+                                    //null_value:null_value,
+                                    index:pro_index
+                                };
+                                var mappingsJson = JSON.stringify(mappingsJsonObj);
+                                ajax.set("index",index);
+                                ajax.set("type",type_name);
+                                ajax.set("mappingsJson",mappingsJson);
+                                ajax.start();
+
+                            }
+                        }, {
+                            icon: 'icon-ok',
+                            label: '保存并继续添加',
+                            cssClass: 'btn-success',
+                            //autospin: true,
+                            action: function(dialogRef){
+
+                            }
+                        },{
+                            icon:'icon-remove',
+                            label: '关闭',
+                            action: function(dialogRef){
+                                dialogRef.close();
+                            }
+                        }],
+                        onshown:function () {
+                              $(".select2").select2({
+                                  allowClear:true
+                              }).on('change', function(){
+
+                              });
+
+                            $('#ignore_above').ace_spinner({value:1,min:1,max:100,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+
+                        }
+                    });
+                });
+            }
 
 		</script>
 	</body>

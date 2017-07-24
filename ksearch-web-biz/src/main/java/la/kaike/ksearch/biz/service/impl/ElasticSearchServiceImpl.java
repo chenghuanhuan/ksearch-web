@@ -17,6 +17,7 @@ import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
 import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequestBuilder;
+import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequestBuilder;
 import org.elasticsearch.action.admin.indices.stats.IndexStats;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
 import org.elasticsearch.client.transport.TransportClient;
@@ -27,6 +28,7 @@ import org.elasticsearch.cluster.metadata.MetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.unit.ByteSizeValue;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -205,6 +207,15 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     public void delAlias(DelAliasVO delAliasVO) {
         IndicesAliasesRequestBuilder builder = ElasticClient.newInstance().getIndicesAdminClient().prepareAliases();
         builder.removeAlias(delAliasVO.getIndex(),delAliasVO.getAlias()).get();
+    }
+
+    @Override
+    public void addMapping(AddMappingVO addMappingVO) {
+        PutMappingRequestBuilder builder = ElasticClient.newInstance().getIndicesAdminClient().preparePutMapping(addMappingVO.getIndex());
+        builder.setType(addMappingVO.getType())
+                .setSource(addMappingVO.getMappingsJson(), XContentType.JSON)
+                .get();
+
     }
 
 
