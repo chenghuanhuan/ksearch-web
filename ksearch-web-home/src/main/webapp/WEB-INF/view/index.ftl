@@ -185,7 +185,7 @@
 
 		<!-- inline scripts related to this page -->
         <script src="/assets/js/fuelux/fuelux.wizard.min.js"></script>
-        <script src="/assets/js/jquery.nestable.min.js"></script>
+        <script src="/assets/js/jquery.nestable.js"></script>
 		<script type="text/javascript">
 			jQuery(function($) {
 
