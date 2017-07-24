@@ -21,6 +21,7 @@ import org.elasticsearch.action.admin.indices.stats.IndexStats;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.block.ClusterBlock;
+import org.elasticsearch.cluster.metadata.AliasMetaData;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
 import org.elasticsearch.cluster.metadata.MetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
@@ -114,6 +115,16 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
                 indicesVO.setReplicas(replicas);
                 indicesVO.setShards(shards);
                 indicesVO.setStatus(indexMetaData.getState().name());
+
+                ImmutableOpenMap<String,AliasMetaData> aliasMetaMap =  indexMetaData.getAliases();
+                Iterator<ObjectObjectCursor<String,AliasMetaData>> objectObjectCursorIterator = aliasMetaMap.iterator();
+                List<String> aliases = new ArrayList<>();
+                while (objectObjectCursorIterator.hasNext()){
+                    ObjectObjectCursor<String,AliasMetaData> dataObjectObjectCursor = objectObjectCursorIterator.next();
+                    AliasMetaData aliasMetaData = dataObjectObjectCursor.value;
+                    aliases.add(aliasMetaData.getAlias());
+                }
+                indicesVO.setAliases(aliases);
                 indicesVOList.add(indicesVO);
             }
         }

@@ -4,6 +4,8 @@
  */
 package la.kaike.ksearch.model.vo.elastic;
 
+import java.util.List;
+
 /**
  * @author chenghuanhuan@kaike.la
  * @since $Revision:1.0.0, $Date: 2017年07月18日 下午3:02 $
@@ -17,6 +19,15 @@ public class IndicesVO {
     private Integer replicas;
     private String status;
 
+    private List<String> aliases;
+
+    public List<String> getAliases() {
+        return aliases;
+    }
+
+    public void setAliases(List<String> aliases) {
+        this.aliases = aliases;
+    }
 
     public String getIndexName() {
         return indexName;

@@ -19,13 +19,13 @@
         </style>
 		<!-- ace settings handler -->
 
-		<script src="assets/js/ace-extra.min.js"></script>
+		<script src="/assets/js/ace-extra.min.js"></script>
 
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 
 		<!--[if lt IE 9]>
-		<script src="assets/js/html5shiv.js"></script>
-		<script src="assets/js/respond.min.js"></script>
+		<script src="/assets/js/html5shiv.js"></script>
+		<script src="/assets/js/respond.min.js"></script>
 		<![endif]-->
 	</head>
 
@@ -552,7 +552,8 @@
                                         +'<div class="form-group">'
                                             +'<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 别名 :</label>'
                                             +'<div class="col-sm-10">'
-                                                +'<input type="text" class="form-field-2" name="tags" id="aliases" value="fdf,fdfff,ll" placeholder="请输入别名，多个请使用回车键" />'
+                                                +'<input type="text" class="form-field-2" name="tags" id="aliases" value="" placeholder="请输入别名，多个请使用回车键" />'
+                                                +'<input type="hidden" id="aliases_server" value=""/>'
                                             +'</div>'
                                         +'</div>'
 
@@ -576,12 +577,11 @@
                                 var ajax = new $ax("/index/addAlias", function (data) {
                                     // 成功
                                     if (data.status===true){
-                                        //$myNotify.success("保存成功");
-                                        $myNotify.success(data.msg)
+                                        $myNotify.success(data.msg);
                                         // 刷新表格
                                         $('#indices_table').bootstrapTable('refresh');
                                         // 关闭窗口
-                                        //dialogRef.close();
+                                        dialogRef.close();
                                     }else {
                                         $myNotify.danger(data.msg);
                                         dialogRef.enableButtons(true);
@@ -604,7 +604,12 @@
                             }
                         }],
                         onshown:function () {
+                            // 初始化tags
                             var tag_input = $('#aliases');
+                            var aliases = row.aliases;
+                            tag_input.val(aliases.join(","));
+                            $("#aliases_server").val(aliases.join(","));
+
                             var index = row.indexName;
                             tag_input.tag(
                                     {
@@ -612,24 +617,51 @@
                                         //enable typeahead by specifying the source array
                                         //source: ace.variable_US_STATES,//defined in ace.js >> ace.enable_search_ahead
                                         afterRemove:function (e) {
-                                            // 删除提醒
-                                            var ajax = new $ax("/index/delAlias", function (data) {
-                                                // 成功
-                                                if (data.status===true){
-                                                    //$myNotify.success("保存成功");
-                                                    $myNotify.success(data.msg)
-                                                    // 刷新表格
-                                                    //$('#indices_table').bootstrapTable('refresh');
-                                                }else {
-                                                    $myNotify.danger(data.msg);
-                                                }
-                                            },function (data) {
+                                            // 判断是否存在，存在则删除，不存在则只前端删除
 
-                                            });
-                                            ajax.set("index",index);
-                                            ajax.set("alias",e)
-                                            ajax.set("clusterName","");
-                                            ajax.start();
+                                            var aliasesServer = $("#aliases_server").val();
+                                            if(aliasesServer){
+                                                var arr = aliasesServer.split(",");
+                                                var f = false;
+                                                // 判断是否存在，不存在则不删除
+                                                $.each(arr,function (i,item) {
+                                                    if (item===e){
+                                                        f = true;
+                                                        return false;
+                                                    }
+                                                });
+                                            }
+                                            if (f) {
+
+
+                                                // 删除提醒
+                                                var ajax = new $ax("/index/delAlias", function (data) {
+                                                    // 成功
+                                                    if (data.status === true) {
+                                                        //$myNotify.success("保存成功");
+                                                        $myNotify.success(data.msg)
+                                                        // 刷新表格
+                                                        $('#indices_table').bootstrapTable('refresh');
+                                                        var arr = aliasesServer.split(",");
+                                                        $.each(arr,function (i,item) {
+                                                            if (item===e){
+                                                                arr.remove(i);
+                                                               return false;
+                                                            }
+                                                        });
+                                                        aliasesServer.val(arr.join(","));
+
+                                                    } else {
+                                                        $myNotify.danger(data.msg);
+                                                    }
+                                                }, function (data) {
+
+                                                });
+                                                ajax.set("index", index);
+                                                ajax.set("alias", e)
+                                                ajax.set("clusterName", "");
+                                                ajax.start();
+                                            }
                                         }
                                     }
                             );
