@@ -4,15 +4,26 @@
  */
 package la.kaike.ksearch.home.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.home.base.BaseController;
 import la.kaike.ksearch.model.Response;
+import la.kaike.ksearch.model.bo.index.PropertiesBO;
 import la.kaike.ksearch.model.vo.index.*;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.common.xcontent.XContentFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -21,6 +32,8 @@ import javax.annotation.Resource;
 @Controller
 @RequestMapping("/index")
 public class IndexController extends BaseController{
+
+    private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
     @Resource
     private ElasticSearchService elasticSearchService;
@@ -131,15 +144,46 @@ public class IndexController extends BaseController{
     /**
      * 添加类型
      * @param addMappingVO
+     * {"properties":{"hhh":{"type":"integer","analyzer":"standard","index":"on"}},"include_in_all":false}
      * @return
      */
     @RequestMapping("/addMapping")
     @ResponseBody
     public Response addMapping(AddMappingVO addMappingVO){
+        // TODO 校验
+
+
+        List<PropertiesVO> propertiesVOList = JSONArray.parseArray(addMappingVO.getMappingsJson(),PropertiesVO.class);
+        JSONObject jsonObject = new JSONObject();
+        JSONObject properties = toPropertiesJson(propertiesVOList);
+        jsonObject.put("properties",properties);
+
+
+        logger.info(jsonObject.toJSONString());
+        addMappingVO.setMappingsJson(jsonObject.toJSONString());
         elasticSearchService.addMapping(addMappingVO);
         return succeed("保存成功！");
     }
 
+    /**
+     * 前端json转换成es配置
+     * @param propertiesVOList
+     * @return
+     */
+    private JSONObject toPropertiesJson(List<PropertiesVO> propertiesVOList){
+        JSONObject properties = new JSONObject();
+        for (PropertiesVO propertiesVO:propertiesVOList){
+            PropertiesBO propertiesBO = new PropertiesBO();
+            BeanUtils.copyProperties(propertiesVO,propertiesBO);
+            if (!CollectionUtils.isEmpty(propertiesVO.getChildren())){
+                JSONObject child = toPropertiesJson(propertiesVO.getChildren());
+                propertiesBO.setProperties(child);
+            }
+
+            properties.put(propertiesVO.getName(),propertiesBO);
+        }
+        return properties;
+    }
 
     /**
      * 添加类型页面
@@ -156,5 +200,21 @@ public class IndexController extends BaseController{
     @RequestMapping("/addTypeForm")
     public String addTypeForm(){
         return "addTypeForm";
+    }
+
+    public static void main(String[] args) throws IOException {
+        XContentBuilder builder =  XContentFactory.jsonBuilder()
+                .startObject()
+                .startObject("news")
+                .startObject("properties")
+                .startObject("title")
+                .field("analyzer", "whitespace")
+                .field("type", "string")
+                .endObject()
+                .endObject()
+                .endObject()
+                .endObject();
+        System.out.println(builder.string());
+
     }
 }

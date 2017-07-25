@@ -800,13 +800,38 @@
 
                 var $validation = false;
                 $('#fuelux-wizard').ace_wizard().on('change' , function(e, info){
-                    if(info.step == 1 && $validation) {
-                        if(!$('#validation-form').valid()) return false;
+                    if(info.step == 1) {
+                        //if(!$('#validation-form').valid()) return false;
+                    }else if (info.step == 2){
+                        var index=row.indexName;
+                        var type_name = $("#type_name").val();
+                        var mappingsJson = JSON.stringify($("#dd_list").nestable('serialize'));
+                        var ajax = new $ax("/index/addMapping", function (data) {
+                            // 成功
+                            if (data.status===true){
+                                $myNotify.success(data.msg)
+                                // 关闭窗口
+                                dialogRef.close();
+                            }else {
+                                $myNotify.danger(data.msg);
+                                dialogRef.enableButtons(true);
+                                dialogRef.setClosable(true);
+                            }
+                        },function (data) {
+
+                        });
+
+                        ajax.set("index",index);
+                        ajax.set("type",type_name);
+                        ajax.set("mappingsJson",mappingsJson);
+                        ajax.start();
                     }
+                    console.log("change");
                 }).on('finished', function(e) {
                    alert();
                 }).on('stepclick', function(e){
                     //return false;//prevent clicking on steps
+                    console.log("stepclick");
                 });
 
                 // 拖拽
@@ -821,25 +846,48 @@
                 $("#add_mapping_btn").on("click",function () {
                     BootstrapDialog.show({
                         type:BootstrapDialog.TYPE_PRIMARY,
-                        title: '添加字段',
+                        title: '添加属性',
                         closeByBackdrop: false,
                         closeByKeyboard: false,
+                        draggable: true,
                         cssClass:'modal-add-type',
                         message: $('<div class="row-fluid"></div>').load('/index/addTypeForm'),
                         buttons: [{
                             icon: 'icon-ok',
-                            label: '保存',
+                            label: '添加',
                             cssClass: 'btn-success',
                             //autospin: true,
                             action: function(dialogRef){
-                                var index=row.indexName;
+                                var type_name = $("#type_name").val();
+                                var pro_name = $("#pro_name").val();
+                                var analyzer = $("#analyzer").val();
+                                var pro_type = $("#pro_type").val();
+                                var pro_index = $("#pro_index").prop("checked");
+                                var include_in_all = $("#include_in_all").prop("checked");
+
+                                var template =
+                                        '<li class="dd-item dd2-item" ' +
+                                        'data-type="'+pro_type+'" ' +
+                                        'data-analyzer="'+analyzer+'" ' +
+                                        'data-index="'+pro_index+'" ' +
+                                        'data-name="'+pro_name+'">'
+
+                                            +'<div class="dd-handle dd2-handle">'
+                                                +'<i class="normal-icon icon-reorder blue bigger-130"></i>'
+                                                +'<i class="drag-icon icon-move bigger-125"></i>'
+                                            +'</div>'
+                                            +'<div class="dd2-content">Menu</div>'
+                                        +'</li>';
+                                $($(".dd .dd-list")[0]).prepend(template);
+
+                               /* var index=row.indexName;
                                 var type_name = $("#type_name").val();
                                 var pro_name = $("#pro_name").val();
                                 var analyzer = $("#analyzer").val();
                                 var pro_type = $("#pro_type").val();
                                 var null_value = $("#null_value").val();
                                 var pro_index = $("#pro_index").val();
-                                var include_in_all = $("#include_in_all").prop("checked");;
+                                var include_in_all = $("#include_in_all").prop("checked");
                                 var ajax = new $ax("/index/addMapping", function (data) {
                                     // 成功
                                     if (data.status===true){
@@ -868,12 +916,12 @@
                                 ajax.set("index",index);
                                 ajax.set("type",type_name);
                                 ajax.set("mappingsJson",mappingsJson);
-                                ajax.start();
+                                ajax.start();*/
 
                             }
                         }, {
                             icon: 'icon-ok',
-                            label: '保存并继续添加',
+                            label: '添加并继续',
                             cssClass: 'btn-success',
                             //autospin: true,
                             action: function(dialogRef){

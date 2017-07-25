@@ -1,7 +1,7 @@
 
             <form class="form-horizontal" id="validation-form" method="get">
                 <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-2 no-padding-right" for="type_name">名称:</label>
+                    <label class="control-label col-xs-12 col-sm-2 no-padding-right" for="pro_name">名称:</label>
 
                     <div class="col-xs-12 col-sm-4">
                         <div class="clearfix">
@@ -13,7 +13,7 @@
 
                     <div class="col-xs-12 col-sm-4">
                         <div class="clearfix">
-                            <input id="type_index" name="pro_index" class="ace ace-switch ace-switch-2" type="checkbox" />
+                            <input id="pro_index" name="pro_index" class="ace ace-switch ace-switch-2" type="checkbox" />
                             <span class="lbl"></span>
                             <#--<input type="password" name="password" id="password" class="col-xs-12 col-sm-4" />-->
                         </div>
@@ -57,7 +57,11 @@
 
                     <div class="col-xs-12 col-sm-4">
                         <div class="clearfix">
-                            <input type="text" name="analyzer" id="analyzer" class="col-xs-12 col-sm-12" />
+                            <select id="analyzer" name="analyzer" class="width-100 select2" data-placeholder="Click to Choose...">
+                                <option value="standard">standard （标准分词器）</option>
+                                <option value="english">english （英文分词）</option>
+                                <option value="chinese">chinese （中文分词）</option>
+                            </select>
                         </div>
                     </div>
 

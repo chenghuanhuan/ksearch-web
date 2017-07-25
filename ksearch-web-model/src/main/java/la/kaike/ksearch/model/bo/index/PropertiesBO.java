@@ -2,37 +2,15 @@
  * kaike.la Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
-package la.kaike.ksearch.model.vo.index;
+package la.kaike.ksearch.model.bo.index;
 
-import java.util.List;
+import com.alibaba.fastjson.JSONObject;
 
 /**
- *  mapping的配置
- *
- *  可以修改的项：
-    增加新的类型定义
-    增加新的字段
-    增加新的分析器
-
-    不允许修改的项：
-    更改字段类型(比如文本改为数字)
-    更改存储为不存储，反之亦然
-    更改索引属性的值
-    更改已索引文档的分析器
-    注意的是新增字段或更改分析器之后，需要再次对所有文档进行索引重建
- *
- *
- *
  * @author chenghuanhuan@kaike.la
- * @since $Revision:1.0.0, $Date: 2017年07月24日 下午3:13 $
+ * @since $Revision:1.0.0, $Date: 2017年07月25日 上午10:26 $
  */
-public class PropertiesVO {
-
-    /**
-     * 字段名称
-     */
-    private String name;
-
+public class PropertiesBO {
     /** 类型 */
     private String type;
 
@@ -78,15 +56,14 @@ public class PropertiesVO {
      */
     private String search_analyzer;
 
-    private List<PropertiesVO> children;
+    private JSONObject properties;
 
-
-    public String getName() {
-        return name;
+    public JSONObject getProperties() {
+        return properties;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProperties(JSONObject properties) {
+        this.properties = properties;
     }
 
     public String getType() {
@@ -159,13 +136,5 @@ public class PropertiesVO {
 
     public void setSearch_analyzer(String search_analyzer) {
         this.search_analyzer = search_analyzer;
-    }
-
-    public List<PropertiesVO> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<PropertiesVO> children) {
-        this.children = children;
     }
 }

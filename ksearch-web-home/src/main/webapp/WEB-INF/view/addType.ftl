@@ -63,16 +63,8 @@
 
                         <div class="step-pane" id="step2">
                             <div class="row-fluid">
-                                <div class="dd dd-draghandle">
+                                <div class="dd dd-draghandle" id="dd_list">
                                     <ol class="dd-list">
-                                        <li class="dd-item dd2-item" data-id="19">
-                                            <div class="dd-handle dd2-handle">
-                                                <i class="normal-icon icon-reorder blue bigger-130"></i>
-
-                                                <i class="drag-icon icon-move bigger-125"></i>
-                                            </div>
-                                            <div class="dd2-content">Menu</div>
-                                        </li>
                                     </ol>
                                 </div>
                                 <div class="center">
@@ -102,11 +94,11 @@
                     <div class="row-fluid wizard-actions">
                         <button class="btn btn-prev">
                             <i class="icon-arrow-left"></i>
-                            Prev
+                            上一步
                         </button>
 
                         <button class="btn btn-success btn-next" data-last="Finish ">
-                            Next
+                            下一步
                             <i class="icon-arrow-right icon-on-right"></i>
                         </button>
                     </div>
