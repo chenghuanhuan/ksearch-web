@@ -384,13 +384,15 @@
                     //cardView:true,
                     //checkboxEnable:true,
                     detailView:true,
-                    url:"/console/cluster/indeices",
+                    url:"/index/getAllMapping",
+                    queryParams:function (params) {
+                        params.index = row.indexName;
+                        params.clusterName = "";
+                        return params;
+                    },
                     columns: [{
-                        field: 'indexName',
+                        field: 'type',
                         title: '类型'
-                    }, {
-                        field: 'docs',
-                        title: '类型名称'
                     }, {
                         field: 'primarySize',
                         title: '操作',
@@ -411,23 +413,23 @@
             function expandMapping(index,row,$detail) {
                 $detail.html('<table></table>').find('table').bootstrapTable({
                     striped:true,
-                    //classes:"table table-no-bordered",
-                    //showHeader:false,
-                    //cardView:true,
-                    //checkboxEnable:true,
-                    url:"/console/cluster/indeices",
+                    //url:"/console/cluster/indeices",
+                    data:row.properties,
                     columns: [{
-                        field: 'indexName',
+                        field: 'name',
                         title: '属性名称'
                     }, {
-                        field: 'docs',
+                        field: 'type',
                         title: '类型'
                     }, {
-                        field: 'primarySize',
-                        title: '格式'
+                        field: 'index',
+                        title: '是否分词'
                     }, {
-                        field: 'primarySize',
-                        title: 'store'
+                        field: 'analyzer',
+                        title: '分词器'
+                    }, {
+                        field: 'ignore_above',
+                        title: '索引最大长度'
                     }, {
                         field: 'primarySize',
                         title: '操作',
@@ -788,15 +790,20 @@
                         closeByKeyboard: false,
                         cssClass:'modal-add-type',
                         message: $('<div class="row-fluid"></div>').load('/index/addTypeHtml'),
-                        onshown:function () {
-                            initAddType(row);
+                        onshown:function (dialogRef) {
+                            initAddType(row,dialogRef);
                         }
                     });
                 }
             };
 
 
-			function initAddType(row){
+            /**
+             * 初始化添加类型窗口信息
+             * @param row
+             * @param dialogRef
+             */
+			function initAddType(row,dialogRef){
 
                 var $validation = false;
                 $('#fuelux-wizard').ace_wizard().on('change' , function(e, info){
@@ -810,12 +817,8 @@
                             // 成功
                             if (data.status===true){
                                 $myNotify.success(data.msg)
-                                // 关闭窗口
-                                dialogRef.close();
                             }else {
                                 $myNotify.danger(data.msg);
-                                dialogRef.enableButtons(true);
-                                dialogRef.setClosable(true);
                             }
                         },function (data) {
 
@@ -828,7 +831,7 @@
                     }
                     console.log("change");
                 }).on('finished', function(e) {
-                   alert();
+                    dialogRef.close();
                 }).on('stepclick', function(e){
                     //return false;//prevent clicking on steps
                     console.log("stepclick");
