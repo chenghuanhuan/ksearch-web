@@ -383,7 +383,7 @@
                     //showHeader:false,
                     //cardView:true,
                     //checkboxEnable:true,
-                    detailView:true,
+                    //detailView:true,
                     url:"/index/getAllMapping",
                     queryParams:function (params) {
                         params.index = row.index;
@@ -401,20 +401,20 @@
                         title: '操作',
                         events: operateEvents,
                         formatter: function (value, row, index) {
-                            var btn = '<button class="btn btn-xs btn-success tooltip-success modifyType" data-rel="tooltip" title="修改类型">'
-                                    +'<i class="icon-ok bigger-120"></i>'
+                            var btn = '<button class="btn btn-xs btn-info tooltip-info modifyType" data-rel="tooltip" title="修改类型">'
+                                    +'<i class="icon-edit bigger-120"></i>'
                                     +'</button>';
                             return btn;
                         }
                     }],
                     onExpandRow: function (index, row, $detail) {
-                        expandMapping(index,row,$detail);
+                        //expandField(index,row,$detail);
                     }
                 });
 
             }
 
-            function expandMapping(index,row,$detail) {
+            function expandField(index,row,$detail) {
                 $detail.html('<table></table>').find('table').bootstrapTable({
                     striped:true,
                     //url:"/console/cluster/indeices",
@@ -438,9 +438,9 @@
                         field: 'primarySize',
                         title: '操作',
                         formatter: function (value, row, index) {
-                            var btn = '<button class="btn btn-xs btn-success tooltip-success" data-rel="tooltip" title="修改类型">'
-                                        +'<i class="icon-ok bigger-120"></i>'
-                                     +'</button>';
+                            var btn = '<button class="btn btn-xs btn-info tooltip-info modifyField" data-rel="tooltip" title="修改类型">'
+                                    +'<i class="icon-edit bigger-120"></i>'
+                                    +'</button>';
                             return btn;
                         }
                     }]
@@ -825,47 +825,47 @@
              */
 			function initAddType(row,dialogRef,type){
 
-			    // 初始化数据
-                if (type===2){
-                    $("#type_name").val(row.type);
-                    $("#include_in_all").attr("checked",row.include_in_all);
-                }
 
                 var $validation = false;
                 $('#fuelux-wizard').ace_wizard().on('change' , function(e, info){
                     if(info.step == 1) {
                         //if(!$('#validation-form').valid()) return false;
                     }else if (info.step == 2){
-                        var index=row.index;
-                        var type_name = $("#type_name").val();
-                        var include_in_all = $("#include_in_all").prop("checked");
-                        var mappingsJson = JSON.stringify($("#dd_list").nestable('serialize'));
-                        var ajax = new $ax("/index/addMapping", function (data) {
-                            // 成功
-                            if (data.status===true){
 
-                                $myNotify.success(data.msg)
-                            }else {
-                                $myNotify.danger(data.msg);
-                            }
-                        },function (data) {
-
-                        });
-
-                        ajax.set("index",index);
-                        ajax.set("type",type_name);
-                        ajax.set("include_in_all",include_in_all);
-                        ajax.set("mappingsJson",mappingsJson);
-                        ajax.start();
                     }
                     console.log("change");
                 }).on('finished', function(e) {
-                    // 刷新
-                    var table = $("#type_table_"+row.index);
-                    if (table){
-                        table.bootstrapTable('refresh');
-                    }
-                    dialogRef.close();
+
+                    var index=row.index;
+                    var type_name = $("#type_name").val();
+                    var include_in_all = $("#include_in_all").prop("checked");
+                    var mappingsJson = JSON.stringify($("#dd_list").nestable('serialize'));
+                    var ajax = new $ax("/index/addMapping", function (data) {
+                        // 成功
+                        if (data.status===true){
+
+                            $myNotify.success(data.msg)
+                            // 刷新
+                            var table = $("#type_table_"+row.index);
+                            if (table){
+                                table.bootstrapTable('refresh');
+                            }
+                            dialogRef.close();
+                        }else {
+                            $myNotify.danger(data.msg);
+                        }
+                    },function (data) {
+
+                    });
+
+                    ajax.set("index",index);
+                    ajax.set("type",type_name);
+                    ajax.set("include_in_all",include_in_all);
+                    ajax.set("mappingsJson",mappingsJson);
+                    ajax.start();
+
+
+
                 }).on('stepclick', function(e){
                     //return false;//prevent clicking on steps
                     console.log("stepclick");
@@ -881,71 +881,206 @@
 
 
                 $("#add_mapping_btn").on("click",function () {
-                    BootstrapDialog.show({
-                        type:BootstrapDialog.TYPE_PRIMARY,
-                        title: '添加属性',
-                        closeByBackdrop: false,
-                        closeByKeyboard: false,
-                        draggable: true,
-                        cssClass:'modal-add-type',
-                        message: $('<div class="row-fluid"></div>').load('/index/addTypeForm'),
-                        buttons: [{
-                            icon: 'icon-ok',
-                            label: '添加',
-                            cssClass: 'btn-success',
-                            //autospin: true,
-                            action: function(dialogRef){
-                                var type_name = $("#type_name").val();
-                                var pro_name = $("#pro_name").val();
-                                var analyzer = $("#analyzer").val();
-                                var pro_type = $("#pro_type").val();
-                                var pro_index = $("#pro_index").prop("checked");
+                    addFieldDialog(null);
+                });
 
+                // 初始化数据
+                if (type===2){
+                    $("#type_name").val(row.type);
+                    $("#include_in_all").attr("checked",row.include_in_all);
+                    // 初始化拖拽数据
+                    var properties = row.properties;
+                    var html = initNestableData(properties);
+                    $($(".dd .dd-list")[0]).html(html);
+                }
 
-                                var template =
-                                        '<li class="dd-item dd2-item" ' +
-                                        'data-type="'+pro_type+'" ' +
-                                        'data-analyzer="'+analyzer+'" ' +
-                                        'data-index="'+pro_index+'" ' +
-                                        'data-name="'+pro_name+'">'
-
-                                            +'<div class="dd-handle dd2-handle">'
-                                                +'<i class="normal-icon icon-reorder blue bigger-130"></i>'
-                                                +'<i class="drag-icon icon-move bigger-125"></i>'
-                                            +'</div>'
-                                            +'<div class="dd2-content">Menu</div>'
-                                        +'</li>';
-                                $($(".dd .dd-list")[0]).prepend(template);
+                // 删除field
+                $("#dd_list").on("click",'.icon-trash',function (e) {
+                //$(".icon-trash").on("click",function (e) {
+                    var msg = '确认要删除吗';
+                    var me = $(this);
+                    $myDialog.confirm(msg,BootstrapDialog.TYPE_DANGER,
+                        function(result) {
+                            // result will be true if button was click, while it will be false if users close the dialog directly.
+                            if(result) {
+                               me.parents('.dd-item').remove();
                             }
-                        }, {
-                            icon: 'icon-ok',
-                            label: '添加并继续',
-                            cssClass: 'btn-success',
-                            //autospin: true,
-                            action: function(dialogRef){
-
-                            }
-                        },{
-                            icon:'icon-remove',
-                            label: '关闭',
-                            action: function(dialogRef){
-                                dialogRef.close();
-                            }
-                        }],
-                        onshown:function () {
-                              $(".select2").select2({
-                                  allowClear:true
-                              }).on('change', function(){
-
-                              });
-
-                            $('#ignore_above').ace_spinner({value:1,min:1,max:100,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
-
                         }
-                    });
+                    );
+
+                });
+
+                // 编辑field
+                $("#dd_list").on("click",'.icon-pencil',function (e) {
+                //$(".icon-pencil").on("click",function (e) {
+                    addFieldDialog($(this).parents('.dd-item'));
+                });
+            }
+            
+            function initNestableData(data) {
+			    if(data==null || data==[]){
+			        return "";
+                }
+                var html="";
+                $.each(data,function (i,item) {
+                    var template =
+                            '<li class="dd-item dd2-item" ' +
+                            'data-type="'+item.type+'" ' +
+                            'data-analyzer="'+item.analyzer+'" ' +
+                            'data-index="'+item.index+'" ' +
+                            'data-name="'+item.name+'">'
+                            +'<div class="dd-handle dd2-handle">'
+                            +'<i class="normal-icon icon-reorder blue bigger-130"></i>'
+                            +'<i class="drag-icon icon-move bigger-125"></i>'
+                            +'</div>'
+                            +'<div class="dd2-content">'+item.name+' ('+item.type+')'
+                            +'<div class="pull-right action-buttons">'
+                            +'<a class="blue" href="#">'
+                            +'<i class="icon-pencil bigger-130"></i>'
+                            +'</a>'
+                            +'</div>'
+                            +'</div>'
+
+                            +'</li>';
+                    html +=template;
+                    if(item.children){
+                        html +=initNestableData();
+                    }
+                });
+
+                return html;
+
+            }
+
+            function addFieldDialog(li) {
+			    var btns = [
+                    {
+                        icon: 'icon-ok',
+                        label: '保存',
+                        cssClass: 'btn-success',
+                        //autospin: true,
+                        action: function(dialogRef){
+                            if(li){// 修改
+                                modifyStaticField(li);
+                            }else {
+                                addStaticField();
+                            }
+
+                            dialogRef.close();
+                        }
+                    }
+                ];
+                if(!li){
+                    btns.push(
+                            {
+                                icon: 'icon-ok',
+                                label: '保存并继续',
+                                cssClass: 'btn-success',
+                                //autospin: true,
+                                action: function(dialogRef){
+                                    addStaticField();
+                                    // 重置表单
+                                    $(':input','#add_field_form')
+                                            .not(':button,:submit,:reset,:hidden')
+                                            .val('')
+                                            .removeAttr('checked')
+                                            .removeAttr('selected');
+                                    $("#analyzer").select2('val','');
+
+                                }
+                            }
+                    );
+                }
+
+                btns.push({
+                    icon:'icon-remove',
+                    label: '关闭',
+                    action: function(dialogRef){
+                        dialogRef.close();
+                    }
+                });
+                BootstrapDialog.show({
+                    type:BootstrapDialog.TYPE_PRIMARY,
+                    title: '添加属性',
+                    closeByBackdrop: false,
+                    closeByKeyboard: false,
+                    draggable: true,
+                    cssClass:'modal-add-type',
+                    message: $('<div class="row-fluid"></div>').load('/index/addTypeForm'),
+                    buttons: btns,
+                    onshown:function () {
+                        $(".select2").select2({
+                            allowClear:true
+                        }).on('change', function(){
+
+                        });
+
+                        $('#ignore_above').ace_spinner({value:1,min:1,max:100,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+
+                        if (li){
+                            // 填充值
+                            //var li = $(this).parents('.dd-item');
+                            // 获取data值
+                            $("#pro_type").select2('val',li.data('type'));
+                            $("#analyzer").select2('val',li.data('analyzer'));
+                            $("#pro_index").attr("checked",li.data('index'));
+                            $("#pro_name").val(li.data('name'));
+                            $("#ignore_above").val(li.data('ignore_above'));
+                        }
+                    }
                 });
             }
 
+            // 添加属性
+            function addStaticField() {
+                var type_name = $("#type_name").val();
+                var pro_name = $("#pro_name").val();
+                var analyzer = $("#analyzer").val();
+                var pro_type = $("#pro_type").val();
+                var pro_index = $("#pro_index").prop("checked");
+
+
+                var template =
+                        '<li class="dd-item dd2-item" ' +
+                        'data-type="'+pro_type+'" ' +
+                        'data-analyzer="'+analyzer+'" ' +
+                        'data-index="'+pro_index+'" ' +
+                        'data-name="'+pro_name+'">'
+
+                        +'<div class="dd-handle dd2-handle">'
+                        +'<i class="normal-icon icon-reorder blue bigger-130"></i>'
+                        +'<i class="drag-icon icon-move bigger-125"></i>'
+                        +'</div>'
+                        +'<div class="dd2-content">'+pro_name+' ('+pro_type+')'
+                        +'<div class="pull-right action-buttons">'
+                        +'<a class="blue" href="#">'
+                        +'<i class="icon-pencil bigger-130"></i>'
+                        +'</a>'
+                        +'<a class="red" href="#">'
+                        +'<i class="icon-trash bigger-130"></i>'
+                        +'</a>'
+                        +'</div>'
+                        +'</div>'
+
+                        +'</li>';
+                $($(".dd .dd-list")[0]).prepend(template);
+            }
+
+            /**
+             * 修改属性
+             */
+            function modifyStaticField(li) {
+                var pro_name = $("#pro_name").val();
+                var analyzer = $("#analyzer").val();
+                var pro_type = $("#pro_type").val();
+                var pro_index = $("#pro_index").prop("checked");
+                var ignore_above = $("#ignore_above").val();
+                li.data("name",pro_name);
+                li.data("analyzer",analyzer);
+                li.data("index",pro_index);
+                li.data("type",pro_type);
+                li.data("ignore_above",ignore_above);
+            }
 		</script>
 	</body>
 </html>

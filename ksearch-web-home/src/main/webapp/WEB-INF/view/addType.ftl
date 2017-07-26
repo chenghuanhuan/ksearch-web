@@ -16,13 +16,13 @@
 
                             <li data-target="#step2">
                                 <span class="step">2</span>
-                                <span class="title">添加数据结构（mapping）</span>
+                                <span class="title">添加属性（mapping）</span>
                             </li>
 
-                            <li data-target="#step3">
+                           <#-- <li data-target="#step3">
                                 <span class="step">3</span>
                                 <span class="title">测试</span>
-                            </li>
+                            </li>-->
 
                         </ul>
                     </div>
@@ -97,7 +97,7 @@
                             上一步
                         </button>
 
-                        <button class="btn btn-success btn-next" data-last="Finish ">
+                        <button class="btn btn-success btn-next" data-last="完成">
                             下一步
                             <i class="icon-arrow-right icon-on-right"></i>
                         </button>

@@ -1,5 +1,5 @@
 
-            <form class="form-horizontal" id="validation-form" method="get">
+            <form class="form-horizontal" id="add_field_form" method="get">
                 <div class="form-group">
                     <label class="control-label col-xs-12 col-sm-2 no-padding-right" for="pro_name">名称:</label>
 
@@ -58,6 +58,7 @@
                     <div class="col-xs-12 col-sm-4">
                         <div class="clearfix">
                             <select id="analyzer" name="analyzer" class="width-100 select2" data-placeholder="Click to Choose...">
+                                <option value=""></option>
                                 <option value="standard">standard （标准分词器）</option>
                                 <option value="english">english （英文分词）</option>
                                 <option value="chinese">chinese （中文分词）</option>
