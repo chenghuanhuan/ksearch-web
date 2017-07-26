@@ -13,10 +13,13 @@ import la.kaike.ksearch.model.vo.elastic.ClusterStatisticsVO;
 import la.kaike.ksearch.model.vo.elastic.IndicesVO;
 import la.kaike.ksearch.model.vo.index.*;
 import la.kaike.ksearch.util.constant.IndexSettingConstant;
+import la.kaike.ksearch.util.exception.BussinessException;
+import org.apache.commons.beanutils.BeanUtils;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
 import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequestBuilder;
+import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsResponse;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequestBuilder;
 import org.elasticsearch.action.admin.indices.stats.IndexStats;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
@@ -24,6 +27,7 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.block.ClusterBlock;
 import org.elasticsearch.cluster.metadata.AliasMetaData;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
+import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.cluster.metadata.MetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.settings.Settings;
@@ -211,12 +215,83 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
     @Override
     public void addMapping(AddMappingVO addMappingVO) {
-        PutMappingRequestBuilder builder = ElasticClient.newInstance().getIndicesAdminClient().preparePutMapping(addMappingVO.getIndex());
+        PutMappingRequestBuilder builder = ElasticClient.newInstance().getIndicesAdminClient()
+                .preparePutMapping(addMappingVO.getIndex());
         builder.setType(addMappingVO.getType())
                 .setSource(addMappingVO.getMappingsJson(), XContentType.JSON)
                 .get();
-
     }
 
+    @Override
+    public List<MappingVO> getAllMapping(GetMappingVO getMappingVO) {
+        List<MappingVO> mappingVOList = new ArrayList<>();
+        try {
+            GetMappingsResponse response = ElasticClient.newInstance().getIndicesAdminClient()
+                    .prepareGetMappings(getMappingVO.getIndex()).get();
+            ImmutableOpenMap<String,ImmutableOpenMap<String,MappingMetaData>> metaDataImmutableOpenMap = response.getMappings();
+            Iterator<ObjectObjectCursor<String, ImmutableOpenMap<String,MappingMetaData>>> iterator = metaDataImmutableOpenMap.iterator();
+            while (iterator.hasNext()){
+                ObjectObjectCursor<String, ImmutableOpenMap<String,MappingMetaData>>  objectCursor = iterator.next();
+                ImmutableOpenMap<String,MappingMetaData> map = objectCursor.value;
+                Iterator<ObjectObjectCursor<String,MappingMetaData>> metaDataIterator = map.iterator();
+
+                while (metaDataIterator.hasNext()){
+                    ObjectObjectCursor<String,MappingMetaData> mc = metaDataIterator.next();
+                    MappingMetaData mappingMetaData = mc.value;
+
+                    // 解析properties
+                    Map<String,Object> sourceAsMap = mappingMetaData.getSourceAsMap();
+                    MappingVO mappingVO = new MappingVO();
+                    mappingVO.setType(objectCursor.key);
+                    List<PropertiesVO> properties = mapToProperties(sourceAsMap);
+                    mappingVO.setProperties(properties);
+                    mappingVOList.add(mappingVO);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("getAllMapping error!",e);
+            new BussinessException("getAllMapping error!");
+        }
+        return mappingVOList;
+    }
+
+    private List<PropertiesVO> mapToProperties(Map<String,Object> params){
+
+        List<PropertiesVO> propertiesVOList = new ArrayList<>();
+        for (Map.Entry<String,Object> entrySet:params.entrySet()){
+
+            Object value = entrySet.getValue();
+            if (value instanceof LinkedHashMap){
+                Map<String,Object> linkedHashMap = (LinkedHashMap) value;
+                // 载入属性值
+                try {
+                    for (Map.Entry<String,Object> entry:linkedHashMap.entrySet()){
+                        PropertiesVO propertiesVO = new PropertiesVO();
+                        if (entry.getValue() instanceof LinkedHashMap){
+                            Map<String,Object> v = (Map<String, Object>) entry.getValue();
+                            BeanUtils.populate(propertiesVO,v);
+                            if (v.containsKey("properties")){
+                                Map<String,Object> children = (Map<String, Object>) v.get("properties");
+                                List<PropertiesVO> properties = mapToProperties(children);
+                                propertiesVO.setChildren(properties);
+                            }
+                        }
+
+                        propertiesVO.setName(entry.getKey());
+                        propertiesVOList.add(propertiesVO);
+
+                    }
+
+                } catch (Exception e) {
+                    logger.error("mapToProperties error!",e);
+                    new BussinessException("mapToProperties error!");
+                }
+
+            }
+
+
+        }
+        return propertiesVOList;
+    }
 
 }

@@ -96,4 +96,11 @@ public interface ElasticSearchService {
      * @param addMappingVO
      */
     void addMapping(AddMappingVO addMappingVO);
+
+    /**
+     * 获取mapping
+     * @param getMappingVO
+     * @return
+     */
+    List<MappingVO> getAllMapping(GetMappingVO getMappingVO);
 }

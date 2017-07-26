@@ -23,6 +23,11 @@ public class BussinessException extends RuntimeException{
 		this.urlPath = bizExceptionEnum.getUrlPath();
 	}
 
+	public BussinessException(String friendlyMsg){
+		this.friendlyCode = BizExceptionEnum.SERVER_ERROR.getCode();
+		this.friendlyMsg = friendlyMsg;
+	}
+
 	public int getCode() {
 		return friendlyCode;
 	}

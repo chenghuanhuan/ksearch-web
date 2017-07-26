@@ -185,6 +185,13 @@ public class IndexController extends BaseController{
         return properties;
     }
 
+    @RequestMapping("/getAllMapping")
+    @ResponseBody
+    public Response getAllMapping(GetMappingVO getMappingVO){
+        List<MappingVO> mappings = elasticSearchService.getAllMapping(getMappingVO);
+        return succeed(mappings);
+    }
+
     /**
      * 添加类型页面
      * @return
