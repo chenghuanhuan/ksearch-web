@@ -242,7 +242,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
                     // 解析properties
                     Map<String,Object> sourceAsMap = mappingMetaData.getSourceAsMap();
                     MappingVO mappingVO = new MappingVO();
-                    mappingVO.setType(objectCursor.key);
+                    mappingVO.setType(mc.key);
                     List<PropertiesVO> properties = mapToProperties(sourceAsMap);
                     mappingVO.setProperties(properties);
                     mappingVOList.add(mappingVO);
@@ -255,6 +255,11 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         return mappingVOList;
     }
 
+    /**
+     * 将map转换成属性对象
+     * @param params
+     * @return
+     */
     private List<PropertiesVO> mapToProperties(Map<String,Object> params){
 
         List<PropertiesVO> propertiesVOList = new ArrayList<>();
@@ -286,10 +291,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
                     logger.error("mapToProperties error!",e);
                     new BussinessException("mapToProperties error!");
                 }
-
             }
-
-
         }
         return propertiesVOList;
     }
