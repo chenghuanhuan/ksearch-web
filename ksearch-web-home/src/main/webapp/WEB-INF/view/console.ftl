@@ -466,7 +466,7 @@
                     //cardView:true,
                     url:"/console/cluster/indeices",
                     columns: [{
-                        field: 'indexName',
+                        field: 'index',
                         title: '索引'
                     }, {
                         field: 'docs',

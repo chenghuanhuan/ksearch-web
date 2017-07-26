@@ -16,10 +16,20 @@ public class AddMappingVO extends Request {
 
     private String type;
 
+    private Boolean include_in_all;
+
     /**
      * mapping的json配置字符串
      */
     private String mappingsJson;
+
+    public Boolean getInclude_in_all() {
+        return include_in_all;
+    }
+
+    public void setInclude_in_all(Boolean include_in_all) {
+        this.include_in_all = include_in_all;
+    }
 
     public String getType() {
         return type;

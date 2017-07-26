@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class IndicesVO {
 
-    private String indexName;
+    private String index;
     private Long docs;
     private String primarySize;
     private Integer shards;
@@ -29,12 +29,12 @@ public class IndicesVO {
         this.aliases = aliases;
     }
 
-    public String getIndexName() {
-        return indexName;
+    public String getIndex() {
+        return index;
     }
 
-    public void setIndexName(String indexName) {
-        this.indexName = indexName;
+    public void setIndex(String index) {
+        this.index = index;
     }
 
     public Long getDocs() {

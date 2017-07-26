@@ -12,9 +12,31 @@ import java.util.List;
  */
 public class MappingVO {
 
+
+    private String index;
+
     private String type;
 
+
+    private Boolean include_in_all;
+
     private List<PropertiesVO> properties;
+
+    public String getIndex() {
+        return index;
+    }
+
+    public void setIndex(String index) {
+        this.index = index;
+    }
+
+    public Boolean getInclude_in_all() {
+        return include_in_all;
+    }
+
+    public void setInclude_in_all(Boolean include_in_all) {
+        this.include_in_all = include_in_all;
+    }
 
     public String getType() {
         return type;

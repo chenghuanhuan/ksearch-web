@@ -200,7 +200,7 @@
                     url:"/console/cluster/indeices",
                     detailView:true,
                     columns: [{
-                        field: 'indexName',
+                        field: 'index',
                         title: '<span class="text-primary">索引</span>'
                     }, {
                         field: 'docs',
@@ -377,7 +377,7 @@
 			});
 
 			function expandTypeTable(index,row,$detail) {
-                $detail.html('<table></table>').find('table').bootstrapTable({
+                $detail.html('<table id="type_table_'+row.index+'"></table>').find('table').bootstrapTable({
                     striped:true,
                     //classes:"table table-no-bordered",
                     //showHeader:false,
@@ -386,22 +386,26 @@
                     detailView:true,
                     url:"/index/getAllMapping",
                     queryParams:function (params) {
-                        params.index = row.indexName;
+                        params.index = row.index;
                         params.clusterName = "";
                         return params;
                     },
                     columns: [{
                         field: 'type',
                         title: '类型'
-                    }, {
+                    },{
+                        field: 'include_in_all',
+                        title: 'include_in_all'
+                     }, {
                         field: 'primarySize',
                         title: '操作',
+                        events: operateEvents,
                         formatter: function (value, row, index) {
-                            var btn =  '<button class="btn btn-xs btn-danger tooltip-danger" data-rel="tooltip" title="删除">'
-                                    +'<i class="icon-trash bigger-120"></i>'
+                            var btn = '<button class="btn btn-xs btn-success tooltip-success modifyType" data-rel="tooltip" title="修改类型">'
+                                    +'<i class="icon-ok bigger-120"></i>'
                                     +'</button>';
                             return btn;
-						}
+                        }
                     }],
                     onExpandRow: function (index, row, $detail) {
                         expandMapping(index,row,$detail);
@@ -434,9 +438,9 @@
                         field: 'primarySize',
                         title: '操作',
                         formatter: function (value, row, index) {
-                            var btn =  '<button class="btn btn-xs btn-danger tooltip-danger" data-rel="tooltip" title="删除">'
-                                    +'<i class="icon-trash bigger-120"></i>'
-                                    +'</button>';
+                            var btn = '<button class="btn btn-xs btn-success tooltip-success" data-rel="tooltip" title="修改类型">'
+                                        +'<i class="icon-ok bigger-120"></i>'
+                                     +'</button>';
                             return btn;
                         }
                     }]
@@ -445,7 +449,7 @@
 
             window.operateEvents = {
                 'click .del': function (e, value, row, index) {
-                    var msg = '确认要删除索引:<strong style="color: red;">'+row.indexName+'</strong>吗？删除后数据无法恢复，请确认后再操作！！！';
+                    var msg = '确认要删除索引:<strong style="color: red;">'+row.index+'</strong>吗？删除后数据无法恢复，请确认后再操作！！！';
 
                     $myDialog.confirm(msg,BootstrapDialog.TYPE_DANGER,
                             function(result) {
@@ -463,7 +467,7 @@
                                     },function (data) {
 
                                     });
-                                    ajax.set("indices",row.indexName);
+                                    ajax.set("indices",row.index);
                                     ajax.set("clusterName","");
                                     ajax.start();
                                 }
@@ -472,7 +476,7 @@
                 },
                 'click .refresh': function (e, value, row, index) {
 
-                    var msg = '确认刷新索引：<strong style="color: #ffb752;">'+row.indexName+'</strong>吗？';
+                    var msg = '确认刷新索引：<strong style="color: #ffb752;">'+row.index+'</strong>吗？';
                     $myDialog.confirm(msg,BootstrapDialog.TYPE_WARNING,
                             function(result) {
                                 // result will be true if button was click, while it will be false if users close the dialog directly.
@@ -489,7 +493,7 @@
                                     },function (data) {
 
                                     });
-                                    ajax.set("indices",row.indexName);
+                                    ajax.set("indices",row.index);
                                     ajax.set("clusterName","");
                                     ajax.start();
                                 }
@@ -497,7 +501,7 @@
                     );
                 },
                 'click .close-index': function (e, value, row, index) {
-                    var msg = '确认关闭索引:<strong style="color: #ffb752;">'+row.indexName+'</strong>吗？';
+                    var msg = '确认关闭索引:<strong style="color: #ffb752;">'+row.index+'</strong>吗？';
                     $myDialog.confirm(msg,BootstrapDialog.TYPE_WARNING,
                             function(result) {
                                 // result will be true if button was click, while it will be false if users close the dialog directly.
@@ -514,7 +518,7 @@
                                     },function (data) {
 
                                     });
-                                    ajax.set("indices",row.indexName);
+                                    ajax.set("indices",row.index);
                                     ajax.set("clusterName","");
                                     ajax.start();
                                 }
@@ -523,7 +527,7 @@
                 },
                 'click .flush-index': function (e, value, row, index) {
 
-                    var msg = '确认flush索引:<strong style="color: #ffb752;">'+row.indexName+'</strong>吗？';
+                    var msg = '确认flush索引:<strong style="color: #ffb752;">'+row.index+'</strong>吗？';
                     $myDialog.confirm(msg,BootstrapDialog.TYPE_WARNING,
                             function(result) {
                                 // result will be true if button was click, while it will be false if users close the dialog directly.
@@ -539,7 +543,7 @@
                                         }
                                     },function (data) {
                                     });
-                                    ajax.set("indices",row.indexName);
+                                    ajax.set("indices",row.index);
                                     ajax.set("clusterName","");
                                     ajax.start();
                                 }
@@ -578,7 +582,7 @@
                                 if (!aliases){
                                     $myNotify.danger("请输入别名，多个使用回车键。");
                                 }
-                                var index = row.indexName;
+                                var index = row.index;
                                 dialogRef.enableButtons(false);
                                 dialogRef.setClosable(false);
                                 var ajax = new $ax("/index/addAlias", function (data) {
@@ -617,7 +621,7 @@
                             tag_input.val(aliases.join(","));
                             $("#aliases_server").val(aliases.join(","));
 
-                            var index = row.indexName;
+                            var index = row.index;
                             tag_input.tag(
                                     {
                                         placeholder:tag_input.attr('placeholder'),
@@ -735,7 +739,7 @@
                             action: function(dialogRef){
                                 dialogRef.enableButtons(false);
                                 dialogRef.setClosable(false);
-                                var index = row.indexName;
+                                var index = row.index;
 
                                 var max_num_segments = parseInt($("#max_num_segments").val());
                                 var only_expunge_deletes= $("#only_expunge_deletes").prop("checked");
@@ -785,13 +789,28 @@
 
                     BootstrapDialog.show({
                         type:BootstrapDialog.TYPE_PRIMARY,
-                        title: '数据结构',
+                        title: '添加类型',
                         closeByBackdrop: false,
                         closeByKeyboard: false,
                         cssClass:'modal-add-type',
                         message: $('<div class="row-fluid"></div>').load('/index/addTypeHtml'),
                         onshown:function (dialogRef) {
-                            initAddType(row,dialogRef);
+                            initAddType(row,dialogRef,1);
+                        }
+                    });
+                },
+                'click .modifyType': function (e, value, row, index) {
+
+                    BootstrapDialog.show({
+                        type:BootstrapDialog.TYPE_PRIMARY,
+                        title: '修改类型',
+                        closeByBackdrop: false,
+                        closeByKeyboard: false,
+                        cssClass:'modal-add-type',
+                        message: $('<div class="row-fluid"></div>').load('/index/addTypeHtml'),
+                        onshown:function (dialogRef) {
+                            initAddType(row,dialogRef,2);
+
                         }
                     });
                 }
@@ -802,20 +821,29 @@
              * 初始化添加类型窗口信息
              * @param row
              * @param dialogRef
+             * @param type 1:添加 2：修改
              */
-			function initAddType(row,dialogRef){
+			function initAddType(row,dialogRef,type){
+
+			    // 初始化数据
+                if (type===2){
+                    $("#type_name").val(row.type);
+                    $("#include_in_all").attr("checked",row.include_in_all);
+                }
 
                 var $validation = false;
                 $('#fuelux-wizard').ace_wizard().on('change' , function(e, info){
                     if(info.step == 1) {
                         //if(!$('#validation-form').valid()) return false;
                     }else if (info.step == 2){
-                        var index=row.indexName;
+                        var index=row.index;
                         var type_name = $("#type_name").val();
+                        var include_in_all = $("#include_in_all").prop("checked");
                         var mappingsJson = JSON.stringify($("#dd_list").nestable('serialize'));
                         var ajax = new $ax("/index/addMapping", function (data) {
                             // 成功
                             if (data.status===true){
+
                                 $myNotify.success(data.msg)
                             }else {
                                 $myNotify.danger(data.msg);
@@ -826,11 +854,17 @@
 
                         ajax.set("index",index);
                         ajax.set("type",type_name);
+                        ajax.set("include_in_all",include_in_all);
                         ajax.set("mappingsJson",mappingsJson);
                         ajax.start();
                     }
                     console.log("change");
                 }).on('finished', function(e) {
+                    // 刷新
+                    var table = $("#type_table_"+row.index);
+                    if (table){
+                        table.bootstrapTable('refresh');
+                    }
                     dialogRef.close();
                 }).on('stepclick', function(e){
                     //return false;//prevent clicking on steps
@@ -866,7 +900,7 @@
                                 var analyzer = $("#analyzer").val();
                                 var pro_type = $("#pro_type").val();
                                 var pro_index = $("#pro_index").prop("checked");
-                                var include_in_all = $("#include_in_all").prop("checked");
+
 
                                 var template =
                                         '<li class="dd-item dd2-item" ' +
@@ -882,45 +916,6 @@
                                             +'<div class="dd2-content">Menu</div>'
                                         +'</li>';
                                 $($(".dd .dd-list")[0]).prepend(template);
-
-                               /* var index=row.indexName;
-                                var type_name = $("#type_name").val();
-                                var pro_name = $("#pro_name").val();
-                                var analyzer = $("#analyzer").val();
-                                var pro_type = $("#pro_type").val();
-                                var null_value = $("#null_value").val();
-                                var pro_index = $("#pro_index").val();
-                                var include_in_all = $("#include_in_all").prop("checked");
-                                var ajax = new $ax("/index/addMapping", function (data) {
-                                    // 成功
-                                    if (data.status===true){
-                                        $myNotify.success(data.msg)
-                                        // 关闭窗口
-                                        dialogRef.close();
-                                    }else {
-                                        $myNotify.danger(data.msg);
-                                        dialogRef.enableButtons(true);
-                                        dialogRef.setClosable(true);
-                                    }
-                                },function (data) {
-
-                                });
-                                var mappingsJsonObj = {};
-                                mappingsJsonObj["properties"]={};
-
-                                mappingsJsonObj["include_in_all"]=include_in_all;
-                                mappingsJsonObj["properties"][""+pro_name]={
-                                    type:pro_type,
-                                    analyzer:analyzer,
-                                    //null_value:null_value,
-                                    index:pro_index
-                                };
-                                var mappingsJson = JSON.stringify(mappingsJsonObj);
-                                ajax.set("index",index);
-                                ajax.set("type",type_name);
-                                ajax.set("mappingsJson",mappingsJson);
-                                ajax.start();*/
-
                             }
                         }, {
                             icon: 'icon-ok',

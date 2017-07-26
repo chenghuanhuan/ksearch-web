@@ -107,7 +107,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
             for (Map.Entry<String,IndexStats> entry:indexStatsMap.entrySet()){
                 IndexStats indexStats = entry.getValue();
                 IndicesVO indicesVO = new IndicesVO();
-                indicesVO.setIndexName(entry.getKey());
+                indicesVO.setIndex(entry.getKey());
                 indicesVO.setDocs(indexStats.getTotal().getDocs().getCount());
                 indicesVO.setPrimarySize(indexStats.getPrimaries().getStore().getSize().toString());
                 //indicesVO.setShards(indexStats.getShards().length);
@@ -148,7 +148,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
             Set<ClusterBlock> clusterBlockSet = objectObjectCursor.value;
             ClusterBlock clusterBlock = clusterBlockSet.iterator().next();
-            indicesVO.setIndexName(objectObjectCursor.key);
+            indicesVO.setIndex(objectObjectCursor.key);
             indicesVO.setStatus(clusterBlock.status().name());
             indicesVOList.add(indicesVO);
         }
@@ -242,7 +242,12 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
                     // 解析properties
                     Map<String,Object> sourceAsMap = mappingMetaData.getSourceAsMap();
                     MappingVO mappingVO = new MappingVO();
+                    mappingVO.setIndex(getMappingVO.getIndex());
                     mappingVO.setType(mc.key);
+                    if (sourceAsMap.containsKey("include_in_all")){
+                        Boolean include_in_all = (Boolean) sourceAsMap.get("include_in_all");
+                        mappingVO.setInclude_in_all(include_in_all);
+                    }
                     List<PropertiesVO> properties = mapToProperties(sourceAsMap);
                     mappingVO.setProperties(properties);
                     mappingVOList.add(mappingVO);

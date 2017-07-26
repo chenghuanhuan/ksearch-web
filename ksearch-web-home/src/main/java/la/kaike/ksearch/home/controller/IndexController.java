@@ -157,7 +157,7 @@ public class IndexController extends BaseController{
         JSONObject jsonObject = new JSONObject();
         JSONObject properties = toPropertiesJson(propertiesVOList);
         jsonObject.put("properties",properties);
-
+        jsonObject.put("include_in_all",addMappingVO.getInclude_in_all());
 
         logger.info(jsonObject.toJSONString());
         addMappingVO.setMappingsJson(jsonObject.toJSONString());
