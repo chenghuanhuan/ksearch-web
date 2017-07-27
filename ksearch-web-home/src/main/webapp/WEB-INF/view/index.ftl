@@ -237,13 +237,17 @@
 							var btns = '<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">'
                                     +'<button class="btn btn-xs btn-success tooltip-success refresh" data-rel="tooltip" title="刷新">'
                                     +'<i class="icon-ok bigger-120"></i>'
-                                    +'</button>'
-
-                                    +'<button class="btn btn-xs btn-info tooltip-info close-index" data-rel="tooltip" title="关闭">'
-                                    +'<i class="icon-edit bigger-120"></i>'
-                                    +'</button>'
-
-                                    +'<button class="btn btn-xs btn-danger tooltip-danger del" data-rel="tooltip" title="删除">'
+                                    +'</button>';
+                            if (row.status === "OPEN") {
+                                btns+='<button class="btn btn-xs btn-info tooltip-info close-index" data-rel="tooltip" title="关闭">'
+                                + '<i class="icon-edit bigger-120"></i>'
+                                + '</button>';
+                            }else {
+                                btns+='<button class="btn btn-xs btn-info tooltip-info close-index" data-rel="tooltip" title="打开">'
+                                        + '<i class="icon-edit bigger-120"></i>'
+                                        + '</button>';
+                            }
+                            btns+='<button class="btn btn-xs btn-danger tooltip-danger del" data-rel="tooltip" title="删除">'
                                     +'<i class="icon-trash bigger-120"></i>'
                                     +'</button>'
 
@@ -502,12 +506,21 @@
                     );
                 },
                 'click .close-index': function (e, value, row, index) {
-                    var msg = '确认关闭索引:<strong style="color: #ffb752;">'+row.index+'</strong>吗？';
+                    var msg = "";
+                    var url = "";
+                    if(row.status=='OPEN'){
+                        msg = '确认关闭索引:<strong style="color: #ffb752;">'+row.index+'</strong>吗？';
+                        url = "/index/close";
+                    }else {
+                        msg = '确认打开索引:<strong style="color: #ffb752;">'+row.index+'</strong>吗？';
+                        url = "/index/open";
+                    }
+
                     $myDialog.confirm(msg,BootstrapDialog.TYPE_WARNING,
                             function(result) {
                                 // result will be true if button was click, while it will be false if users close the dialog directly.
                                 if(result) {
-                                    var ajax = new $ax("/index/close", function (data) {
+                                    var ajax = new $ax(url, function (data) {
                                         // 成功
                                         if (data.status===true){
                                             $myNotify.success(data.data);
@@ -959,7 +972,6 @@
 
                     //html +=template;
                     if(item.children){
-                       // var expandedButton = '<button data-action="collapse" type="button">Collapse</button><button data-action="expand" type="button" style="display: none;">Expand</button>';
                         var append = '<ol class="dd-list">'+initNestableData(item.children)+'</ol>';
                         html +=template+append;
                         html +='</li>';
@@ -1138,7 +1150,7 @@
                     if (li.find('button').length > 0 && li.find('ol').length > 0) {
                         li.find('ol').first().append(template)
                     } else {
-                        var expandedButton = '<button data-action="collapse" type="button">Collapse</button><button data-action="expand" type="button" style="display: none;">Expand</button>';
+                        //var expandedButton = '<button data-action="collapse" type="button">Collapse</button><button data-action="expand" type="button" style="display: none;">Expand</button>';
                         li.prepend(expandedButton)
                         var ol = $("<ol class='dd-list'></ol>")
                         ol.append(template)

@@ -93,6 +93,18 @@ public class IndexController extends BaseController{
     }
 
     /**
+     * 打开索引
+     * @param openIndexReqVO
+     * @return
+     */
+    @RequestMapping("/open")
+    @ResponseBody
+    public Response refresh(OpenIndexReqVO openIndexReqVO){
+        elasticSearchService.openIndex(openIndexReqVO);
+        return succeed("打开索引成功！可能不会马上显示，过一会儿尝试刷新页面！");
+    }
+
+    /**
      * flush
      * @param flushIndexVO
      * @return

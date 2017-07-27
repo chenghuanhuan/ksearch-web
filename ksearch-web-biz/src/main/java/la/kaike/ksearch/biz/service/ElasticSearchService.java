@@ -68,6 +68,12 @@ public interface ElasticSearchService {
     void closeIndex(CloseIndexVO closeIndexVO);
 
     /**
+     * 打开索引
+     * @param openIndexReqVO
+     */
+    void openIndex(OpenIndexReqVO openIndexReqVO);
+
+    /**
      * flush
      * @param flushIndexVO
      */

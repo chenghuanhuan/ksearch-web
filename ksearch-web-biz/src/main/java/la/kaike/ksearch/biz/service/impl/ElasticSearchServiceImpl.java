@@ -183,6 +183,11 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     }
 
     @Override
+    public void openIndex(OpenIndexReqVO openIndexReqVO) {
+        ElasticClient.newInstance().getIndicesAdminClient().prepareOpen(openIndexReqVO.getIndices().toArray(new String[]{})).get();
+    }
+
+    @Override
     public void flushIndex(FlushIndexVO flushIndexVO) {
         ElasticClient.newInstance().getIndicesAdminClient().prepareFlush(flushIndexVO.getIndices().toArray(new String[]{})).get();
     }
