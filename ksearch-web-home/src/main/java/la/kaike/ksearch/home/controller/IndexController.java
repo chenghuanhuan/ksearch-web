@@ -175,6 +175,9 @@ public class IndexController extends BaseController{
         for (PropertiesVO propertiesVO:propertiesVOList){
             PropertiesBO propertiesBO = new PropertiesBO();
             BeanUtils.copyProperties(propertiesVO,propertiesBO);
+            if ("".equals(propertiesBO.getAnalyzer())){
+                propertiesBO.setAnalyzer(null);
+            }
             if (!CollectionUtils.isEmpty(propertiesVO.getChildren())){
                 JSONObject child = toPropertiesJson(propertiesVO.getChildren());
                 propertiesBO.setProperties(child);

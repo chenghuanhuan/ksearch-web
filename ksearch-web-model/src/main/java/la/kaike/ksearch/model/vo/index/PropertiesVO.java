@@ -33,7 +33,12 @@ public class PropertiesVO {
      */
     private String name;
 
-    /** 类型 */
+    /**
+     *
+     * 类型
+     *
+     * keyword类型的数据只能完全匹配，适合那些不需要分词的数据，
+     */
     private String type;
 
     /**

@@ -810,7 +810,6 @@
                         message: $('<div class="row-fluid"></div>').load('/index/addTypeHtml'),
                         onshown:function (dialogRef) {
                             initAddType(row,dialogRef,2);
-
                         }
                     });
                 }
@@ -892,6 +891,7 @@
                     var properties = row.properties;
                     var html = initNestableData(properties);
                     $($(".dd .dd-list")[0]).html(html);
+
                 }
 
                 // 删除field
@@ -1014,8 +1014,9 @@
                         }).on('change', function(){
 
                         });
-
-                        $('#ignore_above').ace_spinner({value:1,min:1,max:100,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+                        //$('#ignore_above').ace_spinner({value:0,min:0,max:200,disabled:false,step:10, btn_up_class:'btn-info' , btn_down_class:'btn-info'})
+                        $('#ignore_above').ace_spinner({value:'',min:1,max:100,disabled:false,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+                        disableSpinner("ignore_above");
 
                         if (li){
                             // 填充值
@@ -1025,7 +1026,21 @@
                             $("#analyzer").select2('val',li.data('analyzer'));
                             $("#pro_index").attr("checked",li.data('index'));
                             $("#pro_name").val(li.data('name'));
-                            $("#ignore_above").val(li.data('ignore_above'));
+                            if (li.data('ignore_above')){
+                                $("#ignore_above").val(parseInt(li.data('ignore_above')));
+                            }
+                            // 禁用 名称
+                            $("#pro_name").attr("readonly",true);
+                            $("#pro_type").select2('readonly',true);
+                        }else {
+                            // 初始化 类型事件
+                            $("#pro_type").on("change",function (e) {
+                                if (e.val=="keyword"){
+                                    enableSpinner("ignore_above");
+                                }else {
+                                    disableSpinner("ignore_above");
+                                }
+                            });
                         }
                     }
                 });
@@ -1038,13 +1053,14 @@
                 var analyzer = $("#analyzer").val();
                 var pro_type = $("#pro_type").val();
                 var pro_index = $("#pro_index").prop("checked");
-
+                var ignore_above = $("#ignore_above").val();
 
                 var template =
                         '<li class="dd-item dd2-item" ' +
                         'data-type="'+pro_type+'" ' +
                         'data-analyzer="'+analyzer+'" ' +
                         'data-index="'+pro_index+'" ' +
+                        'data-ignore_above="'+ignore_above+'" ' +
                         'data-name="'+pro_name+'">'
 
                         +'<div class="dd-handle dd2-handle">'
@@ -1080,6 +1096,18 @@
                 li.data("index",pro_index);
                 li.data("type",pro_type);
                 li.data("ignore_above",ignore_above);
+            }
+            
+            function disableSpinner(id) {
+                $("#"+id).attr('readonly',true);
+                $($("#"+id).prev('.spinner-buttons').find('button')[0]).attr('disabled','disabled');
+                $($("#"+id).next('.spinner-buttons').find('button')[0]).attr('disabled','disabled');
+            }
+            
+            function enableSpinner(id) {
+                $("#"+id).attr('readonly',false);
+                $($("#"+id).prev('.spinner-buttons').find('button')[0]).removeAttr('disabled');
+                $($("#"+id).next('.spinner-buttons').find('button')[0]).removeAttr('disabled');
             }
 		</script>
 	</body>

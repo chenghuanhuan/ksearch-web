@@ -35,6 +35,7 @@
                         <div class="clearfix">
                             <select id="pro_type" name="pro_type" class="width-100 select2" data-placeholder="Click to Choose...">
                                 <option value="text">text</option>
+                                <option value="keyword">keyword</option>
                                 <option value="byte">byte</option>
                                 <option value="short">short</option>
                                 <option value="integer">integer</option>
