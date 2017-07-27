@@ -281,8 +281,9 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
                             Map<String,Object> v = (Map<String, Object>) entry.getValue();
                             BeanUtils.populate(propertiesVO,v);
                             if (v.containsKey("properties")){
-                                Map<String,Object> children = (Map<String, Object>) v.get("properties");
-                                List<PropertiesVO> properties = mapToProperties(children);
+                                //Map<String,Object> children = (Map<String, Object>) v.get("properties");
+                                List<PropertiesVO> properties = mapToProperties(v);
+                                propertiesVO.setType("object");
                                 propertiesVO.setChildren(properties);
                             }
                         }

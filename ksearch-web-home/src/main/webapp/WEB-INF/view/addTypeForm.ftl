@@ -58,11 +58,16 @@
 
                     <div class="col-xs-12 col-sm-4">
                         <div class="clearfix">
-                            <select id="analyzer" name="analyzer" class="width-100 select2" data-placeholder="Click to Choose...">
+                            <select id="analyzer" name="analyzer" class="width-100 select2"  data-placeholder="Click to Choose...">
                                 <option value=""></option>
                                 <option value="standard">standard （标准分词器）</option>
                                 <option value="english">english （英文分词）</option>
                                 <option value="chinese">chinese （中文分词）</option>
+                                <option value="pattern">pattern</option>
+                                <option value="simple">simple</option>
+                                <option value="whitespace">whitespace</option>
+                                <option value="keyword">keyword</option>
+                                <option value="fingerprint">fingerprint</option>
                             </select>
                         </div>
                     </div>
@@ -76,7 +81,7 @@
                     </div>
                 </div>
 
-
+                <#--<input type="hidden" name="is_children" id="is_children"/>-->
                 <#--<div class="center">
                     <button type="button" class="btn btn-sm btn-success">
                         保存

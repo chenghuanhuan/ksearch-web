@@ -45,7 +45,7 @@ public class PropertiesVO {
      * 控制属性如何被索引，可选值 analyzed、not_analyzed(字符串类型)、no
      * "analyzed"//分词，不分词是：not_analyzed ，设置成no，字段将不会被索引
      */
-    private String index;
+    private Boolean index;
 
     /**
      * true,false，是否单独设置此字段的是否存储而从_source字段中分离，默认是false，只能搜索，不能获取值
@@ -102,11 +102,12 @@ public class PropertiesVO {
         this.type = type;
     }
 
-    public String getIndex() {
+
+    public Boolean getIndex() {
         return index;
     }
 
-    public void setIndex(String index) {
+    public void setIndex(Boolean index) {
         this.index = index;
     }
 

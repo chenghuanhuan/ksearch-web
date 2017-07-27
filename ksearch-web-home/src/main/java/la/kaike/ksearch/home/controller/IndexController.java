@@ -178,6 +178,9 @@ public class IndexController extends BaseController{
             if ("".equals(propertiesBO.getAnalyzer())){
                 propertiesBO.setAnalyzer(null);
             }
+            if ("object".equals(propertiesBO.getType())){
+                propertiesBO.setIndex(null);
+            }
             if (!CollectionUtils.isEmpty(propertiesVO.getChildren())){
                 JSONObject child = toPropertiesJson(propertiesVO.getChildren());
                 propertiesBO.setProperties(child);

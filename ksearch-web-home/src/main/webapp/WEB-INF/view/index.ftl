@@ -187,6 +187,7 @@
         <script src="/assets/js/fuelux/fuelux.wizard.min.js"></script>
         <script src="/assets/js/jquery.nestable.js"></script>
 		<script type="text/javascript">
+            var expandedButton = '<button data-action="collapse" type="button">Collapse</button><button data-action="expand" type="button" style="display: none;">Expand</button>';
 			jQuery(function($) {
 
                 $('#indices_table').bootstrapTable({
@@ -878,9 +879,9 @@
                 });
 
 
-
+                // 添加按钮
                 $("#add_mapping_btn").on("click",function () {
-                    addFieldDialog(null);
+                    addFieldDialog(null,1);
                 });
 
                 // 初始化数据
@@ -896,24 +897,27 @@
 
                 // 删除field
                 $("#dd_list").on("click",'.icon-trash',function (e) {
-                //$(".icon-trash").on("click",function (e) {
+                    //$(".icon-trash").on("click",function (e) {
                     var msg = '确认要删除吗';
                     var me = $(this);
-                    $myDialog.confirm(msg,BootstrapDialog.TYPE_DANGER,
-                        function(result) {
-                            // result will be true if button was click, while it will be false if users close the dialog directly.
-                            if(result) {
-                               me.parents('.dd-item').remove();
+                    $myDialog.confirm(msg, BootstrapDialog.TYPE_DANGER,
+                            function (result) {
+                                // result will be true if button was click, while it will be false if users close the dialog directly.
+                                if (result) {
+                                    me.parents('.dd-item').remove();
+                                }
                             }
-                        }
                     );
-
                 });
+
+                // 删除field
+                $("#dd_list").on("click",'.icon-plus',addChildDialog);
 
                 // 编辑field
                 $("#dd_list").on("click",'.icon-pencil',function (e) {
                 //$(".icon-pencil").on("click",function (e) {
-                    addFieldDialog($(this).parents('.dd-item'));
+                    var li = $(this).parent().parent().parent().parent();
+                    addFieldDialog(li,2);
                 });
             }
             
@@ -928,23 +932,41 @@
                             'data-type="'+item.type+'" ' +
                             'data-analyzer="'+item.analyzer+'" ' +
                             'data-index="'+item.index+'" ' +
-                            'data-name="'+item.name+'">'
-                            +'<div class="dd-handle dd2-handle">'
+                            'data-null_value="'+item.null_value+'" ' +
+                            'data-name="'+item.name+'">';
+                    if(item.children){
+                            template+=expandedButton;
+                    }
+                    template +='<div class="dd-handle dd2-handle">'
                             +'<i class="normal-icon icon-reorder blue bigger-130"></i>'
                             +'<i class="drag-icon icon-move bigger-125"></i>'
                             +'</div>'
                             +'<div class="dd2-content">'+item.name+' ('+item.type+')'
-                            +'<div class="pull-right action-buttons">'
-                            +'<a class="blue" href="#">'
+                            +'<div class="pull-right action-buttons">';
+                    if(item.type==="array"||item.type==="object"){
+                        template +=""
+                                +'<a class="green" href="#">'
+                                +'<i class="icon-plus bigger-130"></i>'
+                                +'</a>';
+                    }
+
+                    template+='<a class="blue" href="#">'
                             +'<i class="icon-pencil bigger-130"></i>'
                             +'</a>'
                             +'</div>'
-                            +'</div>'
+                            +'</div>';
 
-                            +'</li>';
-                    html +=template;
+
+                    //html +=template;
                     if(item.children){
-                        html +=initNestableData();
+                       // var expandedButton = '<button data-action="collapse" type="button">Collapse</button><button data-action="expand" type="button" style="display: none;">Expand</button>';
+                        var append = '<ol class="dd-list">'+initNestableData(item.children)+'</ol>';
+                        html +=template+append;
+                        html +='</li>';
+                    }else {
+                        //html +=template;
+                        html +='</li>';
+                        html +=template;
                     }
                 });
 
@@ -952,7 +974,11 @@
 
             }
 
-            function addFieldDialog(li) {
+            /**
+             * 添加字段窗口
+             * type 1 添加 2 编辑 3 添加子节点
+             */
+            function addFieldDialog(li,type) {
 			    var btns = [
                     {
                         icon: 'icon-ok',
@@ -960,17 +986,17 @@
                         cssClass: 'btn-success',
                         //autospin: true,
                         action: function(dialogRef){
-                            if(li){// 修改
+                            if(type===2){// 修改
                                 modifyStaticField(li);
                             }else {
-                                addStaticField();
+                                addStaticField(li);
                             }
 
                             dialogRef.close();
                         }
                     }
                 ];
-                if(!li){
+                if(type!==2){
                     btns.push(
                             {
                                 icon: 'icon-ok',
@@ -978,7 +1004,7 @@
                                 cssClass: 'btn-success',
                                 //autospin: true,
                                 action: function(dialogRef){
-                                    addStaticField();
+                                    addStaticField(li);
                                     // 重置表单
                                     $(':input','#add_field_form')
                                             .not(':button,:submit,:reset,:hidden')
@@ -1009,16 +1035,16 @@
                     message: $('<div class="row-fluid"></div>').load('/index/addTypeForm'),
                     buttons: btns,
                     onshown:function () {
-                        $(".select2").select2({
+                        $("#pro_type").select2({
                             allowClear:true
-                        }).on('change', function(){
-
+                        });
+                        $("#analyzer").select2({
+                            allowClear:true
                         });
                         //$('#ignore_above').ace_spinner({value:0,min:0,max:200,disabled:false,step:10, btn_up_class:'btn-info' , btn_down_class:'btn-info'})
                         $('#ignore_above').ace_spinner({value:'',min:1,max:100,disabled:false,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
-                        disableSpinner("ignore_above");
 
-                        if (li){
+                        if (type===2){
                             // 填充值
                             //var li = $(this).parents('.dd-item');
                             // 获取data值
@@ -1026,41 +1052,61 @@
                             $("#analyzer").select2('val',li.data('analyzer'));
                             $("#pro_index").attr("checked",li.data('index'));
                             $("#pro_name").val(li.data('name'));
+                            $("#null_value").val(li.data('null_value'));
                             if (li.data('ignore_above')){
                                 $("#ignore_above").val(parseInt(li.data('ignore_above')));
                             }
-                            // 禁用 名称
-                            $("#pro_name").attr("readonly",true);
-                            $("#pro_type").select2('readonly',true);
-                        }else {
-                            // 初始化 类型事件
-                            $("#pro_type").on("change",function (e) {
-                                if (e.val=="keyword"){
-                                    enableSpinner("ignore_above");
-                                }else {
-                                    disableSpinner("ignore_above");
-                                }
-                            });
+
+                            // 未保存至数据库可以修改任何值
+                            if(li.data("new")!==1) {
+                                // 禁用 名称
+                                $("#pro_name").attr("readonly", true);
+                                $("#pro_type").select2('readonly', true);
+                            }
+                            if (li.data('type')!=="keyword") {
+                                disableSpinner("ignore_above");
+                            }
                         }
+                        // 初始化 类型事件
+                        $("#pro_type").on("change",function (e) {
+                            if (e.val=="keyword"){
+                                enableSpinner("ignore_above");
+                            }else {
+                                disableSpinner("ignore_above");
+                                $("#ignore_above").val('');
+                            }
+
+                            if (e.val =="text" || e.val =="object" || e.val =="array"){
+                                $("#null_value").attr("readonly",true);
+                            }else {
+                                $("#null_value").attr("readonly",false);
+                            }
+                        });
                     }
                 });
             }
 
             // 添加属性
-            function addStaticField() {
+            function addStaticField(li) {
                 var type_name = $("#type_name").val();
                 var pro_name = $("#pro_name").val();
                 var analyzer = $("#analyzer").val();
+                var null_value = $("#null_value").val();
+               /* if(analyzer){
+                    analyzer = analyzer.join(",");
+                }*/
                 var pro_type = $("#pro_type").val();
                 var pro_index = $("#pro_index").prop("checked");
                 var ignore_above = $("#ignore_above").val();
 
                 var template =
                         '<li class="dd-item dd2-item" ' +
+                        'data-new="1" ' +
                         'data-type="'+pro_type+'" ' +
                         'data-analyzer="'+analyzer+'" ' +
                         'data-index="'+pro_index+'" ' +
                         'data-ignore_above="'+ignore_above+'" ' +
+                        'data-null_value="'+null_value+'" ' +
                         'data-name="'+pro_name+'">'
 
                         +'<div class="dd-handle dd2-handle">'
@@ -1068,18 +1114,39 @@
                         +'<i class="drag-icon icon-move bigger-125"></i>'
                         +'</div>'
                         +'<div class="dd2-content">'+pro_name+' ('+pro_type+')'
-                        +'<div class="pull-right action-buttons">'
-                        +'<a class="blue" href="#">'
-                        +'<i class="icon-pencil bigger-130"></i>'
-                        +'</a>'
-                        +'<a class="red" href="#">'
-                        +'<i class="icon-trash bigger-130"></i>'
-                        +'</a>'
-                        +'</div>'
-                        +'</div>'
+                        +'<div class="pull-right action-buttons">';
+                        if(pro_type==="array"||pro_type==="object"){
+                            template +=""
+                                    +'<a class="green" href="#">'
+                                    +'<i class="icon-plus bigger-130"></i>'
+                                    +'</a>';
+                        }
 
+                        template = template
+                            +'<a class="blue" href="#">'
+                                +'<i class="icon-pencil bigger-130"></i>'
+                            +'</a>'
+                            +'<a class="red" href="#">'
+                                +'<i class="icon-trash bigger-130"></i>'
+                            +'</a>'
+                        +'</div>'
+                        +'</div>'
                         +'</li>';
-                $($(".dd .dd-list")[0]).prepend(template);
+
+                // 如果是添加子节点
+                if(li){
+                    if (li.find('button').length > 0 && li.find('ol').length > 0) {
+                        li.find('ol').first().append(template)
+                    } else {
+                        var expandedButton = '<button data-action="collapse" type="button">Collapse</button><button data-action="expand" type="button" style="display: none;">Expand</button>';
+                        li.prepend(expandedButton)
+                        var ol = $("<ol class='dd-list'></ol>")
+                        ol.append(template)
+                        li.append(ol)
+                    }
+                }else {
+                    $($(".dd .dd-list")[0]).prepend(template);
+                }
             }
 
             /**
@@ -1091,11 +1158,23 @@
                 var pro_type = $("#pro_type").val();
                 var pro_index = $("#pro_index").prop("checked");
                 var ignore_above = $("#ignore_above").val();
+                var null_value = $("#null_value").val();
                 li.data("name",pro_name);
                 li.data("analyzer",analyzer);
                 li.data("index",pro_index);
                 li.data("type",pro_type);
                 li.data("ignore_above",ignore_above);
+                li.data("null_value",null_value);
+
+                if(li.data("new")=="1"&&(pro_type==="array"||pro_type==="object")){
+                    if(li.find(".icon-plus").length==0) {
+                        var template = '<a class="green" href="#">'
+                                + '<i class="icon-plus bigger-130"></i>'
+                                + '</a>';
+                        $(li.find(".pull-right")[0]).prepend(template);
+                    }
+                }
+
             }
             
             function disableSpinner(id) {
@@ -1109,6 +1188,16 @@
                 $($("#"+id).prev('.spinner-buttons').find('button')[0]).removeAttr('disabled');
                 $($("#"+id).next('.spinner-buttons').find('button')[0]).removeAttr('disabled');
             }
+
+            /**
+             * 添加子节点按钮
+             */
+            function addChildDialog(e) {
+                var li = $(this).parent().parent().parent().parent();
+                addFieldDialog(li,3);
+               /* $("#is_children").val("1");*/
+            }
+
 		</script>
 	</body>
 </html>
