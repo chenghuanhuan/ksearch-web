@@ -382,6 +382,7 @@
                     //cardView:true,
                     //checkboxEnable:true,
                     //detailView:true,
+                    uniqueId:'type',
                     url:"/index/getAllMapping",
                     queryParams:function (params) {
                         params.index = row.index;
@@ -888,6 +889,12 @@
                 // 添加按钮
                 $("#add_mapping_btn").on("click",function () {
                     addFieldDialog(null,1);
+                });
+
+                // 重置属性
+                $("#reset_field").on("click",function () {
+                    var html = initNestableData(properties);
+                    $($(".dd .dd-list")[0]).html(html);
                 });
 
                 // 初始化数据
