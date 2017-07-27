@@ -10,7 +10,7 @@ import la.kaike.ksearch.model.Request;
  * @author chenghuanhuan@kaike.la
  * @since $Revision:1.0.0, $Date: 2017年07月24日 下午3:08 $
  */
-public class AddMappingVO extends Request {
+public class AddMappingReqVO extends Request {
 
     private String index;
 

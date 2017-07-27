@@ -11,22 +11,16 @@ import java.util.List;
 
 /**
  * @author chenghuanhuan@kaike.la
- * @since $Revision:1.0.0, $Date: 2017年07月20日 下午5:29 $
+ * @since $Revision:1.0.0, $Date: 2017年07月20日 下午3:58 $
  */
-public class CloseIndexVO extends Request {
+public class RefreshIndexReqVO extends Request{
+
     @Validate(required = true)
     private String clusterName;
 
     @Validate(isNotBlank = true)
     private List<String> indices;
 
-    public String getClusterName() {
-        return clusterName;
-    }
-
-    public void setClusterName(String clusterName) {
-        this.clusterName = clusterName;
-    }
 
     public List<String> getIndices() {
         return indices;
@@ -34,5 +28,13 @@ public class CloseIndexVO extends Request {
 
     public void setIndices(List<String> indices) {
         this.indices = indices;
+    }
+
+    public String getClusterName() {
+        return clusterName;
+    }
+
+    public void setClusterName(String clusterName) {
+        this.clusterName = clusterName;
     }
 }

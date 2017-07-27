@@ -157,7 +157,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     }
 
     @Override
-    public void addIndex(AddIndexVO addIndexVO) {
+    public void addIndex(AddIndexReqVO addIndexVO) {
         TransportClient client = ElasticClient.newInstance().getTransportClient();
         client.admin().indices().prepareCreate(addIndexVO.getIndex()).setSettings(
                 Settings.builder()
@@ -167,18 +167,18 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     }
 
     @Override
-    public void delIndex(DelIndexVO delIndexVO) {
+    public void delIndex(DelIndexReqVO delIndexVO) {
         TransportClient client = ElasticClient.newInstance().getTransportClient();
         client.admin().indices().prepareDelete(delIndexVO.getIndices().toArray(new String[]{})).get();
     }
 
     @Override
-    public void refreshIndex(RefreshIndexVO refreshIndexVO) {
+    public void refreshIndex(RefreshIndexReqVO refreshIndexVO) {
         ElasticClient.newInstance().getIndicesAdminClient().prepareRefresh(refreshIndexVO.getIndices().toArray(new String[]{})).get();
     }
 
     @Override
-    public void closeIndex(CloseIndexVO closeIndexVO) {
+    public void closeIndex(CloseIndexReqVO closeIndexVO) {
         ElasticClient.newInstance().getIndicesAdminClient().prepareClose(closeIndexVO.getIndices().toArray(new String[]{})).get();
     }
 
@@ -188,12 +188,12 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     }
 
     @Override
-    public void flushIndex(FlushIndexVO flushIndexVO) {
+    public void flushIndex(FlushIndexReqVO flushIndexVO) {
         ElasticClient.newInstance().getIndicesAdminClient().prepareFlush(flushIndexVO.getIndices().toArray(new String[]{})).get();
     }
 
     @Override
-    public void optimizeIndex(OptimizeIndexVO optimizeIndexVO) {
+    public void optimizeIndex(OptimizeIndexReqVO optimizeIndexVO) {
         ElasticClient.newInstance().getTransportClient().admin().indices()
                 .prepareForceMerge(optimizeIndexVO.getIndex())
                 .setFlush(optimizeIndexVO.getFlush())
@@ -203,7 +203,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     }
 
     @Override
-    public void createAlias(CreateAliasVO aliasIndexVO) {
+    public void createAlias(CreateAliasReqVO aliasIndexVO) {
         IndicesAliasesRequestBuilder builder = ElasticClient.newInstance().getIndicesAdminClient().prepareAliases();
         String index = aliasIndexVO.getIndex();
         for (String alias:aliasIndexVO.getAliases()){
@@ -213,13 +213,13 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     }
 
     @Override
-    public void delAlias(DelAliasVO delAliasVO) {
+    public void delAlias(DelAliasReqVO delAliasVO) {
         IndicesAliasesRequestBuilder builder = ElasticClient.newInstance().getIndicesAdminClient().prepareAliases();
         builder.removeAlias(delAliasVO.getIndex(),delAliasVO.getAlias()).get();
     }
 
     @Override
-    public void addMapping(AddMappingVO addMappingVO) {
+    public void addMapping(AddMappingReqVO addMappingVO) {
         PutMappingRequestBuilder builder = ElasticClient.newInstance().getIndicesAdminClient()
                 .preparePutMapping(addMappingVO.getIndex());
         builder.setType(addMappingVO.getType())
@@ -228,7 +228,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     }
 
     @Override
-    public List<MappingVO> getAllMapping(GetMappingVO getMappingVO) {
+    public List<MappingVO> getAllMapping(GetMappingReqVO getMappingVO) {
         List<MappingVO> mappingVOList = new ArrayList<>();
         try {
             GetMappingsResponse response = ElasticClient.newInstance().getIndicesAdminClient()

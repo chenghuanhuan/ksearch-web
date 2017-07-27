@@ -48,24 +48,24 @@ public interface ElasticSearchService {
      * 添加索引
      * @param addIndexVO
      */
-    void addIndex(AddIndexVO addIndexVO);
+    void addIndex(AddIndexReqVO addIndexVO);
 
     /**
      * 删除索引
      * @param delIndexVO
      */
-    void delIndex(DelIndexVO delIndexVO);
+    void delIndex(DelIndexReqVO delIndexVO);
 
     /**
      * 刷新索引
      */
-    void refreshIndex(RefreshIndexVO refreshIndexVO);
+    void refreshIndex(RefreshIndexReqVO refreshIndexVO);
 
     /**
      * 关闭索引
      * @param closeIndexVO
      */
-    void closeIndex(CloseIndexVO closeIndexVO);
+    void closeIndex(CloseIndexReqVO closeIndexVO);
 
     /**
      * 打开索引
@@ -77,36 +77,36 @@ public interface ElasticSearchService {
      * flush
      * @param flushIndexVO
      */
-    void flushIndex(FlushIndexVO flushIndexVO);
+    void flushIndex(FlushIndexReqVO flushIndexVO);
 
     /**
      * 优化索引
      * @param optimizeIndexVO
      */
-    void optimizeIndex(OptimizeIndexVO optimizeIndexVO);
+    void optimizeIndex(OptimizeIndexReqVO optimizeIndexVO);
 
     /**
      * 创建别名
      * @param aliasIndexVO
      */
-    void createAlias(CreateAliasVO aliasIndexVO);
+    void createAlias(CreateAliasReqVO aliasIndexVO);
 
     /**
      * 删除别名
      * @param delAliasVO
      */
-    void delAlias(DelAliasVO delAliasVO);
+    void delAlias(DelAliasReqVO delAliasVO);
 
     /**
      * 添加mapping
      * @param addMappingVO
      */
-    void addMapping(AddMappingVO addMappingVO);
+    void addMapping(AddMappingReqVO addMappingVO);
 
     /**
      * 获取mapping
      * @param getMappingVO
      * @return
      */
-    List<MappingVO> getAllMapping(GetMappingVO getMappingVO);
+    List<MappingVO> getAllMapping(GetMappingReqVO getMappingVO);
 }

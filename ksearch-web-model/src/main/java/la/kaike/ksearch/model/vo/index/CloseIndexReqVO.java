@@ -11,12 +11,12 @@ import java.util.List;
 
 /**
  * @author chenghuanhuan@kaike.la
- * @since $Revision:1.0.0, $Date: 2017年07月21日 上午10:36 $
+ * @since $Revision:1.0.0, $Date: 2017年07月20日 下午5:29 $
  */
-public class FlushIndexVO extends Request {
-
+public class CloseIndexReqVO extends Request {
     @Validate(required = true)
     private String clusterName;
+
     @Validate(isNotBlank = true)
     private List<String> indices;
 

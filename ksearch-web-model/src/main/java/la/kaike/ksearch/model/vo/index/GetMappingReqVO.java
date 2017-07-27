@@ -9,18 +9,13 @@ import la.kaike.ksearch.model.validate.Validate;
 
 /**
  * @author chenghuanhuan@kaike.la
- * @since $Revision:1.0.0, $Date: 2017年07月20日 下午2:18 $
+ * @since $Revision:1.0.0, $Date: 2017年07月25日 上午11:13 $
  */
-public class AddIndexVO extends Request {
-
+public class GetMappingReqVO extends Request {
     @Validate(required = true)
     private String clusterName;
     @Validate(required = true,isNotBlank = true,desc = "索引名称")
     private String index;
-    @Validate(required = true,minValue = "1")
-    private Integer numberOfShards;
-    @Validate(required = true,minValue = "1")
-    private Integer numberOfReplicas;
 
     public String getClusterName() {
         return clusterName;
@@ -36,21 +31,5 @@ public class AddIndexVO extends Request {
 
     public void setIndex(String index) {
         this.index = index;
-    }
-
-    public Integer getNumberOfShards() {
-        return numberOfShards;
-    }
-
-    public void setNumberOfShards(Integer numberOfShards) {
-        this.numberOfShards = numberOfShards;
-    }
-
-    public Integer getNumberOfReplicas() {
-        return numberOfReplicas;
-    }
-
-    public void setNumberOfReplicas(Integer numberOfReplicas) {
-        this.numberOfReplicas = numberOfReplicas;
     }
 }

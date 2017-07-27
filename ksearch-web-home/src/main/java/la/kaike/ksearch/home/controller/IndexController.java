@@ -50,7 +50,7 @@ public class IndexController extends BaseController{
      */
     @RequestMapping("/add")
     @ResponseBody
-    public Response add(AddIndexVO addIndexVO){
+    public Response add(AddIndexReqVO addIndexVO){
         elasticSearchService.addIndex(addIndexVO);
         return succeed("添加索引成功");
     }
@@ -62,7 +62,7 @@ public class IndexController extends BaseController{
      */
     @RequestMapping("/del")
     @ResponseBody
-    public Response del(DelIndexVO delIndexVO){
+    public Response del(DelIndexReqVO delIndexVO){
         elasticSearchService.delIndex(delIndexVO);
         return succeed("删除索引成功！");
     }
@@ -75,7 +75,7 @@ public class IndexController extends BaseController{
      */
     @RequestMapping("/refresh")
     @ResponseBody
-    public Response refresh(RefreshIndexVO refreshIndexVO){
+    public Response refresh(RefreshIndexReqVO refreshIndexVO){
         elasticSearchService.refreshIndex(refreshIndexVO);
         return succeed("刷新索引成功！");
     }
@@ -87,7 +87,7 @@ public class IndexController extends BaseController{
      */
     @RequestMapping("/close")
     @ResponseBody
-    public Response refresh(CloseIndexVO closeIndexVO){
+    public Response refresh(CloseIndexReqVO closeIndexVO){
         elasticSearchService.closeIndex(closeIndexVO);
         return succeed("关闭索引成功！");
     }
@@ -111,7 +111,7 @@ public class IndexController extends BaseController{
      */
     @RequestMapping("/flush")
     @ResponseBody
-    public Response flush(FlushIndexVO flushIndexVO){
+    public Response flush(FlushIndexReqVO flushIndexVO){
         elasticSearchService.flushIndex(flushIndexVO);
         return succeed("flush成功！");
     }
@@ -123,7 +123,7 @@ public class IndexController extends BaseController{
      */
     @RequestMapping("/optimize")
     @ResponseBody
-    public Response optimize(OptimizeIndexVO optimizeIndexVO){
+    public Response optimize(OptimizeIndexReqVO optimizeIndexVO){
         elasticSearchService.optimizeIndex(optimizeIndexVO);
         return succeed("优化成功！");
     }
@@ -136,7 +136,7 @@ public class IndexController extends BaseController{
      */
     @RequestMapping("/addAlias")
     @ResponseBody
-    public Response addAlias(CreateAliasVO createAliasVO){
+    public Response addAlias(CreateAliasReqVO createAliasVO){
         elasticSearchService.createAlias(createAliasVO);
         return succeed("添加别名成功！");
     }
@@ -148,7 +148,7 @@ public class IndexController extends BaseController{
      */
     @RequestMapping("/delAlias")
     @ResponseBody
-    public Response delAlias(DelAliasVO delAliasVO){
+    public Response delAlias(DelAliasReqVO delAliasVO){
         elasticSearchService.delAlias(delAliasVO);
         return succeed("删除别名成功！");
     }
@@ -161,7 +161,7 @@ public class IndexController extends BaseController{
      */
     @RequestMapping("/addMapping")
     @ResponseBody
-    public Response addMapping(AddMappingVO addMappingVO){
+    public Response addMapping(AddMappingReqVO addMappingVO){
         // TODO 校验
 
 
@@ -205,7 +205,7 @@ public class IndexController extends BaseController{
 
     @RequestMapping("/getAllMapping")
     @ResponseBody
-    public Response getAllMapping(GetMappingVO getMappingVO){
+    public Response getAllMapping(GetMappingReqVO getMappingVO){
         List<MappingVO> mappings = elasticSearchService.getAllMapping(getMappingVO);
         return succeed(mappings);
     }
