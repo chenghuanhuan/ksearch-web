@@ -18,6 +18,14 @@
                             &lt;#&ndash;<input type="password" name="password" id="password" class="col-xs-12 col-sm-4" />&ndash;&gt;
                         </div>
                     </div>-->
+                    <label class="control-label col-xs-12 col-sm-2 no-padding-right" for="password">是否单独存储(store):</label>
+
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="clearfix">
+                            <input id="store" class="ace ace-switch ace-switch-2" type="checkbox" />
+                            <span class="lbl"></span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">

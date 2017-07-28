@@ -946,9 +946,10 @@
                             '<li class="dd-item dd2-item" ' +
                             'data-type="'+item.type+'" ' +
                             'data-analyzer="'+item.analyzer+'" ' +
-                            'data-index="'+item.index+'" ' +
+                            //'data-index="'+item.index+'" ' +
                             'data-null_value="'+item.null_value+'" ' +
                             'data-fielddata="'+item.fielddata+'" ' +
+                            'data-store="'+item.store+'" ' +
                             'data-name="'+item.name+'">';
                     if(item.children){
                             template+=expandedButton;
@@ -1068,6 +1069,7 @@
                             $("#pro_index").attr("checked",li.data('index'));
 
                             $("#fielddata").attr("checked",li.data('fielddata'));
+                            $("#store").attr("checked",li.data('store'));
 
                             $("#pro_name").val(li.data('name'));
                             $("#null_value").val(li.data('null_value'));
@@ -1116,6 +1118,7 @@
                 var pro_type = $("#pro_type").val();
                 var pro_index = $("#pro_index").prop("checked");
                 var fielddata = $("#fielddata").prop("checked");
+                var store = $("#store").prop("checked");
                 var ignore_above = $("#ignore_above").val();
 
                 var template =
@@ -1123,8 +1126,9 @@
                         'data-new="1" ' +
                         'data-type="'+pro_type+'" ' +
                         'data-analyzer="'+analyzer+'" ' +
-                        'data-index="'+pro_index+'" ' +
+                        //'data-index="'+pro_index+'" ' +
                         'data-fielddata="'+fielddata+'" ' +
+                        'data-store="'+store+'" ' +
                         'data-ignore_above="'+ignore_above+'" ' +
                         'data-null_value="'+null_value+'" ' +
                         'data-name="'+pro_name+'">'
@@ -1178,12 +1182,14 @@
                 var pro_type = $("#pro_type").val();
                 var pro_index = $("#pro_index").prop("checked");
                 var fielddata = $("#fielddata").prop("checked");
+                var store = $("#store").prop("checked");
                 var ignore_above = $("#ignore_above").val();
                 var null_value = $("#null_value").val();
                 li.data("name",pro_name);
                 li.data("analyzer",analyzer);
                 li.data("index",pro_index);
                 li.data("fielddata",fielddata);
+                li.data("store",store);
                 li.data("type",pro_type);
                 li.data("ignore_above",ignore_above);
                 li.data("null_value",null_value);
