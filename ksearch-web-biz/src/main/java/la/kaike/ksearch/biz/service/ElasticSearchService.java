@@ -8,6 +8,7 @@ import la.kaike.ksearch.model.bo.ClusterHealthBO;
 import la.kaike.ksearch.model.vo.elastic.ClusterStatisticsVO;
 import la.kaike.ksearch.model.vo.elastic.IndicesVO;
 import la.kaike.ksearch.model.vo.index.*;
+import la.kaike.ksearch.model.vo.query.SimpleQueryReqVO;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
 
 import java.util.List;
@@ -109,4 +110,11 @@ public interface ElasticSearchService {
      * @return
      */
     List<MappingVO> getAllMapping(GetMappingReqVO getMappingVO);
+
+    /**
+     * 查询
+     * @param simpleQueryReqVO
+     * @return
+     */
+    String simpleQuery(SimpleQueryReqVO simpleQueryReqVO);
 }

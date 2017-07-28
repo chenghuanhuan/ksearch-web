@@ -940,12 +940,15 @@
                 }
                 var html="";
                 $.each(data,function (i,item) {
+                    //item.analyzer = item.analyzer==null?"":item.analyzer;
+                    //item.null_value = item.null_value==null?"":item.null_value;
                     var template =
                             '<li class="dd-item dd2-item" ' +
                             'data-type="'+item.type+'" ' +
                             'data-analyzer="'+item.analyzer+'" ' +
                             'data-index="'+item.index+'" ' +
                             'data-null_value="'+item.null_value+'" ' +
+                            'data-fielddata="'+item.fielddata+'" ' +
                             'data-name="'+item.name+'">';
                     if(item.children){
                             template+=expandedButton;
@@ -1063,6 +1066,9 @@
                             $("#pro_type").select2('val',li.data('type'));
                             $("#analyzer").select2('val',li.data('analyzer'));
                             $("#pro_index").attr("checked",li.data('index'));
+
+                            $("#fielddata").attr("checked",li.data('fielddata'));
+
                             $("#pro_name").val(li.data('name'));
                             $("#null_value").val(li.data('null_value'));
                             if (li.data('ignore_above')){
@@ -1109,6 +1115,7 @@
                 }*/
                 var pro_type = $("#pro_type").val();
                 var pro_index = $("#pro_index").prop("checked");
+                var fielddata = $("#fielddata").prop("checked");
                 var ignore_above = $("#ignore_above").val();
 
                 var template =
@@ -1117,6 +1124,7 @@
                         'data-type="'+pro_type+'" ' +
                         'data-analyzer="'+analyzer+'" ' +
                         'data-index="'+pro_index+'" ' +
+                        'data-fielddata="'+fielddata+'" ' +
                         'data-ignore_above="'+ignore_above+'" ' +
                         'data-null_value="'+null_value+'" ' +
                         'data-name="'+pro_name+'">'
@@ -1169,11 +1177,13 @@
                 var analyzer = $("#analyzer").val();
                 var pro_type = $("#pro_type").val();
                 var pro_index = $("#pro_index").prop("checked");
+                var fielddata = $("#fielddata").prop("checked");
                 var ignore_above = $("#ignore_above").val();
                 var null_value = $("#null_value").val();
                 li.data("name",pro_name);
                 li.data("analyzer",analyzer);
                 li.data("index",pro_index);
+                li.data("fielddata",fielddata);
                 li.data("type",pro_type);
                 li.data("ignore_above",ignore_above);
                 li.data("null_value",null_value);

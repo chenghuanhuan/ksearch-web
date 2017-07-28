@@ -9,15 +9,15 @@
                         </div>
                     </div>
 
-                    <label class="control-label col-xs-12 col-sm-2 no-padding-right" for="password">是否分词:</label>
+                    <#--<label class="control-label col-xs-12 col-sm-2 no-padding-right" for="password">是否分词:</label>
 
                     <div class="col-xs-12 col-sm-4">
                         <div class="clearfix">
                             <input id="pro_index" name="pro_index" class="ace ace-switch ace-switch-2" type="checkbox" />
                             <span class="lbl"></span>
-                            <#--<input type="password" name="password" id="password" class="col-xs-12 col-sm-4" />-->
+                            &lt;#&ndash;<input type="password" name="password" id="password" class="col-xs-12 col-sm-4" />&ndash;&gt;
                         </div>
-                    </div>
+                    </div>-->
                 </div>
 
                 <div class="form-group">
@@ -68,6 +68,7 @@
                                 <option value="whitespace">whitespace</option>
                                 <option value="keyword">keyword</option>
                                 <option value="fingerprint">fingerprint</option>
+                                <option value="stop">stop</option>
                             </select>
                         </div>
                     </div>
@@ -81,6 +82,17 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+
+                    <label class="control-label col-xs-12 col-sm-2 no-padding-right" for="fielddata">fielddata:</label>
+
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="clearfix">
+                            <input id="fielddata" name="fielddata" class="ace ace-switch ace-switch-2" type="checkbox" />
+                            <span class="lbl"></span>
+                        </div>
+                    </div>
+                </div>
                 <#--<input type="hidden" name="is_children" id="is_children"/>-->
                 <#--<div class="center">
                     <button type="button" class="btn btn-sm btn-success">

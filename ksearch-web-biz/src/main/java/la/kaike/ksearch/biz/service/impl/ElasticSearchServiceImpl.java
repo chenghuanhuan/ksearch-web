@@ -12,9 +12,12 @@ import la.kaike.ksearch.model.bo.ClusterHealthBO;
 import la.kaike.ksearch.model.vo.elastic.ClusterStatisticsVO;
 import la.kaike.ksearch.model.vo.elastic.IndicesVO;
 import la.kaike.ksearch.model.vo.index.*;
+import la.kaike.ksearch.model.vo.query.SimpleQueryReqVO;
+import la.kaike.ksearch.model.vo.query.SortFieldVO;
 import la.kaike.ksearch.util.constant.IndexSettingConstant;
 import la.kaike.ksearch.util.exception.BussinessException;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
@@ -23,6 +26,7 @@ import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsResponse;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequestBuilder;
 import org.elasticsearch.action.admin.indices.stats.IndexStats;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
+import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.block.ClusterBlock;
 import org.elasticsearch.cluster.metadata.AliasMetaData;
@@ -33,6 +37,8 @@ import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.unit.ByteSizeValue;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -263,6 +269,40 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
             new BussinessException("getAllMapping error!");
         }
         return mappingVOList;
+    }
+
+    @Override
+    public String simpleQuery(SimpleQueryReqVO simpleQueryReqVO) {
+        TransportClient client = ElasticClient.newInstance().getTransportClient();
+
+        SearchRequestBuilder builder = null;
+
+        // 索引
+        if (CollectionUtils.isEmpty(simpleQueryReqVO.getIndices())){
+            builder = client.prepareSearch();
+        }else {
+            builder = client.prepareSearch(simpleQueryReqVO.getIndices().toArray(new String[]{}));
+        }
+
+        // 类型
+        if (CollectionUtils.isNotEmpty(simpleQueryReqVO.getTypes())){
+            builder.setTypes(simpleQueryReqVO.getTypes().toArray(new String[]{}));
+        }
+        // 排序字段
+        if (CollectionUtils.isNotEmpty(simpleQueryReqVO.getSorts())){
+            for (SortFieldVO sortFieldVO:simpleQueryReqVO.getSorts()){
+                builder.addSort(sortFieldVO.getField(), SortOrder.valueOf(sortFieldVO.getOrder().toUpperCase()));
+            }
+        }
+
+        // TODO 查询指定字段
+/*
+        QueryBuilder queryBuilder = QueryBuilders.disMaxQuery();
+        builder.setQuery(queryBuilder);*/
+        SearchSourceBuilder sourceBuilder = SearchSourceBuilder.searchSource();
+        builder.setSource(sourceBuilder);
+
+        return null;
     }
 
     /**

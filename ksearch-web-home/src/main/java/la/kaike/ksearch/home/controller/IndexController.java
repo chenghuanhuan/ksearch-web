@@ -170,7 +170,6 @@ public class IndexController extends BaseController{
         JSONObject properties = toPropertiesJson(propertiesVOList);
         jsonObject.put("properties",properties);
         jsonObject.put("include_in_all",addMappingVO.getInclude_in_all());
-
         logger.info(jsonObject.toJSONString());
         addMappingVO.setMappingsJson(jsonObject.toJSONString());
         elasticSearchService.addMapping(addMappingVO);
@@ -192,6 +191,9 @@ public class IndexController extends BaseController{
             }
             if ("object".equals(propertiesBO.getType())){
                 propertiesBO.setIndex(null);
+            }
+            if ("".equals(propertiesBO.getNull_value())){
+                propertiesBO.setNull_value(null);
             }
             if (!CollectionUtils.isEmpty(propertiesVO.getChildren())){
                 JSONObject child = toPropertiesJson(propertiesVO.getChildren());

@@ -83,8 +83,22 @@ public class PropertiesVO {
      */
     private String search_analyzer;
 
+    /**
+     * 用于排序 text字段需设置为true才可以排序
+     * 聚合这些操作用单独的数据结构(fielddata)缓存到内存里了
+     */
+    private Boolean fielddata;
+
     private List<PropertiesVO> children;
 
+
+    public Boolean getFielddata() {
+        return fielddata;
+    }
+
+    public void setFielddata(Boolean fielddata) {
+        this.fielddata = fielddata;
+    }
 
     public String getName() {
         return name;

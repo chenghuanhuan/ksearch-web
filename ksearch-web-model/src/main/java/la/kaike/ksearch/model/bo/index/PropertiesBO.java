@@ -56,7 +56,21 @@ public class PropertiesBO {
      */
     private String search_analyzer;
 
+    /**
+     * 用于排序 text字段需设置为true才可以排序
+     */
+    private Boolean fielddata;
+
     private JSONObject properties;
+
+
+    public Boolean getFielddata() {
+        return fielddata;
+    }
+
+    public void setFielddata(Boolean fielddata) {
+        this.fielddata = fielddata;
+    }
 
     public JSONObject getProperties() {
         return properties;
