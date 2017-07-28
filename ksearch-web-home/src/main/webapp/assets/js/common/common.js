@@ -73,3 +73,17 @@
     }
     window.$myDialog=$myDialog;
 } ());
+
+/**
+ * 左侧菜单栏事件
+ */
+$(function () {
+    $(".left-menu").each(function () {
+        console.log($(this).attr("href"));
+        console.log(window.location.pathname);
+        if($(this).attr("href").indexOf(window.location.pathname)>-1){
+            $(this).parent().addClass("active");
+            return false;
+        }
+    });
+});
