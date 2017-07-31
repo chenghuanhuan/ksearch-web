@@ -117,4 +117,11 @@ public interface ElasticSearchService {
      * @return
      */
     String simpleQuery(SimpleQueryReqVO simpleQueryReqVO);
+
+    /**
+     * 添加文档
+     * @param addDocReqVO
+     * @return
+     */
+    String addDoc(AddDocReqVO addDocReqVO);
 }

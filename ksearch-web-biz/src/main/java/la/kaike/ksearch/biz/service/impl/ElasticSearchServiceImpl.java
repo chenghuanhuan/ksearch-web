@@ -305,6 +305,14 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         return null;
     }
 
+    @Override
+    public String addDoc(AddDocReqVO addDocReqVO) {
+        ElasticClient.newInstance().getTransportClient()
+                .prepareIndex(addDocReqVO.getIndex(),addDocReqVO.getType())
+                .setSource(addDocReqVO.getJsonSource(),XContentType.JSON).get();
+        return null;
+    }
+
     /**
      * 将map转换成属性对象
      * @param params

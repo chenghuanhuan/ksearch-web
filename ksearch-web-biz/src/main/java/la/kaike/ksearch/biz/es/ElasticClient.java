@@ -8,16 +8,13 @@ import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
-import org.elasticsearch.action.search.SearchRequestBuilder;
-import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.ClusterAdminClient;
 import org.elasticsearch.client.IndicesAdminClient;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.metadata.MetaData;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
-import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.sort.SortOrder;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -132,7 +129,9 @@ public class ElasticClient {
     }
 
     public static void main(String[] args) {
-        System.out.println(SortOrder.valueOf("DESC"));
+
+
+       /* System.out.println(SortOrder.valueOf("DESC"));
         TransportClient client = ElasticClient.newInstance().getTransportClient();
 
         SearchRequestBuilder builder = null;
@@ -147,10 +146,10 @@ public class ElasticClient {
         // 前缀匹配
         //QueryBuilder queryBuilder = QueryBuilders.prefixQuery("a","aa");
 
-       /* QueryBuilder queryBuilder = QueryBuilders.termQuery("a","aa");
-        builder.setQuery(queryBuilder);*/
-        /*SearchSourceBuilder sourceBuilder = SearchSourceBuilder.searchSource();
-        builder.setSource(sourceBuilder);*/
+       *//* QueryBuilder queryBuilder = QueryBuilders.termQuery("a","aa");
+        builder.setQuery(queryBuilder);*//*
+        *//*SearchSourceBuilder sourceBuilder = SearchSourceBuilder.searchSource();
+        builder.setSource(sourceBuilder);*//*
         //builder.addSort("e", SortOrder.DESC);
 
         builder.setFrom(0).setSize(3);
@@ -158,6 +157,18 @@ public class ElasticClient {
         System.out.println(searchResponse);
         SearchHits hits = searchResponse.getHits();
         hits.getHits();
+*/
+
+        String json = "{\n" +
+                "  \"f\":\"aa3\",\n" +
+                "  \"g\":\"g\"\n" +
+                "}";
+        ElasticClient.newInstance().getTransportClient()
+                 .prepareIndex("test2","test","4")
+                .setSource(json, XContentType.JSON).get();
+
+
+
     }
 
     public TransportClient getTransportClient() {

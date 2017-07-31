@@ -205,11 +205,28 @@ public class IndexController extends BaseController{
         return properties;
     }
 
+    /**
+     * 获取所有mapping配置
+     * @param getMappingVO
+     * @return
+     */
     @RequestMapping("/getAllMapping")
     @ResponseBody
     public Response getAllMapping(GetMappingReqVO getMappingVO){
         List<MappingVO> mappings = elasticSearchService.getAllMapping(getMappingVO);
         return succeed(mappings);
+    }
+
+    /**
+     * 添加文档
+     * @param addDocReqVO
+     * @return
+     */
+    @RequestMapping("/addDoc")
+    @ResponseBody
+    public Response addDoc(AddDocReqVO addDocReqVO){
+        elasticSearchService.addDoc(addDocReqVO);
+        return succeed("保存成功");
     }
 
     /**
