@@ -169,7 +169,7 @@
                                     添加索引
                                 </button>
                             </div>-->
-                                <table id="indices_table"></table>
+                                <table id="indices_table" data-search="true"></table>
                             </div>
                         </div>
 
@@ -269,10 +269,15 @@
                         //checkboxEnable:true,
                         //search:true,
                         //toolbar:"#toolbar",
+                        sidePagination:'server',
                         url:"/dataview/query",
                         pageList:[10, 25, 50, 100],
                         pagination:true,
                         detailView:true,
+                        //showRefresh:true,
+                        showColumns:true,
+                        //showPaginationSwitch:true,
+                        //showFooter:true,
                         //pageSize:1,
                         columns:columns,
                         queryParams:function (params) {

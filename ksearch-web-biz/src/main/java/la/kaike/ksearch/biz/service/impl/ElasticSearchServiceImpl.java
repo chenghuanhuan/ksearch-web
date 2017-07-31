@@ -292,6 +292,42 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
         TransportClient client = ElasticClient.newInstance().getTransportClient();
 
+        SearchRequestBuilder builder = builder(client,simpleQueryReqVO);
+
+        // TODO 查询指定字段
+/*
+        QueryBuilder queryBuilder = QueryBuilders.disMaxQuery();
+        builder.setQuery(queryBuilder);*/
+        //SearchSourceBuilder sourceBuilder = SearchSourceBuilder.searchSource();
+        //builder.setSource(sourceBuilder);
+
+        SearchResponse countRes = builder.setSize(0).get();
+        pageResponse.setTotal(countRes.getHits().getTotalHits());
+
+
+        // 查询真实数据
+        //builder = builder(client,simpleQueryReqVO);
+
+        builder.setFrom(simpleQueryReqVO.getOffset())
+                .setSize(simpleQueryReqVO.getLimit());
+        SearchResponse searchResponse = builder.get();
+
+        SearchHits searchHits = searchResponse.getHits();
+
+
+
+        Iterator<SearchHit> searchHitIterator = searchHits.iterator();
+        List<Map<String,Object>> hashMapList = new ArrayList<>();
+        while (searchHitIterator.hasNext()){
+            SearchHit hit = searchHitIterator.next();
+            Map<String,Object> map = hit.getSource();
+            hashMapList.add(map);
+        }
+        pageResponse.setRows(hashMapList);
+        return pageResponse;
+    }
+
+    private SearchRequestBuilder builder(TransportClient client,SimpleQueryReqVO simpleQueryReqVO){
         SearchRequestBuilder builder = null;
 
         // 索引
@@ -311,29 +347,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
                 builder.addSort(sortFieldVO.getField(), SortOrder.valueOf(sortFieldVO.getOrder().toUpperCase()));
             }
         }
-
-        // TODO 查询指定字段
-/*
-        QueryBuilder queryBuilder = QueryBuilders.disMaxQuery();
-        builder.setQuery(queryBuilder);*/
-        //SearchSourceBuilder sourceBuilder = SearchSourceBuilder.searchSource();
-        //builder.setSource(sourceBuilder);
-       /* builder.setFrom(simpleQueryReqVO.getOffset())
-                .setSize(simpleQueryReqVO.getLimit());*/
-        SearchResponse searchResponse = builder.get();
-
-        SearchHits searchHits = searchResponse.getHits();
-        pageResponse.setTotal(searchHits.getTotalHits());
-
-        Iterator<SearchHit> searchHitIterator = searchHits.iterator();
-        List<Map<String,Object>> hashMapList = new ArrayList<>();
-        while (searchHitIterator.hasNext()){
-            SearchHit hit = searchHitIterator.next();
-            Map<String,Object> map = hit.getSource();
-            hashMapList.add(map);
-        }
-        pageResponse.setData(hashMapList);
-        return pageResponse;
+        return builder;
     }
 
     @Override

@@ -14,6 +14,17 @@ public class PageResponse extends Response{
      */
     private long total;
 
+    private Object rows;
+
+
+    public Object getRows() {
+        return rows;
+    }
+
+    public void setRows(Object rows) {
+        this.rows = rows;
+    }
+
     public long getTotal() {
         return total;
     }
