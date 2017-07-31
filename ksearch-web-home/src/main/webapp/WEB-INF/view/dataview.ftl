@@ -105,22 +105,13 @@
                         <i class="icon-home home-icon"></i>
                         <a href="#">首页</a>
                     </li>
-                    <li class="active">索引管理</li>
+                    <li class="active">数据浏览</li>
                 </ul><!-- .breadcrumb -->
 
                 <!-- #nav-search -->
             </div>
 
             <div class="page-content">
-            <#--		<div class="page-header">
-                        <h1>
-                            索引管理
-                            <small>
-                                <i class="icon-double-angle-right"></i>
-                                索引列表
-                            </small>
-                        </h1>
-                    </div>-->
                 <!-- /.page-header -->
                 <hr />
                 <div class="row">
@@ -255,7 +246,7 @@
                     var data = data.data;
                     var columns = [];
                     $.each(data,function (i,item) {
-                        columns.push({field:item,title:item});
+                        columns.push({field:item,title:item,formatter:formatter});
                     });
 
                     // 初始化表格
@@ -267,7 +258,7 @@
                         //showHeader:false,
                         //cardView:true,
                         //checkboxEnable:true,
-                        //search:true,
+                        search:false,
                         //toolbar:"#toolbar",
                         sidePagination:'server',
                         url:"/dataview/query",
@@ -288,7 +279,6 @@
                         onExpandRow: function (index, row, $detail) {
                             ///$detail.html('<div>'+JSON.stringify(row,null,4)+'</div>')
                             //$detail.html('<div></div>').find("div").JSONView(row);
-                            $detail.html('<div id="jsonF_"'+index+'></div>')
                             var options = {
                                 dom: $detail.html('<div></div>').find("div"),
                                 isCollapsible: true,
@@ -299,6 +289,9 @@
                             };
                             window.jf = new JsonFormater(options);
                             jf.doFormat(row);
+                        },
+                        onLoadSuccess:function () {
+                            //$('[data-rel=tooltip]').tooltip();
                         }
 
                     });
@@ -315,7 +308,10 @@
 
 
 
+        var formatter = function (value, row, index) {
 
+            return value;
+        }
 
     });
 

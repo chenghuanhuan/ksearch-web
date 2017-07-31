@@ -35,6 +35,7 @@ JsonFormater.prototype = {
             html = this.ProcessObject(obj[0], 0, false, false, false);
             $(this.options.dom).html("<pre class='jf-CodeContainer'>" + html + "</pre>");
             this.isFormated = true;
+            return html;
         } catch (e) {
             alert("JSON数据格式不正确:\n" + e.message);
             $(this.options.dom).html("");
