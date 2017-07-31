@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSON;
 import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
 import la.kaike.ksearch.biz.es.ElasticClient;
 import la.kaike.ksearch.biz.service.ElasticSearchService;
+import la.kaike.ksearch.model.PageResponse;
 import la.kaike.ksearch.model.bo.ClusterHealthBO;
 import la.kaike.ksearch.model.vo.elastic.ClusterStatisticsVO;
 import la.kaike.ksearch.model.vo.elastic.IndicesVO;
@@ -22,11 +23,13 @@ import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
 import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequestBuilder;
+import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsResponse;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequestBuilder;
 import org.elasticsearch.action.admin.indices.stats.IndexStats;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.block.ClusterBlock;
 import org.elasticsearch.cluster.metadata.AliasMetaData;
@@ -37,7 +40,8 @@ import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.unit.ByteSizeValue;
 import org.elasticsearch.common.xcontent.XContentType;
-import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -237,8 +241,19 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     public List<MappingVO> getAllMapping(GetMappingReqVO getMappingVO) {
         List<MappingVO> mappingVOList = new ArrayList<>();
         try {
+
+            GetMappingsRequest request = new GetMappingsRequest();
+            request.indices(getMappingVO.getIndex());
+            if (getMappingVO.getType()!=null) {
+                request.types(getMappingVO.getType());
+            }
             GetMappingsResponse response = ElasticClient.newInstance().getIndicesAdminClient()
-                    .prepareGetMappings(getMappingVO.getIndex()).get();
+                    .getMappings(request).actionGet();
+
+           /* GetMappingsResponse response = ElasticClient.newInstance().getIndicesAdminClient()
+                    .prepareGetMappings(getMappingVO.getIndex()).get();*/
+
+
             ImmutableOpenMap<String,ImmutableOpenMap<String,MappingMetaData>> metaDataImmutableOpenMap = response.getMappings();
             Iterator<ObjectObjectCursor<String, ImmutableOpenMap<String,MappingMetaData>>> iterator = metaDataImmutableOpenMap.iterator();
             while (iterator.hasNext()){
@@ -272,7 +287,9 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     }
 
     @Override
-    public String simpleQuery(SimpleQueryReqVO simpleQueryReqVO) {
+    public PageResponse simpleQuery(SimpleQueryReqVO simpleQueryReqVO) {
+        PageResponse pageResponse = new PageResponse();
+
         TransportClient client = ElasticClient.newInstance().getTransportClient();
 
         SearchRequestBuilder builder = null;
@@ -299,10 +316,24 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 /*
         QueryBuilder queryBuilder = QueryBuilders.disMaxQuery();
         builder.setQuery(queryBuilder);*/
-        SearchSourceBuilder sourceBuilder = SearchSourceBuilder.searchSource();
-        builder.setSource(sourceBuilder);
+        //SearchSourceBuilder sourceBuilder = SearchSourceBuilder.searchSource();
+        //builder.setSource(sourceBuilder);
+       /* builder.setFrom(simpleQueryReqVO.getOffset())
+                .setSize(simpleQueryReqVO.getLimit());*/
+        SearchResponse searchResponse = builder.get();
 
-        return null;
+        SearchHits searchHits = searchResponse.getHits();
+        pageResponse.setTotal(searchHits.getTotalHits());
+
+        Iterator<SearchHit> searchHitIterator = searchHits.iterator();
+        List<Map<String,Object>> hashMapList = new ArrayList<>();
+        while (searchHitIterator.hasNext()){
+            SearchHit hit = searchHitIterator.next();
+            Map<String,Object> map = hit.getSource();
+            hashMapList.add(map);
+        }
+        pageResponse.setData(hashMapList);
+        return pageResponse;
     }
 
     @Override

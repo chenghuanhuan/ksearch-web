@@ -1,6 +1,7 @@
 package la.kaike.ksearch.home.base;
 
 import com.baomidou.mybatisplus.plugins.Page;
+import la.kaike.ksearch.model.PageResponse;
 import la.kaike.ksearch.model.Response;
 import la.kaike.ksearch.model.page.PageInfoBT;
 import la.kaike.ksearch.util.support.HttpKit;
@@ -134,6 +135,12 @@ public class BaseController {
      */
     public static Response succeed(Object returnData) {
         return getResponseData(true, returnData, SUCCESS_MSG);
+    }
+
+    public static PageResponse succeed(PageResponse pageResponse){
+        pageResponse.setStatus(true);
+        pageResponse.setMsg(SUCCESS_MSG);
+        return pageResponse;
     }
 
     /**

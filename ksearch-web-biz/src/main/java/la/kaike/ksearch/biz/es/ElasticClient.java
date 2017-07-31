@@ -4,14 +4,19 @@
  */
 package la.kaike.ksearch.biz.es;
 
+import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
+import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
+import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsResponse;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
 import org.elasticsearch.client.ClusterAdminClient;
 import org.elasticsearch.client.IndicesAdminClient;
 import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.cluster.metadata.MetaData;
+import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.xcontent.XContentType;
@@ -21,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Iterator;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -152,11 +158,9 @@ public class ElasticClient {
         builder.setSource(sourceBuilder);*//*
         //builder.addSort("e", SortOrder.DESC);
 
-        builder.setFrom(0).setSize(3);
+       builder.setFrom(0).setSize(3);
         SearchResponse searchResponse = builder.get();
         System.out.println(searchResponse);
-        SearchHits hits = searchResponse.getHits();
-        hits.getHits();
 */
 
         String json = "{\n" +
@@ -167,6 +171,14 @@ public class ElasticClient {
                  .prepareIndex("test2","test","4")
                 .setSource(json, XContentType.JSON).get();
 
+
+        GetMappingsRequest request = new GetMappingsRequest();
+        request.indices("test2");
+        request.types("test");
+        GetMappingsResponse response = ElasticClient.newInstance().getIndicesAdminClient()
+                .getMappings(request).actionGet();
+        ImmutableOpenMap<String,ImmutableOpenMap<String,MappingMetaData>> metaDataImmutableOpenMap = response.getMappings();
+        Iterator<ObjectObjectCursor<String, ImmutableOpenMap<String,MappingMetaData>>> iterator = metaDataImmutableOpenMap.iterator();
 
 
     }

@@ -4,8 +4,16 @@
  */
 package la.kaike.ksearch.home.controller;
 
+import la.kaike.ksearch.biz.service.ElasticSearchService;
+import la.kaike.ksearch.home.base.BaseController;
+import la.kaike.ksearch.model.PageResponse;
+import la.kaike.ksearch.model.Response;
+import la.kaike.ksearch.model.vo.query.SimpleQueryReqVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.Resource;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -13,10 +21,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/dataview")
-public class DataViewController {
+public class DataViewController extends BaseController{
+
+    @Resource
+    private ElasticSearchService elasticSearchService;
 
     @RequestMapping
     public String index(){
         return "dataview";
     }
+
+    /**
+     * 查询
+     * @param simpleQueryReqVO
+     * @return
+     */
+    @RequestMapping("/query")
+    @ResponseBody
+    public Response query(SimpleQueryReqVO simpleQueryReqVO){
+        PageResponse pageResponse = elasticSearchService.simpleQuery(simpleQueryReqVO);
+        return succeed(pageResponse);
+    }
+
 }

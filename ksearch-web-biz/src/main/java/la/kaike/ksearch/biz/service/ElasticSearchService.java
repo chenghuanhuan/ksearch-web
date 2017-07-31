@@ -4,6 +4,7 @@
  */
 package la.kaike.ksearch.biz.service;
 
+import la.kaike.ksearch.model.PageResponse;
 import la.kaike.ksearch.model.bo.ClusterHealthBO;
 import la.kaike.ksearch.model.vo.elastic.ClusterStatisticsVO;
 import la.kaike.ksearch.model.vo.elastic.IndicesVO;
@@ -116,7 +117,7 @@ public interface ElasticSearchService {
      * @param simpleQueryReqVO
      * @return
      */
-    String simpleQuery(SimpleQueryReqVO simpleQueryReqVO);
+    PageResponse simpleQuery(SimpleQueryReqVO simpleQueryReqVO);
 
     /**
      * 添加文档
