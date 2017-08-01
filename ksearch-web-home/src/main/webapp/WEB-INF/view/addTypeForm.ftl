@@ -100,6 +100,13 @@
                             <span class="lbl"></span>
                         </div>
                     </div>
+                    <label class="control-label col-xs-12 col-sm-2 no-padding-right" for="boost">boost:</label>
+
+                    <div class="col-xs-12 col-sm-4">
+                        <div class="clearfix">
+                            <input type="text" name="boost" id="boost"  class="col-xs-12 col-sm-12" />
+                        </div>
+                    </div>
                 </div>
                 <#--<input type="hidden" name="is_children" id="is_children"/>-->
                 <#--<div class="center">

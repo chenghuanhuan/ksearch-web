@@ -413,38 +413,6 @@
 
             }
 
-            function expandField(index,row,$detail) {
-                $detail.html('<table></table>').find('table').bootstrapTable({
-                    striped:true,
-                    //url:"/console/cluster/indeices",
-                    data:row.properties,
-                    columns: [{
-                        field: 'name',
-                        title: '属性名称'
-                    }, {
-                        field: 'type',
-                        title: '类型'
-                    }, {
-                        field: 'index',
-                        title: '是否分词'
-                    }, {
-                        field: 'analyzer',
-                        title: '分词器'
-                    }, {
-                        field: 'ignore_above',
-                        title: '索引最大长度'
-                    }, {
-                        field: 'primarySize',
-                        title: '操作',
-                        formatter: function (value, row, index) {
-                            var btn = '<button class="btn btn-xs btn-info tooltip-info modifyField" data-rel="tooltip" title="修改类型">'
-                                    +'<i class="icon-edit bigger-120"></i>'
-                                    +'</button>';
-                            return btn;
-                        }
-                    }]
-                });
-            }
 
             window.operateEvents = {
                 'click .del': function (e, value, row, index) {
@@ -946,7 +914,7 @@
                             '<li class="dd-item dd2-item" ' +
                             'data-type="'+item.type+'" ' +
                             'data-analyzer="'+item.analyzer+'" ' +
-                            //'data-index="'+item.index+'" ' +
+                            'data-boost="'+item.boost+'" ' +
                             'data-null_value="'+item.null_value+'" ' +
                             'data-fielddata="'+item.fielddata+'" ' +
                             'data-store="'+item.store+'" ' +
@@ -1059,6 +1027,7 @@
                         });
                         //$('#ignore_above').ace_spinner({value:0,min:0,max:200,disabled:false,step:10, btn_up_class:'btn-info' , btn_down_class:'btn-info'})
                         $('#ignore_above').ace_spinner({value:'',min:1,max:100,disabled:false,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+                        $('#boost').ace_spinner({value:'',min:1,max:10000,disabled:false,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
 
                         if (type===2){
                             // 填充值
@@ -1075,6 +1044,9 @@
                             $("#null_value").val(li.data('null_value'));
                             if (li.data('ignore_above')){
                                 $("#ignore_above").val(parseInt(li.data('ignore_above')));
+                            }
+                            if (li.data('boost')){
+                                $("#boost").val(parseInt(li.data('boost')));
                             }
 
                             // 未保存至数据库可以修改任何值
@@ -1112,21 +1084,19 @@
                 var pro_name = $("#pro_name").val();
                 var analyzer = $("#analyzer").val();
                 var null_value = $("#null_value").val();
-               /* if(analyzer){
-                    analyzer = analyzer.join(",");
-                }*/
                 var pro_type = $("#pro_type").val();
                 var pro_index = $("#pro_index").prop("checked");
                 var fielddata = $("#fielddata").prop("checked");
                 var store = $("#store").prop("checked");
                 var ignore_above = $("#ignore_above").val();
+                var boost = $("#boost").val();
 
                 var template =
                         '<li class="dd-item dd2-item" ' +
                         'data-new="1" ' +
                         'data-type="'+pro_type+'" ' +
                         'data-analyzer="'+analyzer+'" ' +
-                        //'data-index="'+pro_index+'" ' +
+                        'data-boost="'+boost+'" ' +
                         'data-fielddata="'+fielddata+'" ' +
                         'data-store="'+store+'" ' +
                         'data-ignore_above="'+ignore_above+'" ' +
@@ -1184,6 +1154,7 @@
                 var fielddata = $("#fielddata").prop("checked");
                 var store = $("#store").prop("checked");
                 var ignore_above = $("#ignore_above").val();
+                var boost = $("#boost").val();
                 var null_value = $("#null_value").val();
                 li.data("name",pro_name);
                 li.data("analyzer",analyzer);
@@ -1193,7 +1164,7 @@
                 li.data("type",pro_type);
                 li.data("ignore_above",ignore_above);
                 li.data("null_value",null_value);
-
+                li.data("boost",boost);
                 if(li.data("new")=="1"&&(pro_type==="array"||pro_type==="object")){
                     if(li.find(".icon-plus").length==0) {
                         var template = '<a class="green" href="#">'
