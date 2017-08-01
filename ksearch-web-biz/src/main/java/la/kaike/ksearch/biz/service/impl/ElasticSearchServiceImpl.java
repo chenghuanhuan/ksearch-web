@@ -347,6 +347,11 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
                 builder.addSort(sortFieldVO.getField(), SortOrder.valueOf(sortFieldVO.getOrder().toUpperCase()));
             }
         }
+
+        if (simpleQueryReqVO.getSort()!=null && simpleQueryReqVO.getOrder()!=null){
+            builder.addSort(simpleQueryReqVO.getSort(),SortOrder.valueOf(simpleQueryReqVO.getOrder().toUpperCase()));
+        }
+
         return builder;
     }
 

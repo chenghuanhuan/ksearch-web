@@ -246,7 +246,7 @@
                     var data = data.data;
                     var columns = [];
                     $.each(data,function (i,item) {
-                        columns.push({field:item,title:item,formatter:formatter});
+                        columns.push({field:item,sortable:true,title:item,formatter:formatter});
                     });
 
                     // 初始化表格
@@ -271,6 +271,7 @@
                         //showFooter:true,
                         //pageSize:1,
                         columns:columns,
+                        silentSort:false,
                         queryParams:function (params) {
                             params.indices = index;
                             params.types = type;
