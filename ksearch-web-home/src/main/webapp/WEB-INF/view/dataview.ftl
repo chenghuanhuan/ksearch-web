@@ -139,6 +139,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <hr>
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">关键字:</label>
+
+                                    <div class="col-xs-12 col-sm-4">
+                                        <div class="clearfix">
+                                            <input type="text" id="keyword"  class="col-xs-12 col-sm-12" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-xs-12">
                                 <div class="form-group">
                                     <div class="col-xs-12 col-sm-10">
@@ -240,13 +252,19 @@
                 $myNotify.warn("请选择一个类型");
                 return;
             }
+
+            var keyword = $("#keyword").val();
             // 获取表头配置
             var aj = new $ax("/common/fields",function (data) {
                 if (data.status){
                     var data = data.data;
                     var columns = [];
                     $.each(data,function (i,item) {
-                        columns.push({field:item,sortable:true,title:item,formatter:formatter});
+                        var column = {field:item.fieldName,title:item.fieldName}
+                        if (item.type !="object" && item.type !="array"){
+                            column.sortable=true;
+                        }
+                        columns.push(column);
                     });
 
                     // 初始化表格
@@ -262,19 +280,20 @@
                         //toolbar:"#toolbar",
                         sidePagination:'server',
                         url:"/dataview/query",
-                        pageList:[10, 25, 50, 100],
+                        pageList:[15, 25, 50, 100],
                         pagination:true,
                         detailView:true,
                         //showRefresh:true,
                         showColumns:true,
                         //showPaginationSwitch:true,
                         //showFooter:true,
-                        //pageSize:1,
+                        pageSize:15,
                         columns:columns,
                         silentSort:false,
                         queryParams:function (params) {
                             params.indices = index;
                             params.types = type;
+                            params.keyword = keyword;
                             return params;
                         },
                         onExpandRow: function (index, row, $detail) {
@@ -303,6 +322,7 @@
 
             aj.set("type",type);
             aj.set("index",index);
+            //aj.set("keyword",keyword);
             aj.set("clusterName","");
             aj.start();
         });

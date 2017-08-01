@@ -8,6 +8,7 @@ import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.home.base.BaseController;
 import la.kaike.ksearch.model.Response;
 import la.kaike.ksearch.model.vo.SelectVO;
+import la.kaike.ksearch.model.vo.common.FieldsVO;
 import la.kaike.ksearch.model.vo.elastic.IndicesVO;
 import la.kaike.ksearch.model.vo.index.GetMappingReqVO;
 import la.kaike.ksearch.model.vo.index.MappingVO;
@@ -79,12 +80,15 @@ public class CommonController extends BaseController {
     @ResponseBody
     public Response fields(GetMappingReqVO reqVO){
         List<MappingVO> mappingVOList =  elasticSearchService.getAllMapping(reqVO);
-        List<String> fields = new ArrayList<>();
+        List<FieldsVO> fields = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(mappingVOList)){
             for (MappingVO mappingVO:mappingVOList){
                 List<PropertiesVO> propertiesVOList = mappingVO.getProperties();
                 for (PropertiesVO propertiesVO:propertiesVOList){
-                    fields.add(propertiesVO.getName());
+                    FieldsVO fieldsVO = new FieldsVO();
+                    fieldsVO.setFieldName(propertiesVO.getName());
+                    fieldsVO.setType(propertiesVO.getType());
+                    fields.add(fieldsVO);
                 }
             }
         }

@@ -15,6 +15,11 @@ import java.util.List;
 public class SimpleQueryReqVO extends PageVO {
 
     /**
+     * 关键字
+     */
+    private String keyword;
+
+    /**
      * 索引
      */
     private List<String> indices;
@@ -32,6 +37,14 @@ public class SimpleQueryReqVO extends PageVO {
     private String sort;
 
     private String order;
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
 
     public String getSort() {
         return sort;

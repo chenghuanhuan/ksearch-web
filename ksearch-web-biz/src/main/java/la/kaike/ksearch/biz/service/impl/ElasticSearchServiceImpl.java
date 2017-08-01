@@ -19,6 +19,7 @@ import la.kaike.ksearch.util.constant.IndexSettingConstant;
 import la.kaike.ksearch.util.exception.BussinessException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
@@ -40,6 +41,7 @@ import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.unit.ByteSizeValue;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.SortOrder;
@@ -350,6 +352,13 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
         if (simpleQueryReqVO.getSort()!=null && simpleQueryReqVO.getOrder()!=null){
             builder.addSort(simpleQueryReqVO.getSort(),SortOrder.valueOf(simpleQueryReqVO.getOrder().toUpperCase()));
+        }
+
+        if (StringUtils.isNotEmpty(simpleQueryReqVO.getKeyword())){
+            //builder.setQuery(QueryBuilders.queryStringQuery(simpleQueryReqVO.getKeyword()));
+            builder.setQuery(QueryBuilders.simpleQueryStringQuery(simpleQueryReqVO.getKeyword()));
+            //builder.setQuery(QueryBuilders.termQuery("type",simpleQueryReqVO.getKeyword()));
+            //builder.setQuery()
         }
 
         return builder;

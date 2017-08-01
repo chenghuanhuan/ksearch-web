@@ -163,13 +163,17 @@ public class ElasticClient {
         System.out.println(searchResponse);
 */
 
-        String json = "{\n" +
-                "  \"f\":\"aa3\",\n" +
-                "  \"g\":\"g\"\n" +
-                "}";
-        ElasticClient.newInstance().getTransportClient()
-                 .prepareIndex("test2","test","4")
-                .setSource(json, XContentType.JSON).get();
+
+        for (int i=0;i<100;i++){
+            String json = "{" +
+                    "  \"abcdef f\":\"aa3"+i+"\"," +
+                    "  \"g\":\"g"+i+"\"," +
+                    "  \"test1\":\"abcdefg "+i+"\"" +
+                    "}";
+            ElasticClient.newInstance().getTransportClient()
+                    .prepareIndex("test2","test1",""+i)
+                    .setSource(json, XContentType.JSON).get();
+        }
 
 
         GetMappingsRequest request = new GetMappingsRequest();
