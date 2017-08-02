@@ -108,15 +108,4 @@
                         </div>
                     </div>
                 </div>
-                <#--<input type="hidden" name="is_children" id="is_children"/>-->
-                <#--<div class="center">
-                    <button type="button" class="btn btn-sm btn-success">
-                        保存
-                        <i class="icon-arrow-right icon-on-right bigger-110"></i>
-                    </button>
-                    <button type="button" class="btn btn-sm btn-success">
-                        保存并继续添加
-                        <i class="icon-arrow-right icon-on-right bigger-110"></i>
-                    </button>
-                </div>-->
             </form>

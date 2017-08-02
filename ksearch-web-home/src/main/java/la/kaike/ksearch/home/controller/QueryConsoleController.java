@@ -18,4 +18,10 @@ public class QueryConsoleController {
     public String index(){
         return "query_console";
     }
+
+    @RequestMapping("query_dsl")
+    public String queryDsl(){
+        return "query_dsl";
+    }
+
 }
