@@ -4,14 +4,14 @@
  */
 package la.kaike.ksearch.model.vo.test;
 
-import la.kaike.ksearch.model.Request;
+import la.kaike.ksearch.model.ClusterRequest;
 import la.kaike.ksearch.model.validate.Validate;
 
 /**
  * @author chenghuanhuan@kaike.la
  * @since $Revision:1.0.0, $Date: 2017年07月14日 上午11:47 $
  */
-public class TestVO extends Request{
+public class TestVO extends ClusterRequest {
 
     @Validate(required = true)
     private String name;

@@ -61,3 +61,4 @@ window.jQuery || document.write("<script src='/assets/js/jquery-1.10.2.min.js'>"
 <#--
 <script src="/assets/js/chosen.jquery.min.js"></script>-->
 <script src="/assets/js/select2.min.js"></script>
+<script src="/assets/js/common/util.js"></script>

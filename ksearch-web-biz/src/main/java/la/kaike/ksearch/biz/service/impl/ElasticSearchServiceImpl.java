@@ -7,6 +7,7 @@ package la.kaike.ksearch.biz.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
 import la.kaike.ksearch.biz.es.ElasticClient;
+import la.kaike.ksearch.biz.es.ElasticClientUtil;
 import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.model.PageResponse;
 import la.kaike.ksearch.model.bo.ClusterHealthBO;
@@ -61,7 +62,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
     @Override
     public ClusterHealthBO clusterHealth(String clusterName) {
-        ClusterHealthResponse obj = ElasticClient.newInstance().getClusterHealth();
+        ClusterHealthResponse obj = ElasticClientUtil.getClusterHealth(ElasticClient.getClient(clusterName));
         ClusterHealthBO clusterHealthBO = new ClusterHealthBO();
         if(obj!=null){
             clusterHealthBO = JSON.parseObject(obj.toString(),ClusterHealthBO.class);
@@ -72,7 +73,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
     @Override
     public NodesStatsResponse nodeStats(String clusterName) {
-        NodesStatsResponse response = ElasticClient.newInstance().getNodeStats();
+        NodesStatsResponse response = ElasticClientUtil.getNodeStats(ElasticClient.getClient(clusterName));
         return response;
     }
 
@@ -82,7 +83,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         ClusterStatisticsVO clusterStatisticsVO = new ClusterStatisticsVO();
 
         // 统计文档数量
-        IndicesStatsResponse clusterStatsResponse = ElasticClient.newInstance().getStats();
+        IndicesStatsResponse clusterStatsResponse = ElasticClientUtil.getStats(ElasticClient.getClient(clusterName));
         Map<String, IndexStats> indexStatsMap = clusterStatsResponse.getIndices();
         long totalDoc = 0;
         long bytes =0;
@@ -112,8 +113,8 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         List<IndicesVO> indicesVOList = new ArrayList<>();
 
         /** 正在使用的索引 ***/
-        IndicesStatsResponse clusterStatsResponse = ElasticClient.newInstance().getStats();
-        MetaData metadata = ElasticClient.newInstance().getMetadata();
+        IndicesStatsResponse clusterStatsResponse = ElasticClientUtil.getStats(ElasticClient.getClient(clusterName));
+        MetaData metadata = ElasticClientUtil.getMetadata(ElasticClient.getClient(clusterName));
         Map<String, IndexStats> indexStatsMap = clusterStatsResponse.getIndices();
         if (indexStatsMap!=null&&indexStatsMap.size()>0){
             for (Map.Entry<String,IndexStats> entry:indexStatsMap.entrySet()){
@@ -150,7 +151,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
         /** 获取已关闭的索引 */
 
-        ClusterStateResponse clusterStateResponse = ElasticClient.newInstance().getClusterState();
+        ClusterStateResponse clusterStateResponse = ElasticClientUtil.getClusterState(ElasticClient.getClient(clusterName));
         ImmutableOpenMap<String,Set<ClusterBlock>> immutableOpenMap =  clusterStateResponse.getState().getBlocks().indices();
         Iterator<ObjectObjectCursor<String, Set<ClusterBlock>>> iterator = immutableOpenMap.iterator();
         while (iterator.hasNext()) {
@@ -170,7 +171,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
     @Override
     public void addIndex(AddIndexReqVO addIndexVO) {
-        TransportClient client = ElasticClient.newInstance().getTransportClient();
+        TransportClient client = ElasticClient.getClient(addIndexVO.getClusterName());
         client.admin().indices().prepareCreate(addIndexVO.getIndex()).setSettings(
                 Settings.builder()
                         .put(IndexSettingConstant.NUMBER_OF_SHARDS,addIndexVO.getNumberOfShards())
@@ -180,33 +181,37 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
     @Override
     public void delIndex(DelIndexReqVO delIndexVO) {
-        TransportClient client = ElasticClient.newInstance().getTransportClient();
+        TransportClient client = ElasticClient.getClient(delIndexVO.getClusterName());
         client.admin().indices().prepareDelete(delIndexVO.getIndices().toArray(new String[]{})).get();
     }
 
     @Override
     public void refreshIndex(RefreshIndexReqVO refreshIndexVO) {
-        ElasticClient.newInstance().getIndicesAdminClient().prepareRefresh(refreshIndexVO.getIndices().toArray(new String[]{})).get();
+        ElasticClient.getClient(refreshIndexVO.getClusterName()).admin()
+                .indices().prepareRefresh(refreshIndexVO.getIndices().toArray(new String[]{})).get();
     }
 
     @Override
     public void closeIndex(CloseIndexReqVO closeIndexVO) {
-        ElasticClient.newInstance().getIndicesAdminClient().prepareClose(closeIndexVO.getIndices().toArray(new String[]{})).get();
+        ElasticClient.getClient(closeIndexVO.getClusterName()).admin()
+                .indices().prepareClose(closeIndexVO.getIndices().toArray(new String[]{})).get();
     }
 
     @Override
     public void openIndex(OpenIndexReqVO openIndexReqVO) {
-        ElasticClient.newInstance().getIndicesAdminClient().prepareOpen(openIndexReqVO.getIndices().toArray(new String[]{})).get();
+        ElasticClientUtil.getIndicesAdminClient(ElasticClient.getClient(openIndexReqVO.getClusterName()))
+                .prepareOpen(openIndexReqVO.getIndices().toArray(new String[]{})).get();
     }
 
     @Override
     public void flushIndex(FlushIndexReqVO flushIndexVO) {
-        ElasticClient.newInstance().getIndicesAdminClient().prepareFlush(flushIndexVO.getIndices().toArray(new String[]{})).get();
+        ElasticClientUtil.getIndicesAdminClient(ElasticClient.getClient(flushIndexVO.getClusterName()))
+                .prepareFlush(flushIndexVO.getIndices().toArray(new String[]{})).get();
     }
 
     @Override
     public void optimizeIndex(OptimizeIndexReqVO optimizeIndexVO) {
-        ElasticClient.newInstance().getTransportClient().admin().indices()
+        ElasticClientUtil.getIndicesAdminClient(ElasticClient.getClient(optimizeIndexVO.getClusterName()))
                 .prepareForceMerge(optimizeIndexVO.getIndex())
                 .setFlush(optimizeIndexVO.getFlush())
                 .setMaxNumSegments(optimizeIndexVO.getMaxNumSegments())
@@ -216,7 +221,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
     @Override
     public void createAlias(CreateAliasReqVO aliasIndexVO) {
-        IndicesAliasesRequestBuilder builder = ElasticClient.newInstance().getIndicesAdminClient().prepareAliases();
+        IndicesAliasesRequestBuilder builder = ElasticClientUtil.getIndicesAdminClient(ElasticClient.getClient(aliasIndexVO.getClusterName())).prepareAliases();
         String index = aliasIndexVO.getIndex();
         for (String alias:aliasIndexVO.getAliases()){
             builder.addAlias(index,alias);
@@ -226,13 +231,13 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
     @Override
     public void delAlias(DelAliasReqVO delAliasVO) {
-        IndicesAliasesRequestBuilder builder = ElasticClient.newInstance().getIndicesAdminClient().prepareAliases();
+        IndicesAliasesRequestBuilder builder = ElasticClientUtil.getIndicesAdminClient(ElasticClient.getClient(delAliasVO.getClusterName())).prepareAliases();
         builder.removeAlias(delAliasVO.getIndex(),delAliasVO.getAlias()).get();
     }
 
     @Override
     public void addMapping(AddMappingReqVO addMappingVO) {
-        PutMappingRequestBuilder builder = ElasticClient.newInstance().getIndicesAdminClient()
+        PutMappingRequestBuilder builder = ElasticClientUtil.getIndicesAdminClient(ElasticClient.getClient(addMappingVO.getClusterName()))
                 .preparePutMapping(addMappingVO.getIndex());
         builder.setType(addMappingVO.getType())
                 .setSource(addMappingVO.getMappingsJson(), XContentType.JSON)
@@ -249,7 +254,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
             if (getMappingVO.getType()!=null) {
                 request.types(getMappingVO.getType());
             }
-            GetMappingsResponse response = ElasticClient.newInstance().getIndicesAdminClient()
+            GetMappingsResponse response = ElasticClientUtil.getIndicesAdminClient(ElasticClient.getClient(getMappingVO.getClusterName()))
                     .getMappings(request).actionGet();
 
            /* GetMappingsResponse response = ElasticClient.newInstance().getIndicesAdminClient()
@@ -292,7 +297,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     public PageResponse simpleQuery(SimpleQueryReqVO simpleQueryReqVO) {
         PageResponse pageResponse = new PageResponse();
 
-        TransportClient client = ElasticClient.newInstance().getTransportClient();
+        TransportClient client = ElasticClient.getClient(simpleQueryReqVO.getClusterName());
 
         SearchRequestBuilder builder = builder(client,simpleQueryReqVO);
 
@@ -366,7 +371,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
     @Override
     public String addDoc(AddDocReqVO addDocReqVO) {
-        ElasticClient.newInstance().getTransportClient()
+        ElasticClient.getClient(addDocReqVO.getClusterName())
                 .prepareIndex(addDocReqVO.getIndex(),addDocReqVO.getType())
                 .setSource(addDocReqVO.getJsonSource(),XContentType.JSON).get();
         return null;

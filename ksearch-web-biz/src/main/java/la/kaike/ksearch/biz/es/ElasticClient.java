@@ -4,18 +4,12 @@
  */
 package la.kaike.ksearch.biz.es;
 
+import com.baidu.disconf.client.usertools.IKuKoConfDataGetter;
 import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
-import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
-import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
-import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsResponse;
-import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
-import org.elasticsearch.client.ClusterAdminClient;
-import org.elasticsearch.client.IndicesAdminClient;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
-import org.elasticsearch.cluster.metadata.MetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
@@ -27,6 +21,8 @@ import org.slf4j.LoggerFactory;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -35,103 +31,66 @@ import java.util.Iterator;
 public class ElasticClient {
 
     private static final Logger logger = LoggerFactory.getLogger(ElasticClient.class);
-    private volatile static ElasticClient client;
 
-    private TransportClient transportClient;
+    private static Map<String,TransportClient> clientMap = new ConcurrentHashMap<>();
 
-    public static ElasticClient newInstance(){
+    public static TransportClient getClient(String clusterName){
+        TransportClient client = clientMap.get(clusterName);
         if (client == null){
-            synchronized (ElasticClient.class){
-                if (client == null){
-                    try {
-                        Settings settings = Settings
-                                .builder()
-                                .put("cluster.name","my-application")
-                                //这个客户端可以嗅到集群的其它部分，并将它们加入到机器列表。为了开启该功能，设置client.transport.sniff为true。
-                                .put("client.transport.sniff",true)
-                                .build();
-
-
-                        TransportClient transportClient = new PreBuiltTransportClient(settings)
-                                .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("172.16.70.76"),9300));
-                        client = new ElasticClient();
-                        client.setTransportClient(transportClient);
-                    } catch (UnknownHostException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+            String clusterHosts = IKuKoConfDataGetter.getStringValue(clusterName+".hosts");
+            client = Builder.builder().setClusterName(clusterName).addNode(clusterHosts)._client;
+            clientMap.put(clusterName,client);
+            logger.info("Elastic client created!");
         }
 
         return client;
     }
 
-    private void setTransportClient(TransportClient transportClient) {
-        this.transportClient = transportClient;
-    }
 
-    public void close(){
-        transportClient.close();
-    }
+    private static class Builder {
+        private TransportClient _client;
 
-    /**
-     * 获取健康状况信息
-     * @return
-     */
-    public  ClusterHealthResponse getClusterHealth(){
-        ClusterHealthResponse response = transportClient.admin().cluster().prepareHealth().execute().actionGet();
-        System.out.println(response);
-        return response;
-    }
+        public static Builder builder(){
+            return new Builder();
+        }
+        public ElasticClient.Builder setClusterName(String clusterName) {
+            this._client = new PreBuiltTransportClient(getSettings(clusterName));;
+            return this;
+        }
 
-    /**
-     * 获取节点状态信息
-     * @return
-     */
-    public  NodesStatsResponse getNodeStats(){
-        NodesStatsResponse response = getClusterAdminClient().prepareNodesStats().execute().actionGet();
-        return response;
-    }
+        private Settings getSettings(String clusterName) {
+            Settings settings = Settings
+                    .builder()
+                    .put("cluster.name",clusterName)
+                    .put("client.transport.ignore_cluster_name", false)
+                    //这个客户端可以嗅到集群的其它部分，并将它们加入到机器列表。为了开启该功能，设置client.transport.sniff为true。
+                    .put("client.transport.sniff",true)
+                    .build();
+            return settings;
+        }
 
-    public MetaData getMetadata(){
-        //IndicesStatsResponse statsResponse = transportClient.admin().indices().prepareStats().execute().actionGet();
-        //GetSettingsResponse response = transportClient.admin().indices().prepareGetSettings().execute().actionGet();
-       // System.out.println(response.getSetting("product",""));
-        //"index.number_of_shards" -> "5"
-        //"index.number_of_replicas" -> "1"
-        //"index.creation_date" -> "1498813262911"
-        //"index.provided_name" -> "website"
-        //"index.uuid" -> "6BUJ_EefQXa6VYRrIQKBGQ"
-        //"index.version.created" -> "5040399"
-        ClusterStateResponse clusterStateResponse = getClusterAdminClient().prepareState().get();
-        MetaData metaData = clusterStateResponse.getState().getMetaData();
-        return metaData;
-    }
+        public ElasticClient.Builder addNode(String nodeAddrs) {
+            String[] hosts = nodeAddrs.split(",");
+            for (String host : hosts) {
+                String infos[] = host.split(":");
+                addNode(infos[0], infos.length == 2 ? Integer.valueOf(infos[1]) : 9300);
+            }
+            return this;
+        }
 
-    public ClusterAdminClient getClusterAdminClient(){
-        return transportClient.admin().cluster();
-    }
+        public ElasticClient.Builder addNode(String ip, int port) {
+            try {
+                this._client.addTransportAddress(
+                        new InetSocketTransportAddress(InetAddress.getByName(ip), port));
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+            return this;
+        }
 
-    /**
-     * 获取状态信息
-     * @return
-     */
-    public IndicesStatsResponse getStats(){
-       IndicesStatsResponse response = transportClient.admin().indices().prepareStats().execute().actionGet();
-       return response;
-    }
-
-    /**
-     * 集群状态信息
-     * @return
-     */
-    public ClusterStateResponse getClusterState(){
-        ClusterStateResponse clusterStateResponse = getClusterAdminClient().prepareState().execute().actionGet();
-        return clusterStateResponse;
-    }
-
-    public IndicesAdminClient getIndicesAdminClient(){
-        return getTransportClient().admin().indices();
+        public TransportClient build() {
+            return this._client;
+        }
     }
 
     public static void main(String[] args) {
@@ -170,16 +129,17 @@ public class ElasticClient {
                     "  \"g\":\"g"+i+"\"," +
                     "  \"test1\":\"abcdefg "+i+"\"" +
                     "}";
-            ElasticClient.newInstance().getTransportClient()
+            ElasticClient.getClient("my-application")
                     .prepareIndex("test2","test1",""+i)
                     .setSource(json, XContentType.JSON).get();
         }
 
+        System.out.println(ElasticClient.getClient("my-application"));
 
         GetMappingsRequest request = new GetMappingsRequest();
         request.indices("test2");
         request.types("test");
-        GetMappingsResponse response = ElasticClient.newInstance().getIndicesAdminClient()
+        GetMappingsResponse response = ElasticClient.getClient("my-application").admin().indices()
                 .getMappings(request).actionGet();
         ImmutableOpenMap<String,ImmutableOpenMap<String,MappingMetaData>> metaDataImmutableOpenMap = response.getMappings();
         Iterator<ObjectObjectCursor<String, ImmutableOpenMap<String,MappingMetaData>>> iterator = metaDataImmutableOpenMap.iterator();
@@ -187,7 +147,4 @@ public class ElasticClient {
 
     }
 
-    public TransportClient getTransportClient() {
-        return transportClient;
-    }
 }

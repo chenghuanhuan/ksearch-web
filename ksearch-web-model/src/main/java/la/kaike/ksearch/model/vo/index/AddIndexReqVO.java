@@ -4,14 +4,14 @@
  */
 package la.kaike.ksearch.model.vo.index;
 
-import la.kaike.ksearch.model.Request;
+import la.kaike.ksearch.model.ClusterRequest;
 import la.kaike.ksearch.model.validate.Validate;
 
 /**
  * @author chenghuanhuan@kaike.la
  * @since $Revision:1.0.0, $Date: 2017年07月20日 下午2:18 $
  */
-public class AddIndexReqVO extends Request {
+public class AddIndexReqVO extends ClusterRequest {
 
     @Validate(required = true)
     private String clusterName;

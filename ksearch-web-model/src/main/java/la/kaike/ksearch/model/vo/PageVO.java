@@ -4,13 +4,13 @@
  */
 package la.kaike.ksearch.model.vo;
 
-import la.kaike.ksearch.model.Request;
+import la.kaike.ksearch.model.ClusterRequest;
 
 /**
  * @author chenghuanhuan@kaike.la
  * @since $Revision:1.0.0, $Date: 2017年07月28日 下午3:05 $
  */
-public class PageVO extends Request{
+public class PageVO extends ClusterRequest {
     /**
      * 第多少条开始
      */

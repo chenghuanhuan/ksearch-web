@@ -4,7 +4,7 @@
  */
 package la.kaike.ksearch.model.vo.index;
 
-import la.kaike.ksearch.model.Request;
+import la.kaike.ksearch.model.ClusterRequest;
 import la.kaike.ksearch.model.validate.Validate;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  * @author chenghuanhuan@kaike.la
  * @since $Revision:1.0.0, $Date: 2017年07月20日 下午3:27 $
  */
-public class DelIndexReqVO extends Request {
+public class DelIndexReqVO extends ClusterRequest {
 
     @Validate(required = true)
     private String clusterName;

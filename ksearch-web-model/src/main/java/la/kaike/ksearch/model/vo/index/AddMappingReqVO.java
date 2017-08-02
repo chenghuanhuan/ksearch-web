@@ -4,13 +4,13 @@
  */
 package la.kaike.ksearch.model.vo.index;
 
-import la.kaike.ksearch.model.Request;
+import la.kaike.ksearch.model.ClusterRequest;
 
 /**
  * @author chenghuanhuan@kaike.la
  * @since $Revision:1.0.0, $Date: 2017年07月24日 下午3:08 $
  */
-public class AddMappingReqVO extends Request {
+public class AddMappingReqVO extends ClusterRequest {
 
     private String index;
 

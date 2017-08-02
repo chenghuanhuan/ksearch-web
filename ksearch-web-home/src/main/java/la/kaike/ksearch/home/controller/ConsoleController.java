@@ -4,10 +4,15 @@
  */
 package la.kaike.ksearch.home.controller;
 
+import com.baidu.disconf.client.usertools.IKuKoConfDataGetter;
 import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.home.base.BaseController;
+import la.kaike.ksearch.model.ClusterRequest;
 import la.kaike.ksearch.model.Response;
 import la.kaike.ksearch.model.bo.ClusterHealthBO;
+import la.kaike.ksearch.model.vo.console.ClusterHealthReqVO;
+import la.kaike.ksearch.model.vo.console.ClusterNodeReqVO;
+import la.kaike.ksearch.model.vo.console.ClusterStatisticsReqVO;
 import la.kaike.ksearch.model.vo.elastic.*;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.elasticsearch.action.admin.cluster.node.stats.NodeStats;
@@ -42,16 +47,28 @@ public class ConsoleController extends BaseController{
     }
 
     /**
+     * 获取所有的集群名称
+     * @return
+     */
+    @RequestMapping("/clusters")
+    @ResponseBody
+    public Response getCluster(){
+        String clusterNames = IKuKoConfDataGetter.getStringValue("ksearch.cluster.name");
+        return succeed(clusterNames);
+    }
+
+
+    /**
      * 集群健康状况
      * @return
      */
     @RequestMapping("/cluster/health")
     @ResponseBody
-    public Response clusterHealth(){
+    public Response clusterHealth(ClusterHealthReqVO clusterHealthReqVO){
         List<ClusterHealthListVO> clusterHealthListVOList = new ArrayList<>();
-
+        String clusterName = clusterHealthReqVO.getClusterName();
         try {
-            ClusterHealthBO clusterHealthBO = elasticSearchService.clusterHealth("");
+            ClusterHealthBO clusterHealthBO = elasticSearchService.clusterHealth(clusterName);
 
             Map<String,Object> map =  PropertyUtils.describe(clusterHealthBO);
 
@@ -77,14 +94,14 @@ public class ConsoleController extends BaseController{
      */
     @RequestMapping("/cluster/state/nodes")
     @ResponseBody
-    public Response clusterAndNode(){
-        NodesStatsResponse response = elasticSearchService.nodeStats("");
+    public Response clusterAndNode(ClusterNodeReqVO clusterNodeReqVO){
+        NodesStatsResponse response = elasticSearchService.nodeStats(clusterNodeReqVO.getClusterName());
         ClusterVO clusterVO = new ClusterVO();
         List<NodeStatsVO> nodesStatsVOList = new ArrayList<>();
         List<NodeStats> nodeStatsList = response.getNodes();
 
         // 获取健康状况
-        ClusterHealthBO clusterHealthBO = elasticSearchService.clusterHealth("");
+        ClusterHealthBO clusterHealthBO = elasticSearchService.clusterHealth(clusterNodeReqVO.getClusterName());
         clusterVO.setStatus(clusterHealthBO.getStatus());
         clusterVO.setName(response.getClusterName().value());
         if (!CollectionUtils.isEmpty(nodeStatsList)){
@@ -108,8 +125,8 @@ public class ConsoleController extends BaseController{
      */
     @RequestMapping("/cluster/statistics")
     @ResponseBody
-    public Response clusterStatistics(){
-        ClusterStatisticsVO clusterStatisticsVO = elasticSearchService.clusterStatistics("");
+    public Response clusterStatistics(ClusterStatisticsReqVO clusterStatisticsReqVO){
+        ClusterStatisticsVO clusterStatisticsVO = elasticSearchService.clusterStatistics(clusterStatisticsReqVO.getClusterName());
         return succeed(clusterStatisticsVO);
     }
 
@@ -119,8 +136,8 @@ public class ConsoleController extends BaseController{
      */
     @RequestMapping("/cluster/indeices")
     @ResponseBody
-    public Response indicesList(){
-        List<IndicesVO> indicesVOList = elasticSearchService.getIndicesVO("");
+    public Response indicesList(ClusterRequest request){
+        List<IndicesVO> indicesVOList = elasticSearchService.getIndicesVO(request.getClusterName());
         return succeed(indicesVOList);
     }
 

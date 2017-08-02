@@ -4,7 +4,7 @@
  */
 package la.kaike.ksearch.home.aop;
 
-import la.kaike.ksearch.model.Request;
+import la.kaike.ksearch.BaseRequest;
 import la.kaike.ksearch.model.Response;
 import la.kaike.ksearch.model.validate.ValidateTools;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -37,7 +37,7 @@ public class ParamValidateAop {
         Object[] params = pjp.getArgs();
         if (params != null && params.length >0){
             for (Object param:params){
-                if (param instanceof Request){
+                if (param instanceof BaseRequest){
                     String errorMsg = ValidateTools.validate(param);
                     if (errorMsg != null) {
                         Response obj = new Response();

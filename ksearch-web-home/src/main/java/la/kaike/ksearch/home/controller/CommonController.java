@@ -42,7 +42,7 @@ public class CommonController extends BaseController {
     @RequestMapping("/index/select")
     @ResponseBody
     public Response indexSelect(SimpleQueryReqVO simpleQueryReqVO){
-        List<IndicesVO> indicesVOS =  elasticSearchService.getIndicesVO("");
+        List<IndicesVO> indicesVOS =  elasticSearchService.getIndicesVO(simpleQueryReqVO.getClusterName());
         List<SelectVO> selectVOList = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(indicesVOS)){
             for (IndicesVO indicesVO:indicesVOS){

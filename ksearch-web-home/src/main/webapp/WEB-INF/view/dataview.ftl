@@ -199,9 +199,10 @@
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
     var columns=[];
+    var clusterName = Util.cookie.get("cluster-name");
     jQuery(function($) {
 
-        new $ax("/common/index/select", function (data) {
+        var ajIndex = new $ax("/common/index/select", function (data) {
             if(data.status){
                 $("#select_index").select2({
                     allowClear: true,
@@ -221,13 +222,16 @@
                             });
                         }
                     });
-                    aj.set("clusterName","");
+                    aj.set("clusterName",clusterName);
                     aj.set("index",$(this).val());
                     aj.start();
 
                 });
             }
-        }).start();
+        });
+        ajIndex.set("clusterName",clusterName);
+        ajIndex.start();
+
 
         $("#select_type").select2({
             allowClear: true,
@@ -294,6 +298,7 @@
                             params.indices = index;
                             params.types = type;
                             params.keyword = keyword;
+                            params.clusterName = clusterName;
                             return params;
                         },
                         onExpandRow: function (index, row, $detail) {
@@ -323,16 +328,10 @@
             aj.set("type",type);
             aj.set("index",index);
             //aj.set("keyword",keyword);
-            aj.set("clusterName","");
+            aj.set("clusterName",clusterName);
             aj.start();
         });
 
-
-
-        var formatter = function (value, row, index) {
-
-            return value;
-        }
 
     });
 

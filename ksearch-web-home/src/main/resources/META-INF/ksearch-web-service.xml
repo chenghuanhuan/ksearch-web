@@ -11,10 +11,10 @@
     http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <!-- 测试，预发布， 生产环境的服务端配置文件 -->
-     <context:property-placeholder location="classpath:system.properties"  ignore-resource-not-found="true"/>
+   <!--  <context:property-placeholder location="classpath:system.properties"  ignore-resource-not-found="true"/>-->
     <!--expose-proxy表示是否要将当前的代理对象放入AopContext中 -->
     <aop:aspectj-autoproxy expose-proxy="true"/>
     <context:component-scan base-package="la.kaike.ksearch" />
     <import resource="spring-mybatis.xml"/>
-<!--    <import resource="classpath*:disconf-client.xml"/>-->
+    <import resource="classpath*:disconf-client.xml"/>
 </beans>

@@ -181,8 +181,9 @@
         <script src="/assets/js/jquery.nestable.js"></script>
 		<script type="text/javascript">
             var expandedButton = '<button data-action="collapse" type="button">Collapse</button><button data-action="expand" type="button" style="display: none;">Expand</button>';
-			jQuery(function($) {
-
+			var clusterName = "";
+            jQuery(function($) {
+                clusterName = Util.cookie.get("cluster-name");
                 $('#indices_table').bootstrapTable({
                     striped:true,
                     //classes:"table table-no-bordered",
@@ -192,6 +193,10 @@
                     search:true,
                     toolbar:"#toolbar",
                     url:"/console/cluster/indeices",
+                    queryParams:function (params) {
+                        params.clusterName = clusterName;
+                        return params;
+                    },
                     detailView:true,
                     columns: [{
                         field: 'index',
@@ -347,7 +352,7 @@
                                 ajax.set("index",index);
                                 ajax.set("numberOfShards",number_of_shards);
                                 ajax.set("numberOfReplicas",number_of_replicas);
-                                ajax.set("clusterName","");
+                                ajax.set("clusterName",clusterName);
                                 ajax.start();
 
                             }
@@ -386,7 +391,7 @@
                     url:"/index/getAllMapping",
                     queryParams:function (params) {
                         params.index = row.index;
-                        params.clusterName = "";
+                        params.clusterName = clusterName;
                         return params;
                     },
                     columns: [{
@@ -435,7 +440,7 @@
 
                                     });
                                     ajax.set("indices",row.index);
-                                    ajax.set("clusterName","");
+                                    ajax.set("clusterName",clusterName);
                                     ajax.start();
                                 }
                             }
@@ -461,7 +466,7 @@
 
                                     });
                                     ajax.set("indices",row.index);
-                                    ajax.set("clusterName","");
+                                    ajax.set("clusterName",clusterName);
                                     ajax.start();
                                 }
                             }
@@ -495,7 +500,7 @@
 
                                     });
                                     ajax.set("indices",row.index);
-                                    ajax.set("clusterName","");
+                                    ajax.set("clusterName",clusterName);
                                     ajax.start();
                                 }
                             }
@@ -520,7 +525,7 @@
                                     },function (data) {
                                     });
                                     ajax.set("indices",row.index);
-                                    ajax.set("clusterName","");
+                                    ajax.set("clusterName",clusterName);
                                     ajax.start();
                                 }
                             }
@@ -579,7 +584,7 @@
                                 });
                                 ajax.set("index",index);
                                 ajax.set("aliases",aliases)
-                                ajax.set("clusterName","");
+                                ajax.set("clusterName",clusterName);
                                 ajax.start();
 
                             }
@@ -646,7 +651,7 @@
                                                 });
                                                 ajax.set("index", index);
                                                 ajax.set("alias", e)
-                                                ajax.set("clusterName", "");
+                                                ajax.set("clusterName", clusterName);
                                                 ajax.start();
                                             }
                                         }
@@ -745,7 +750,7 @@
                                 ajax.set("onlyExpungeDeletes",only_expunge_deletes);
                                 ajax.set("flush",flush);
                                 ajax.set("waitForMerge",wait_for_merge);
-                                ajax.set("clusterName","");
+                                ajax.set("clusterName",clusterName);
                                 ajax.start();
 
                             }
@@ -837,6 +842,7 @@
                     ajax.set("type",type_name);
                     ajax.set("include_in_all",include_in_all);
                     ajax.set("mappingsJson",mappingsJson);
+                    ajax.set("clusterName",clusterName);
                     ajax.start();
 
 

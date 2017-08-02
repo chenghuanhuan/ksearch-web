@@ -118,9 +118,8 @@
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
 
-								<div class="row">
-                                    <div class="col-xs-12" id="cluster_info">
-                                    </div>
+								<div class="row" id="cluster_info">
+
 								</div>
                                 <div class="hr hr32 hr-dotted"></div>
 
@@ -295,53 +294,31 @@
 		<script type="text/javascript">
 			jQuery(function($) {
 
-                /**
-                 * 集群信息
-                 */
-                var ajax = new $ax("/console/cluster/state/nodes", function (data) {
-                    if (data.status===true) {
-						var datalist = data.data;
-						if (datalist.length>0){
-						    var html ='<p>';
-							$.each(datalist,function (i,t) {
-							    var cls = "success";
-							    if (t.status=="yellow"){
-							        cls = "warning";
-								}else if (t.status=="red"){
-									cls = "danger";
-								}
-								var content ='<span style=\'width: 45px;\' class=\'label label-sm label-success arrowed\'>green</span>'+ ':最健康的状态，说明所有的分片包括备份都可用</br>'+
-										'<span style=\'width: 45px;\' class=\'label label-sm label-yellow arrowed\'>yellow</span>:基本的分片可用，但是备份不可用（或者是没有备份）</br>'+
-										'<span style=\'width: 45px;\'  class=\'label label-sm label-danger arrowed\'>red</span>:部分的分片可用，表明分片有一部分损坏。此时执行查询部分数据仍然可以查到，遇到这种情况，还是赶快解决比较好</br>';
-								html +='集群：'+'<button data-trigger="hover" data-rel="popover" class="btn btn-'+cls+' tooltip-"'+cls+' data-content="'+content+'">'+t.name+'</button>&nbsp;';
-								html +='&nbsp;节点：';
-								var nodes = t.nodes;
+				// 获取所有的集群名称
+                var ajax = new $ax("/console/clusters", function (data) {
+                    if (data.status){
+                        var clusterNames = data.data.split(",");
+                        $.each(clusterNames,function (i,item) {
+                            initClusterNodeInfo(i,item);
+                        });
 
-								$.each(nodes,function (j,d) {
-									html +='<button data-rel="tooltip" title="'+d.transport_address+'" class="btn btn-xs btn-primary tooltip-success">'+d.name+'</button>&nbsp;';
-                                });
-                            });
-							html+='</p>';
-							$("#cluster_info").html(html);
+                        // 初始化健康信息
+                        initClusterHealth(clusterNames[0]);
+                        initClusterStatistics(clusterNames[0]);
+					}
 
-							// 初始化健康信息
-                            initClusterHealth(datalist[0].name);
-                            $("#nodeSize").html(datalist[0].nodes.length);
-
-                            initClusterStatistics(datalist[0].name);
-
-                            // 初始化tooltip
-                            $('[data-rel=tooltip]').tooltip();
-                            $('[data-rel=popover]').popover({html:true});
-						}
-                    }
-                }, function (data) {
-
-                });
+				});
                 ajax.start();
 
-
-
+				$(document).on("click",".cluster-name",function () {
+                        //$(this).children("i").remove();
+					$("#cluster_info").find(".icon-ok").remove();
+					$(this).prepend('<i class="icon-ok"></i>');
+					Util.cookie.set("cluster-name",$(this).text(),36000);
+                    // 初始化健康信息
+                    initClusterHealth($(this).text());
+                    initClusterStatistics($(this).text());
+                });
 
 
 
@@ -350,13 +327,6 @@
 					var barColor = !$box.hasClass('infobox-dark') ? $box.css('color') : '#FFF';
 					$(this).sparkline('html', {tagValuesAttribute:'data-values', type: 'bar', barColor: barColor , chartRangeMin:$(this).data('min') || 0} );
 				});
-
-
-
-
-
-			  var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
-			  var previousPoint = null;
 
 
 
@@ -443,6 +413,10 @@
                     showHeader:false,
                     //cardView:true,
                     url:"/console/cluster/health",
+                    queryParams:function (params) {
+                        params.clusterName = clusterName;
+                        return params;
+                    },
                     columns: [{
                         field: 'name',
                         title: '参数'
@@ -458,6 +432,10 @@
                     //showHeader:false,
                     //cardView:true,
                     url:"/console/cluster/indeices",
+                    queryParams:function (params) {
+                        params.clusterName = clusterName;
+                        return params;
+                    },
                     columns: [{
                         field: 'index',
                         title: '索引'
@@ -515,8 +493,64 @@
                 }, function (data) {
 
                 });
-
+				ajax.set("clusterName",clusterName);
                 ajax.start();
+            }
+
+
+
+            /**
+			 * 初始化集群节点信息
+			 */
+            function initClusterNodeInfo(i,clusterName) {
+                /*
+                 * 集群信息
+                 */
+                var ajax = new $ax("/console/cluster/state/nodes", function (data) {
+                    if (data.status===true) {
+                        var datalist = data.data;
+                        if (datalist.length>0){
+                            var html =' <div class="col-xs-12"><p>';
+                            $.each(datalist,function (i,t) {
+                                var cls = "success";
+                                if (t.status=="yellow"){
+                                    cls = "warning";
+                                }else if (t.status=="red"){
+                                    cls = "danger";
+                                }
+                                var content ='<span style=\'width: 45px;\' class=\'label label-sm label-success arrowed\'>green</span>'+ ':最健康的状态，说明所有的分片包括备份都可用</br>'+
+                                        '<span style=\'width: 45px;\' class=\'label label-sm label-yellow arrowed\'>yellow</span>:基本的分片可用，但是备份不可用（或者是没有备份）</br>'+
+                                        '<span style=\'width: 45px;\'  class=\'label label-sm label-danger arrowed\'>red</span>:部分的分片可用，表明分片有一部分损坏。此时执行查询部分数据仍然可以查到，遇到这种情况，还是赶快解决比较好</br>';
+                                html +='集群：'+'<button id="cluster_name_'+clusterName+'" data-trigger="hover" data-rel="popover" class="cluster-name btn btn-'+cls+' tooltip-"'+cls+' data-content="'+content+'">';
+										if(i==0){
+										    html+='<i class="icon-ok"></i>';
+										}
+										html += t.name+'</button>&nbsp;';
+                                html +='&nbsp;节点：';
+                                var nodes = t.nodes;
+
+                                $.each(nodes,function (j,d) {
+                                    html +='<button data-rel="tooltip" title="'+d.transport_address+'" class="btn btn-xs btn-primary tooltip-success">'+d.name+'</button>&nbsp;';
+                                });
+                            });
+                            html+='</p></div>';
+                            $("#cluster_info").append(html);
+
+
+                            $("#nodeSize").html(datalist[0].nodes.length);
+
+                            // 初始化tooltip
+                            $('[data-rel=tooltip]').tooltip();
+                            $('[data-rel=popover]').popover({html:true});
+                        }
+                    }
+                }, function (data) {
+
+                });
+
+                ajax.set("clusterName",clusterName);
+                ajax.start();
+
             }
 		</script>
 		<div style="text-align:center;">
