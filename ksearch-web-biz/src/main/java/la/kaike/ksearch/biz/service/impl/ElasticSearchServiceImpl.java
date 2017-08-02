@@ -400,7 +400,10 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
                             if (v.containsKey("properties")){
                                 //Map<String,Object> children = (Map<String, Object>) v.get("properties");
                                 List<PropertiesVO> properties = mapToProperties(v);
-                                propertiesVO.setType("object");
+                                //propertiesVO.setType("object");
+                                if (!"nested".equals(propertiesVO.getType())){
+                                    propertiesVO.setType("object");
+                                }
                                 propertiesVO.setChildren(properties);
                             }
                         }

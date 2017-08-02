@@ -52,7 +52,7 @@
                                 <option value="double">double</option>
                                 <option value="boolean">boolean</option>
                                 <option value="date">date</option>
-                                <option value="array">array</option>
+                                <option value="nested">nested</option>
                                 <option value="object">object</option>
                             </select>
                         </div>

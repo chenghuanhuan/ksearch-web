@@ -934,7 +934,7 @@
                             +'</div>'
                             +'<div class="dd2-content">'+item.name+' ('+item.type+')'
                             +'<div class="pull-right action-buttons">';
-                    if(item.type==="array"||item.type==="object"){
+                    if(item.type==="nested"||item.type==="object"){
                         template +=""
                                 +'<a class="green" href="#">'
                                 +'<i class="icon-plus bigger-130"></i>'
@@ -1074,7 +1074,7 @@
                                 $("#ignore_above").val('');
                             }
 
-                            if (e.val =="text" || e.val =="object" || e.val =="array"){
+                            if (e.val =="text" || e.val =="object" || e.val =="nested"){
                                 $("#null_value").attr("readonly",true);
                             }else {
                                 $("#null_value").attr("readonly",false);
@@ -1115,7 +1115,7 @@
                         +'</div>'
                         +'<div class="dd2-content">'+pro_name+' ('+pro_type+')'
                         +'<div class="pull-right action-buttons">';
-                        if(pro_type==="array"||pro_type==="object"){
+                        if(pro_type==="nested"||pro_type==="object"){
                             template +=""
                                     +'<a class="green" href="#">'
                                     +'<i class="icon-plus bigger-130"></i>'
@@ -1171,7 +1171,7 @@
                 li.data("ignore_above",ignore_above);
                 li.data("null_value",null_value);
                 li.data("boost",boost);
-                if(li.data("new")=="1"&&(pro_type==="array"||pro_type==="object")){
+                if(li.data("new")=="1"&&(pro_type==="nested"||pro_type==="object")){
                     if(li.find(".icon-plus").length==0) {
                         var template = '<a class="green" href="#">'
                                 + '<i class="icon-plus bigger-130"></i>'

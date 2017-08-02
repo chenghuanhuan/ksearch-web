@@ -191,10 +191,18 @@ public class IndexController extends BaseController{
             }
             if ("object".equals(propertiesBO.getType())){
                 propertiesBO.setIndex(null);
+                propertiesBO.setFielddata(null);
+                propertiesBO.setStore(null);
             }
             if ("".equals(propertiesBO.getNull_value())){
                 propertiesBO.setNull_value(null);
             }
+
+            if ("nested".equals(propertiesBO.getType())){
+                propertiesBO.setStore(null);
+                propertiesBO.setFielddata(null);
+            }
+
             if (!CollectionUtils.isEmpty(propertiesVO.getChildren())){
                 JSONObject child = toPropertiesJson(propertiesVO.getChildren());
                 propertiesBO.setProperties(child);
