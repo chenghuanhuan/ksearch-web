@@ -6,8 +6,12 @@ package la.kaike.ksearch.biz.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
+import io.searchbox.client.JestClient;
+import io.searchbox.client.JestResult;
 import la.kaike.ksearch.biz.es.ElasticClient;
 import la.kaike.ksearch.biz.es.ElasticClientUtil;
+import la.kaike.ksearch.biz.es.IndexExt;
+import la.kaike.ksearch.biz.es.SearchExt;
 import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.model.PageResponse;
 import la.kaike.ksearch.model.bo.ClusterHealthBO;
@@ -17,6 +21,7 @@ import la.kaike.ksearch.model.vo.index.*;
 import la.kaike.ksearch.model.vo.query.SimpleQueryReqVO;
 import la.kaike.ksearch.model.vo.query.SortFieldVO;
 import la.kaike.ksearch.util.constant.IndexSettingConstant;
+import la.kaike.ksearch.util.constant.MethodNameEnum;
 import la.kaike.ksearch.util.exception.BussinessException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -50,6 +55,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -318,7 +324,6 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         builder.setFrom(simpleQueryReqVO.getOffset())
                 .setSize(simpleQueryReqVO.getLimit());
         SearchResponse searchResponse = builder.get();
-
         SearchHits searchHits = searchResponse.getHits();
 
 
@@ -375,6 +380,21 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
                 .prepareIndex(addDocReqVO.getIndex(),addDocReqVO.getType())
                 .setSource(addDocReqVO.getJsonSource(),XContentType.JSON).get();
         return null;
+    }
+
+    @Override
+    public String executeDSL(String method,String uri,String dsl,String clusterName) throws IOException {
+        JestResult jestResult = null;
+        JestClient client = ElasticClient.getHttpClient(clusterName);
+        if (MethodNameEnum.PUT.getValue().equals(method)||MethodNameEnum.POST.getValue().equals(method)){
+            //method = MethodNameEnum.POST.getValue();
+            IndexExt index = new IndexExt.Builder(dsl).setURI("/test2/test1/1").build();
+            jestResult = client.execute(index);
+        }else {
+            SearchExt searchExt = new SearchExt.Builder(dsl).setURI(uri).setRestMethod(method).build();
+            jestResult = ElasticClient.getHttpClient(clusterName).execute(searchExt);
+        }
+        return jestResult.getJsonString();
     }
 
     /**

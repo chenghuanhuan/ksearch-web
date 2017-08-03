@@ -12,6 +12,7 @@ import la.kaike.ksearch.model.vo.index.*;
 import la.kaike.ksearch.model.vo.query.SimpleQueryReqVO;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -125,4 +126,11 @@ public interface ElasticSearchService {
      * @return
      */
     String addDoc(AddDocReqVO addDocReqVO);
+
+    /**
+     * 执行dsl语句
+     * @param dsl
+     * @return
+     */
+    String executeDSL(String method,String uri,String dsl,String clusterName) throws IOException;
 }
