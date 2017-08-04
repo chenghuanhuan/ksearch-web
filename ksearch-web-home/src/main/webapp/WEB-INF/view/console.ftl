@@ -314,7 +314,7 @@
                         //$(this).children("i").remove();
 					$("#cluster_info").find(".icon-ok").remove();
 					$(this).prepend('<i class="icon-ok"></i>');
-					Util.cookie.set("cluster-name",$(this).text(),36000);
+					Util.cookie.set("cluster-name",$(this).text(),30*24*60*60*1000);
                     // 初始化健康信息
                     initClusterHealth($(this).text());
                     initClusterStatistics($(this).text());
@@ -524,6 +524,7 @@
                                 html +='集群：'+'<button id="cluster_name_'+clusterName+'" data-trigger="hover" data-rel="popover" class="cluster-name btn btn-'+cls+' tooltip-"'+cls+' data-content="'+content+'">';
 										if(i==0){
 										    html+='<i class="icon-ok"></i>';
+                                            Util.cookie.set("cluster-name",clusterName,30*24*60*60*1000);
 										}
 										html += t.name+'</button>&nbsp;';
                                 html +='&nbsp;节点：';
