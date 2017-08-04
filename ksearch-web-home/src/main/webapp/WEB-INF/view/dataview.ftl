@@ -176,21 +176,14 @@
                                     <div class="col-xs-12 col-sm-2">
                                         <div class="clearfix">
                                             <select name="field" class="width-100 select2" data-placeholder="Click to Choose...">
-
+                                                <option value="_all">_all</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-xs-12 col-sm-2">
                                         <div class="clearfix">
                                             <select name="op" class="width-100 select2" data-placeholder="Click to Choose...">
-                                                <option value="term">term</option>
-                                                <#--<option value="wildcard">wildcard</option>-->
-                                                <option value="prefix">prefix</option>
-                                               <#-- <option value="fuzzy">fuzzy</option>
-                                                <option value="range">range</option>-->
                                                 <option value="query_string">query_string</option>
-                                              <#--  <option value="text">text</option>
-                                                <option value="missing">missing</option>-->
                                             </select>
                                         </div>
                                     </div>
@@ -280,6 +273,14 @@
            $(this).parent().parent().parent().remove();
         });
 
+        $(document).on("change","select[name='field']",function () {
+            if($(this).val()==="_all"){
+                $($(this).parent().parent().parent().find("select[name='op']")[0]).html("<option value='query_string'>query_string</option>");
+            }else {
+                $($(this).parent().parent().parent().find("select[name='op']")[0]).html('<option value="term">term</option> <option value="prefix">prefix</option> <option value="query_string">query_string</option>');
+            }
+        });
+
 
         var ajIndex = new $ax("/common/index/select", function (data) {
             if(data.status){
@@ -302,6 +303,7 @@
                             });
                             // 类型下拉事件
                             $("#select_type").on("change",function () {
+                                resetDetailQuery();
                                 var type = $("#select_type").select2("val");
 
                                 var index = $("#select_index").select2("val");
@@ -433,8 +435,10 @@
         $("#more").on("click",function () {
             if($(".hide-form").css("display")=="none") {
                 $(".hide-form").show();
+                $(this).text("收起...");
             }else {
                 $(".hide-form").hide();
+                $(this).text("更多...");
             }
         });
 
