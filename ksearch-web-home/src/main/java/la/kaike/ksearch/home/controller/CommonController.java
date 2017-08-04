@@ -83,16 +83,24 @@ public class CommonController extends BaseController {
         List<FieldsVO> fields = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(mappingVOList)){
             for (MappingVO mappingVO:mappingVOList){
-                List<PropertiesVO> propertiesVOList = mappingVO.getProperties();
-                for (PropertiesVO propertiesVO:propertiesVOList){
-                    FieldsVO fieldsVO = new FieldsVO();
-                    fieldsVO.setFieldName(propertiesVO.getName());
-                    fieldsVO.setType(propertiesVO.getType());
-                    fields.add(fieldsVO);
-                }
+                fields = converFieldList(mappingVO.getProperties());
             }
         }
         return succeed(fields);
     }
 
+    private List<FieldsVO> converFieldList(List<PropertiesVO> propertiesVOList){
+        List<FieldsVO> fieldsVOList = new ArrayList<>();
+        for (PropertiesVO propertiesVO:propertiesVOList){
+            FieldsVO fieldsVO = new FieldsVO();
+            fieldsVO.setFieldName(propertiesVO.getName());
+            fieldsVO.setType(propertiesVO.getType());
+            fieldsVOList.add(fieldsVO);
+            if (propertiesVO.getType().equals("object")||propertiesVO.getType().equals("nested")){
+                List<FieldsVO> children = converFieldList(propertiesVO.getChildren());
+                fieldsVO.setChildren(children);
+            }
+        }
+        return fieldsVOList;
+    }
 }

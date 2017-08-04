@@ -38,6 +38,16 @@ public class SimpleQueryReqVO extends PageVO {
 
     private String order;
 
+    private String source;
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
     public String getKeyword() {
         return keyword;
     }

@@ -5,6 +5,8 @@
 package la.kaike.ksearch.model.vo.common;
 
 
+import java.util.List;
+
 /**
  * @author chenghuanhuan@kaike.la
  * @since $Revision:1.0.0, $Date: 2017年08月01日 上午10:07 $
@@ -18,6 +20,16 @@ public class FieldsVO{
      * 字段类型
      */
     private String type;
+
+    private List<FieldsVO> children;
+
+    public List<FieldsVO> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<FieldsVO> children) {
+        this.children = children;
+    }
 
     public String getFieldName() {
         return fieldName;

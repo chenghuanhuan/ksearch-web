@@ -151,7 +151,65 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xs-12">
+                            <div class="col-xs-5" style="width: 47.5%;">
+                                <div class="hr hr32 hr-dotted" style="margin:12px 0"></div>
+                            </div>
+                            <div class="col-xs-2" style="width: 5%;">
+                                <div><a href="javascript:void (0);" style="color:#a7a6a6;text-decoration:none;" id="more">更多...</a></div>
+                            </div>
+                            <div class="col-xs-5" style="width: 47.5%;">
+                                <div class="hr hr32 hr-dotted" style="margin:12px 0"></div>
+                            </div>
+
+                            <div class="col-xs-12 hide-form" id="detail_query">
+                                <div class="form-group" id="query_1">
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">条件:</label>
+                                    <div class="col-xs-12 col-sm-2">
+                                        <div class="clearfix">
+                                            <select name="bool" class="width-100 select2" data-placeholder="Click to Choose...">
+                                                <option value="must">must</option>
+                                                <option value="must_not">must_not</option>
+                                                <option value="should">should</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-2">
+                                        <div class="clearfix">
+                                            <select name="field" class="width-100 select2" data-placeholder="Click to Choose...">
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-2">
+                                        <div class="clearfix">
+                                            <select name="op" class="width-100 select2" data-placeholder="Click to Choose...">
+                                                <option value="term">term</option>
+                                                <#--<option value="wildcard">wildcard</option>-->
+                                                <option value="prefix">prefix</option>
+                                               <#-- <option value="fuzzy">fuzzy</option>
+                                                <option value="range">range</option>-->
+                                                <option value="query_string">query_string</option>
+                                              <#--  <option value="text">text</option>
+                                                <option value="missing">missing</option>-->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-2">
+                                        <div class="clearfix">
+                                            <input type="text" name="query_value"  class="col-xs-12 col-sm-12" placeholder="请填写查询字符串"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-1">
+                                        <div class="clearfix">
+                                            <button class="btn btn-xs add-query">+</button>
+                                            <button class="btn btn-xs del-query">-</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                            <div class="col-xs-12" id="query-btn">
                                 <div class="form-group">
                                     <div class="col-xs-12 col-sm-10">
                                     </div>
@@ -200,7 +258,28 @@
 <script type="text/javascript">
     var columns=[];
     var clusterName = Util.cookie.get("cluster-name");
+    var template = "";
+
+
     jQuery(function($) {
+        template = $("#query_1").html();
+
+        $(document).on("click",".add-query",function () {
+            var af = $('<div class="col-xs-12 hide-form" style="padding-top: 10px;"><div class="form-group"></div></div>');
+            af.html(template);
+            $("#query-btn").before(af);
+            // 更新下拉框
+            var select = $("#query-btn").prev().find('select[name="field"]');
+            initFieldSelect(select);
+        });
+
+        $(document).on("click",".del-query",function () {
+            if($(".del-query").length===1){
+                return;
+            }
+           $(this).parent().parent().parent().remove();
+        });
+
 
         var ajIndex = new $ax("/common/index/select", function (data) {
             if(data.status){
@@ -210,15 +289,44 @@
                     data:data.data
                 });
 
+                /*  索引变更**/
                 $("#select_index").on("change", function (e) {
                     console.log("select2:select", e);
-
+                    resetDetailQuery();
                     var aj= new $ax("/common/type/select", function (data) {
                         if(data.status){
                             $("#select_type").select2({
                                 allowClear: true,
                                 placeholder: "请选择类型",
                                 data:data.data
+                            });
+                            // 类型下拉事件
+                            $("#select_type").on("change",function () {
+                                var type = $("#select_type").select2("val");
+
+                                var index = $("#select_index").select2("val");
+                                var type_aj = new $ax("/common/fields",function (data) {
+                                    if (data.status){
+                                        fieldData = [{id:"_all",text:"_all"}];
+                                        getFieldData(data.data,"");
+                                        initFieldSelect($($("#query_1").find("select[name='field']")[0]));
+
+                                        // 初始化表格信息
+                                        columns=[];
+                                        $.each(data.data,function (i,item) {
+                                            var column = {field:item.fieldName,title:item.fieldName}
+                                            if (item.type !="object" && item.type !="array"){
+                                                column.sortable=true;
+                                            }
+                                            columns.push(column);
+                                        });
+
+                                    }
+                                });
+                                type_aj.set("type",type);
+                                type_aj.set("index",index);
+                                type_aj.set("clusterName",clusterName);
+                                type_aj.start();
                             });
                         }
                     });
@@ -236,6 +344,12 @@
         $("#select_type").select2({
             allowClear: true,
             placeholder: "请选择类型",
+            data:[]
+        });
+
+        $("#field").select2({
+            allowClear: true,
+            placeholder: "请选择字段",
             data:[]
         });
 
@@ -258,19 +372,10 @@
             }
 
             var keyword = $("#keyword").val();
-            // 获取表头配置
-            var aj = new $ax("/common/fields",function (data) {
-                if (data.status){
-                    var data = data.data;
-                    var columns = [];
-                    $.each(data,function (i,item) {
-                        var column = {field:item.fieldName,title:item.fieldName}
-                        if (item.type !="object" && item.type !="array"){
-                            column.sortable=true;
-                        }
-                        columns.push(column);
-                    });
-
+            var source = null;
+            if($(".hide-form").css("display")=="block"){
+                source = JSON.stringify(getDetailValue());
+            }
                     // 初始化表格
 
                     $('#indices_table').bootstrapTable("destroy");
@@ -299,6 +404,7 @@
                             params.types = type;
                             params.keyword = keyword;
                             params.clusterName = clusterName;
+                            params.source = source;
                             return params;
                         },
                         onExpandRow: function (index, row, $detail) {
@@ -321,24 +427,152 @@
 
                     });
 
+        });
 
-                }
-            });
-
-            aj.set("type",type);
-            aj.set("index",index);
-            //aj.set("keyword",keyword);
-            aj.set("clusterName",clusterName);
-            aj.start();
+        
+        $("#more").on("click",function () {
+            if($(".hide-form").css("display")=="none") {
+                $(".hide-form").show();
+            }else {
+                $(".hide-form").hide();
+            }
         });
 
 
     });
 
 
+    /**
+     * 解析字段
+     * @type {[*]}
+     */
+    var fieldData = [{id:"_all",text:"_all"}];
+    function getFieldData(data,prefix) {
+        $.each(data,function (i,item) {
+            if (item.type =="object" || item.type =="nested"){
+                $.each(item.children,function (i,t) {
+                    if (t.type =="object" || t.type =="nested"){
+                        var pre = "";
+                        if(prefix!=""){
+                            pre=prefix+".";
+                        }else {
+                            pre=prefix;
+                        }
+                        pre = pre+item.fieldName+"."
+                        var pre =pre+t.fieldName+".";
+                        console.log(t);
 
 
+                        getFieldData(t.children,pre)
+                    }else {
+                        var value ="";
+                        if(prefix!=""){
+                             value=prefix+".";
+                        }else {
+                            value = prefix;
+                        }
 
+                        value+=item.fieldName+".";
+                        var value = value+t.fieldName;
+                        fieldData.push({id:value,text:value});
+                    }
+                });
+
+            }else {
+                var value = prefix+item.fieldName;
+                fieldData.push({id:value,text:value});
+            }
+
+        });
+
+    }
+
+
+    function initFieldSelect(dom) {
+        var fieldSelectOption = '';
+        $.each(fieldData,function (i,data) {
+            fieldSelectOption+="<option value='"+data.id+"'>"+data.text+"</option>";
+        });
+        dom.html(fieldSelectOption);
+    }
+
+
+    /**
+     * 重置查询明细div
+     */
+    function resetDetailQuery() {
+
+        $(".hide-form").each(function (i) {
+            if(i==0){
+                $($(this).find('select[name="field"]')[0]).html('');
+            }
+            if (i>0){
+                $(this).remove();
+            }
+        });
+    }
+    
+    function getDetailValue() {
+        var fieldValues = [];
+        $("select[name='field']").each(function () {
+            fieldValues.push($(this).val());
+        });
+        var boolValues = [];
+        $("select[name='bool']").each(function () {
+            boolValues.push($(this).val());
+        });
+        var opValues = [];
+        $("select[name='op']").each(function () {
+            opValues.push($(this).val());
+        });
+
+        var queryValues = [];
+        $("input[name='query_value']").each(function () {
+            queryValues.push($(this).val());
+        });
+
+        var source = {"query":
+                {"bool":{
+
+                 }
+                }
+        };
+        $.each(boolValues,function (i,value) {
+            if(!source.query.bool[value]){
+                source.query.bool[value]=[];
+            }
+            var fieldValue = fieldValues[i];
+            var opValue = opValues[i];
+            if(opValue==="query_string"){
+                var query_string = {
+                    "query_string":{
+                    "default_field":fieldValue,
+                            "query":queryValues[i]
+                    }
+                };
+                source.query.bool[value].push(query_string);
+            }
+            else if(opValue==="prefix"){
+                var prefix = {
+                    "prefix":{
+                    }
+                };
+                prefix.prefix[fieldValue]=queryValues[i];
+                source.query.bool[value].push(prefix);
+            }
+            else if(opValue==="term"){
+                var should = {
+                    "term":{
+                    }
+                };
+                should.term[fieldValue]=queryValues[i];
+                source.query.bool[value].push(should);
+            }
+
+        });
+        //var query = {"query":source};
+        return source.query;
+    }
 
 </script>
 </body>

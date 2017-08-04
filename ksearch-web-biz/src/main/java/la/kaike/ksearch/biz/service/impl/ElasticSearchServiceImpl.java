@@ -371,6 +371,10 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
             //builder.setQuery()
         }
 
+        if (StringUtils.isNotEmpty(simpleQueryReqVO.getSource())) {
+            builder.setQuery(QueryBuilders.wrapperQuery(simpleQueryReqVO.getSource()));
+        }
+
         return builder;
     }
 
