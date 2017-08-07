@@ -4,23 +4,25 @@
  */
 package la.kaike.ksearch.biz.service;
 
-import java.util.List;
-import java.util.Map;
+import la.kaike.ksearch.model.dbo.user.Role;
+import la.kaike.ksearch.model.dbo.user.User;
 
 /**
  * @author chenghuanhuan@kaike.la
  * @since $Revision:1.0.0, $Date: 2017年07月13日 下午2:50 $
  */
 public interface UserService {
-
-
     /**
-     * 根据条件查询用户列表
-     * @param name
-     * @param beginTime
-     * @param endTime
-     * @param deptid
+     * 通过id获取用户信息
+     * @param userId
      * @return
      */
-    List<Map<String, Object>> selectUsers(String name, String beginTime,String endTime,Integer deptid);
+    User getUserById(String userId);
+
+    /**
+     * 获取角色信息
+     * @param roleId
+     * @return
+     */
+    Role getRoleById(Integer roleId);
 }

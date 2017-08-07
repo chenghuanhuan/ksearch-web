@@ -41,6 +41,7 @@ public class ConsoleController extends BaseController{
     @Resource
     private ElasticSearchService elasticSearchService;
 
+    //@RequiresPermissions(value = {"delete"})
     @RequestMapping
     public String index(){
         return "console";

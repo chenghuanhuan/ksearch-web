@@ -3,7 +3,7 @@
 <mapper namespace="la.kaike.ksearch.biz.dal.mapper.UserMapper">
 
 	<!-- 通用查询映射结果 -->
-	<resultMap id="BaseResultMap" type="la.kaike.ksearch.model.dbo.User">
+	<resultMap id="BaseResultMap" type="la.kaike.ksearch.model.dbo.user.User">
 		<id column="id" property="id" />
 		<result column="avatar" property="avatar" />
 		<result column="account" property="account" />

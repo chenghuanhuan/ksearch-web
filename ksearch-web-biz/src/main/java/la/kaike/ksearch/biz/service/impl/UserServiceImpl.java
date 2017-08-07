@@ -4,13 +4,14 @@
  */
 package la.kaike.ksearch.biz.service.impl;
 
+import la.kaike.ksearch.biz.dal.mapper.RoleMapper;
 import la.kaike.ksearch.biz.dal.mapper.UserMapper;
 import la.kaike.ksearch.biz.service.UserService;
+import la.kaike.ksearch.model.dbo.user.Role;
+import la.kaike.ksearch.model.dbo.user.User;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -22,8 +23,19 @@ public class UserServiceImpl implements UserService {
     @Resource
     private UserMapper userMapper;
 
+    @Resource
+    private RoleMapper roleMapper;
+
     @Override
-    public List<Map<String, Object>> selectUsers(String name, String beginTime, String endTime, Integer deptid) {
-        return userMapper.selectUsers(name,beginTime,endTime,deptid);
+    public User getUserById(String userId) {
+        User user = userMapper.selectById(userId);
+
+        return user;
+    }
+
+    @Override
+    public Role getRoleById(Integer roleId) {
+
+        return roleMapper.selectById(roleId);
     }
 }

@@ -49,7 +49,7 @@
                         <li class="divider"></li>
 
                         <li>
-                            <a href="#">
+                            <a href="/login/logout">
                                 <i class="icon-off"></i>
                                 退出
                             </a>

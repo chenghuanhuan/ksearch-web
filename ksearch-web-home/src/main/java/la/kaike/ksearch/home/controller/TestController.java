@@ -36,7 +36,7 @@ public class TestController extends BaseController {
     @RequestMapping("/list")
     @ResponseBody
     public Object list(@RequestParam(required = false) String name, @RequestParam(required = false) String beginTime, @RequestParam(required = false) String endTime, @RequestParam(required = false) Integer deptid) {
-        List<Map<String, Object>> users = userService.selectUsers(name, beginTime, endTime, deptid);
+        List<Map<String, Object>> users = null;
         return new UserWarpper(users).warp();
     }
 
