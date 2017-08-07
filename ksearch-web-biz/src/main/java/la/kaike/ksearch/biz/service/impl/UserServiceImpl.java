@@ -4,6 +4,7 @@
  */
 package la.kaike.ksearch.biz.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import la.kaike.ksearch.biz.dal.mapper.RoleMapper;
 import la.kaike.ksearch.biz.dal.mapper.UserMapper;
 import la.kaike.ksearch.biz.service.UserService;
@@ -43,5 +44,17 @@ public class UserServiceImpl implements UserService {
     public User queryUser(User user) {
         User ret = userMapper.selectOne(user);
         return ret;
+    }
+
+    @Override
+    public void addUser(User user) {
+        userMapper.insert(user);
+    }
+
+    @Override
+    public void updateUser(User user) {
+        EntityWrapper<User> entityWrapper = new EntityWrapper<>();
+        entityWrapper.setEntity(user);
+        userMapper.update(user,entityWrapper);
     }
 }

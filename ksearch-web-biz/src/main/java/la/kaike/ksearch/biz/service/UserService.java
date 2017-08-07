@@ -11,7 +11,7 @@ import la.kaike.ksearch.model.dbo.user.User;
  * @author chenghuanhuan@kaike.la
  * @since $Revision:1.0.0, $Date: 2017年07月13日 下午2:50 $
  */
-public interface UserService {
+public interface UserService{
     /**
      * 通过id获取用户信息
      * @param userId
@@ -32,4 +32,16 @@ public interface UserService {
      * @return
      */
     User queryUser(User user);
+
+    /**
+     * 添加用户
+     * @param user
+     */
+    void addUser(User user);
+
+    /**
+     * 更新用户
+     * @param user
+     */
+    void updateUser(User user);
 }
