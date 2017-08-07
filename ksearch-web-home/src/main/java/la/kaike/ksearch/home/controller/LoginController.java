@@ -43,7 +43,7 @@ public class LoginController extends BaseController {
     @ResponseBody()
     public Response login(LoginReqVO loginReqVO){
 
-        User user = userService.getUserById(loginReqVO.getUserId());
+        User user = userService.selectById(loginReqVO.getUserId());
         if (user != null
                 && user.getUserId().equals(loginReqVO.getUserId())
                 &&user.getPassword().equals(loginReqVO.getPassword())){

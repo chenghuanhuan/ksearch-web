@@ -198,7 +198,7 @@ public class BaseController {
      * 获取当前登录用户信息
      * @return
      */
-    public static User getLoginUser(){
+    public User getLoginUser(){
         Subject currentUser = SecurityUtils.getSubject();
         User user = null;
         if (null != currentUser) {

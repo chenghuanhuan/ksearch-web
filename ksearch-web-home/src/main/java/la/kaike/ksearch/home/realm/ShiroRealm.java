@@ -4,7 +4,9 @@
  */
 package la.kaike.ksearch.home.realm;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import la.kaike.ksearch.biz.service.UserService;
+import la.kaike.ksearch.biz.service.RoleService;
 import la.kaike.ksearch.model.dbo.user.Role;
 import la.kaike.ksearch.model.dbo.user.User;
 import la.kaike.ksearch.util.constant.WebConstant;
@@ -32,6 +34,10 @@ public class ShiroRealm extends AuthorizingRealm {
     @Resource
     private UserService userService;
 
+    @Resource
+    private RoleService roleService;
+
+
     /**
      * 登陆第二步,通过用户信息将其权限和角色加入作用域中,达到验证的功能
      */
@@ -49,7 +55,7 @@ public class ShiroRealm extends AuthorizingRealm {
         // 通过当前登陆用户的姓名查找到相应的用户的所有信息
         //User user = userService.getUserById(userId);
         if (user.getUsername().equals(userId)) {
-            Role role = userService.getRoleById(user.getRoleId());
+            Role role = roleService.selectById(user.getRoleId());
             if (role!=null) {
                 // 装配用户的角色和权限 delete
                 roles.add(role.getRoleName());
@@ -85,7 +91,7 @@ public class ShiroRealm extends AuthorizingRealm {
         User user = new User();
         user.setPassword(pwd);
         user.setUserId(token.getUsername());
-        User dbUser = userService.queryUser(user);
+        User dbUser = userService.selectOne(new EntityWrapper<>(user));
         if (dbUser == null) {
             throw new AuthorizationException();
         }
