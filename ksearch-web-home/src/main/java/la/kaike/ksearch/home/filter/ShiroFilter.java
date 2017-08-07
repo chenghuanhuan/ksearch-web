@@ -7,7 +7,6 @@ package la.kaike.ksearch.home.filter;
 import la.kaike.ksearch.biz.service.UserService;
 import la.kaike.ksearch.model.dbo.user.User;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 
 import javax.annotation.Resource;
@@ -45,11 +44,11 @@ public class ShiroFilter implements Filter {
             // 例如：User user = userService.getByAccount(principal.getName());
             User user = userService.getUserById(principal.getName());
             if (user.getUsername().equals(principal.getName())) {
-                UsernamePasswordToken token = new UsernamePasswordToken(
+               /* UsernamePasswordToken token = new UsernamePasswordToken(
                         user.getUsername(), user.getPassword());
                 subjects = SecurityUtils.getSubject();
                 subjects.login(token);
-                subjects.getSession();
+                subjects.getSession();*/
             } else {
                 // 如果用户为空，则subjects信息登出
                 if (subjects != null) {

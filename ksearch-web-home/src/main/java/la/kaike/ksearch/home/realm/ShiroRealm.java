@@ -7,6 +7,7 @@ package la.kaike.ksearch.home.realm;
 import la.kaike.ksearch.biz.service.UserService;
 import la.kaike.ksearch.model.dbo.user.Role;
 import la.kaike.ksearch.model.dbo.user.User;
+import la.kaike.ksearch.util.constant.WebConstant;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationException;
@@ -41,11 +42,12 @@ public class ShiroRealm extends AuthorizingRealm {
             throw new AuthorizationException(
                     "PrincipalCollection method argument cannot be null.");
         }
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute(WebConstant.SESSION_USER_KEY);
         String userId = (String) getAvailablePrincipal(principals);
         List<String> roles = new ArrayList<>();
         List<String> permissions = new ArrayList<>();
         // 通过当前登陆用户的姓名查找到相应的用户的所有信息
-        User user = userService.getUserById(userId);
+        //User user = userService.getUserById(userId);
         if (user.getUsername().equals(userId)) {
             Role role = userService.getRoleById(user.getRoleId());
             if (role!=null) {
@@ -56,6 +58,7 @@ public class ShiroRealm extends AuthorizingRealm {
                 for (String permission:arrPermission) {
                     permissions.add(permission);
                 }
+                user.setRole(role);
             }
         } else {
             throw new AuthorizationException();
@@ -82,16 +85,19 @@ public class ShiroRealm extends AuthorizingRealm {
         User user = new User();
         user.setPassword(pwd);
         user.setUserId(token.getUsername());
-        if (user == null) {
+        User dbUser = userService.queryUser(user);
+        if (dbUser == null) {
             throw new AuthorizationException();
         }
         SimpleAuthenticationInfo info = null;
-        if (user.getUserId().equals(token.getUsername())) {
-            info = new SimpleAuthenticationInfo(user.getUserId(),
-                    user.getPassword(), getName());
+        if (dbUser.getUserId().equals(token.getUsername())) {
+            info = new SimpleAuthenticationInfo(dbUser.getUserId(),
+                    dbUser.getPassword(), getName());
+            //将该User村放入session作用域中
+            dbUser.setPassword(null);
+            this.setSession(WebConstant.SESSION_USER_KEY, dbUser);
         }
-        //将该User村放入session作用域中
-        //this.setSession("user", user);
+
         return info;
     }
 

@@ -57,11 +57,26 @@ public class LoginController extends BaseController {
         return failed("用户名或密码错误！");
     }
 
+    /**
+     * 注销
+     * @return
+     */
     @RequestMapping("/logout")
     public String logout(){
 
         SecurityUtils.getSubject().logout();
 
         return "login";
+    }
+
+    /**
+     * 获取用户信息
+     * @return
+     */
+    @RequestMapping("/user")
+    @ResponseBody()
+    public Response user(){
+        User user = getLoginUser();
+        return succeed(user);
     }
 }

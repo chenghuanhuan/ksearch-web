@@ -86,4 +86,21 @@ $(function () {
             return false;
         }
     });
+
+
+    // 获取用户信息
+    var ajax = new $ax("/login/user", function (data) {
+        // 成功
+        if (data.status===true&&data.data){
+            var info = '<small>欢迎光临,</small>'+data.data.username;
+            $("#user-info").html(info);
+        }
+    },function (data) {
+
+    });
+
+    ajax.start();
+
+
+
 });

@@ -25,4 +25,11 @@ public interface UserService {
      * @return
      */
     Role getRoleById(Integer roleId);
+
+    /**
+     * 获取用户
+     * @param user
+     * @return
+     */
+    User queryUser(User user);
 }

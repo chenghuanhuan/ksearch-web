@@ -38,4 +38,10 @@ public class UserServiceImpl implements UserService {
 
         return roleMapper.selectById(roleId);
     }
+
+    @Override
+    public User queryUser(User user) {
+        User ret = userMapper.selectOne(user);
+        return ret;
+    }
 }

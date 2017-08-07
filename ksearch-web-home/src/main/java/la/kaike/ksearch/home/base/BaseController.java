@@ -3,9 +3,13 @@ package la.kaike.ksearch.home.base;
 import com.baomidou.mybatisplus.plugins.Page;
 import la.kaike.ksearch.model.PageResponse;
 import la.kaike.ksearch.model.Response;
+import la.kaike.ksearch.model.dbo.user.User;
 import la.kaike.ksearch.model.page.PageInfoBT;
 import la.kaike.ksearch.util.support.HttpKit;
 import la.kaike.ksearch.util.util.FileUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -188,5 +192,19 @@ public class BaseController {
     public Response handleException(Exception ex) {
         logger.error("system error", ex);
         return failed(SYSTEM_ERROR + "，原因:" + ex.getMessage());
+    }
+
+    /**
+     * 获取当前登录用户信息
+     * @return
+     */
+    public static User getLoginUser(){
+        Subject currentUser = SecurityUtils.getSubject();
+        User user = null;
+        if (null != currentUser) {
+            Session session = currentUser.getSession();
+            user = (User) session.getAttribute("user");
+        }
+        return user;
     }
 }

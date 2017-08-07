@@ -37,6 +37,7 @@
 
         <property name="filterChainDefinitions">
             <value>
+                /=authc
                 /login=anon
                 /console/**=authc
                 /index/**=authc
