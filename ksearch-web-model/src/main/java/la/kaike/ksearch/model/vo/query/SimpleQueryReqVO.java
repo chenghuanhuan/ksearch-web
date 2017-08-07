@@ -4,6 +4,7 @@
  */
 package la.kaike.ksearch.model.vo.query;
 
+import la.kaike.ksearch.model.validate.Validate;
 import la.kaike.ksearch.model.vo.PageVO;
 
 import java.util.List;
@@ -13,6 +14,9 @@ import java.util.List;
  * @since $Revision:1.0.0, $Date: 2017年07月28日 上午9:49 $
  */
 public class SimpleQueryReqVO extends PageVO {
+
+    @Validate(required = true,isNotBlank = true,desc = "集群名称")
+    private String clusterName;
 
     /**
      * 关键字
@@ -39,6 +43,14 @@ public class SimpleQueryReqVO extends PageVO {
     private String order;
 
     private String source;
+
+    public String getClusterName() {
+        return clusterName;
+    }
+
+    public void setClusterName(String clusterName) {
+        this.clusterName = clusterName;
+    }
 
     public String getSource() {
         return source;

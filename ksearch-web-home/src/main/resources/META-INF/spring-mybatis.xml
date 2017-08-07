@@ -61,10 +61,11 @@
             <array>
                 <!-- 分页插件配置 -->
                 <bean id="paginationInterceptor" class="com.baomidou.mybatisplus.plugins.PaginationInterceptor">
+                    <property name="dialectType" value="mysql"/>
                 </bean>
             </array>
         </property>
-        <!--<property name="globalConfig" ref="globalConfig"/>-->
+        <property name="globalConfig" ref="globalConfig"/>
     </bean>
 
     <bean id="globalConfig" class="com.baomidou.mybatisplus.entity.GlobalConfiguration">
@@ -75,6 +76,7 @@
             UUID->`3`("全局唯一ID")
         -->
         <property name="idType" value="2" />
+        <property name="dbType" value="mysql"/>
         <!--
             MYSQL->`mysql`
             ORACLE->`oracle`
