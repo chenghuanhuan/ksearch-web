@@ -1,3 +1,15 @@
+<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+
+    <div class="cluster_select" id="sidebar-shortcuts-mini">
+        <span class="btn btn-success"></span>
+
+        <span class="btn btn-info"></span>
+
+        <span class="btn btn-warning"></span>
+
+        <span class="btn btn-danger"></span>
+    </div>
+</div><!-- #sidebar-shortcuts -->
 <ul class="nav nav-list">
     <li >
         <a href="/console" class="left-menu">
