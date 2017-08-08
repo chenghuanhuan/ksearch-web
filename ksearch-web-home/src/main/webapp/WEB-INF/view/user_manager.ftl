@@ -237,7 +237,7 @@
     function showDialog(row) {
         BootstrapDialog.show({
             type:BootstrapDialog.TYPE_PRIMARY,
-            title: '添加索引',
+            title: '用户信息',
             closeByBackdrop: false,
             closeByKeyboard: false,
             //size:BootstrapDialog.SIZE_LARGE,
@@ -288,21 +288,54 @@
                     var userId = $.trim($("#userId").val());
                     if (!userId){
                         $myNotify.danger("请输入工号！");
-                    }
-                    var username = $.trim($("#username").val());
-
-                    if (!username){
-                        $myNotify.danger("请输入用户名！");
+                        return;
                     }
 
-                    var roleId = $.trim($("#roleId").val());
-                    if (!roleId){
-                        $myNotify.danger("请选择角色！");
+                    var flag = true;
+                    if(!row){
+                        // 验证工号是否存在
+                        $.ajax({
+                            type: "POST",
+                            url: "/user/get",
+                            dataType: "json",
+                            async: false,
+                            data: {userId:userId},
+                            success: function(data) {
+                                if(data.status){
+                                    if(data.data){
+                                        $myNotify.danger("工号已存在");
+                                        flag = false;
+                                    }
+                                }else {
+                                    $myNotify.danger(data.msg);
+                                }
+                            },
+                            error: function(data) {
+                                $myNotify.danger(data.msg);
+                                flag = false;
+                            }
+                        });
                     }
-                    aj.set("userId",userId);
-                    aj.set("roleId",roleId);
-                    aj.set("username",username);
-                    aj.start();
+
+                    if(flag){
+                        var username = $.trim($("#username").val());
+
+                        if (!username){
+                            $myNotify.danger("请输入用户名！");
+                            return;
+                        }
+
+                        var roleId = $.trim($("#roleId").val());
+                        if (!roleId){
+                            $myNotify.danger("请选择角色！");
+                            return;
+                        }
+                        aj.set("userId",userId);
+                        aj.set("roleId",roleId);
+                        aj.set("username",username);
+                        aj.start();
+                    }
+
                 }
             }, {
                 icon:'icon-remove',

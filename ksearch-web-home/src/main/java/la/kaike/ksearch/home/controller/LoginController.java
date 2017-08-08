@@ -9,6 +9,7 @@ import la.kaike.ksearch.home.base.BaseController;
 import la.kaike.ksearch.model.Response;
 import la.kaike.ksearch.model.dbo.user.User;
 import la.kaike.ksearch.model.vo.login.LoginReqVO;
+import la.kaike.ksearch.util.util.MD5Util;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -44,9 +45,10 @@ public class LoginController extends BaseController {
     public Response login(LoginReqVO loginReqVO){
 
         User user = userService.selectById(loginReqVO.getUserId());
+        String inputPwd = MD5Util.encrypt(loginReqVO.getPassword());
         if (user != null
                 && user.getUserId().equals(loginReqVO.getUserId())
-                &&user.getPassword().equals(loginReqVO.getPassword())){
+                &&user.getPassword().equals(inputPwd)){
             UsernamePasswordToken token = new UsernamePasswordToken(user.getUserId(), user
                     .getPassword().toString());
             Subject subject = SecurityUtils.getSubject();
@@ -78,5 +80,9 @@ public class LoginController extends BaseController {
     public Response user(){
         User user = getLoginUser();
         return succeed(user);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(MD5Util.encrypt("123456"));
     }
 }

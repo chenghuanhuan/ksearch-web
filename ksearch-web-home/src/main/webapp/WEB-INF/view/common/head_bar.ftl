@@ -46,7 +46,12 @@
                         </li>-->
 
                        <#-- <li class="divider"></li>-->
-
+                           <li>
+                               <a href="javascript:void(0);" id="modify-pwd">
+                                   <i class="icon-cog"></i>
+                                   修改密码
+                               </a>
+                           </li>
                         <li>
                             <a href="/login/logout">
                                 <i class="icon-off"></i>

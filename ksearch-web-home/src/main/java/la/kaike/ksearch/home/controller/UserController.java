@@ -12,9 +12,11 @@ import la.kaike.ksearch.home.base.BaseController;
 import la.kaike.ksearch.model.PageResponse;
 import la.kaike.ksearch.model.Response;
 import la.kaike.ksearch.model.dbo.user.User;
+import la.kaike.ksearch.model.vo.user.ModifyPwdReqVO;
 import la.kaike.ksearch.model.vo.user.UserDelReqVO;
 import la.kaike.ksearch.model.vo.user.UserPageReqVO;
 import la.kaike.ksearch.model.vo.user.UserSaveReqVO;
+import la.kaike.ksearch.util.util.MD5Util;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -87,7 +89,11 @@ public class UserController extends BaseController{
             user.setCreateBy(operator.getUserId());
             user.setCreateTime(new Date());
         }
-        user.setPassword("123456");
+        if (userService.selectById(userSaveReqVO.getUserId())==null) {
+            // 设置初始密码
+            String pwd = MD5Util.encrypt("123456");
+            user.setPassword(pwd);
+        }
         user.setUpdateBy(operator.getUserId());
         user.setUpdateTime(new Date());
         userService.insertOrUpdate(user);
@@ -107,5 +113,41 @@ public class UserController extends BaseController{
         user.setStatus(0);
         userService.insertOrUpdate(user);
         return succeed();
+    }
+
+    /**
+     * 获取单个用户信息
+     * @param delReqVO
+     * @return
+     */
+    @RequestMapping("/get")
+    @ResponseBody
+    public Response get(UserDelReqVO delReqVO){
+        User user = userService.selectById(delReqVO.getUserId());
+        if (user!=null) {
+            user.setPassword(null);
+        }
+        return succeed(user);
+    }
+
+    /**
+     * 修改用户密码
+     * @param modifyPwdReqVO
+     * @return
+     */
+    @RequestMapping("/password")
+    @ResponseBody
+    public Response password(ModifyPwdReqVO modifyPwdReqVO){
+        if (!modifyPwdReqVO.getPassword().equals(modifyPwdReqVO.getSecondPwd())){
+            return failed("两次输入的密码不相同！");
+        }
+        User user = userService.selectById(modifyPwdReqVO.getUserId());
+        String currPwd = modifyPwdReqVO.getCurrPwd();
+        if (!MD5Util.encrypt(currPwd).equals(user.getPassword())){
+            return failed("原密码不正确");
+        }
+        user.setPassword(MD5Util.encrypt(modifyPwdReqVO.getPassword()));
+        userService.update(user,null);
+        return succeed("保存成功");
     }
 }
