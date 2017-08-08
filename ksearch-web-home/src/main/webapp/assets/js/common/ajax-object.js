@@ -1,6 +1,12 @@
 (function () {
-	var $ax = function (url, success, error) {
-		this.url = url;
+	var $ax = function (option, success, error) {
+		if ("object" == typeof option){
+			this.async = option.async;
+			this.url = option.url;
+		}else {
+            this.url = option;
+		}
+
 		this.type = "post";
 		this.data = {};
 		this.dataType = "json";

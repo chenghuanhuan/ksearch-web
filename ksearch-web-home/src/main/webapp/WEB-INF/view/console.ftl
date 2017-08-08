@@ -286,7 +286,9 @@
 					$(this).prepend('<i class="icon-ok"></i>');
 					Util.cookie.set("cluster-name",$(this).text(),30*24*60*60*1000);
                     // 初始化健康信息
-                    initClusterHealth($(this).text());
+                    //initClusterHealth($(this).text());
+                    $('#cluster_health_table').bootstrapTable('refresh');
+                    $('#indices_table').bootstrapTable('refresh');
                     initClusterStatistics($(this).text());
                 });
 
@@ -476,7 +478,7 @@
                 /*
                  * 集群信息
                  */
-                var ajax = new $ax("/console/cluster/state/nodes", function (data) {
+                var ajax = new $ax({url:"/console/cluster/state/nodes",async:false}, function (data) {
                     if (data.status===true) {
                         var datalist = data.data;
                         if (datalist.length>0){

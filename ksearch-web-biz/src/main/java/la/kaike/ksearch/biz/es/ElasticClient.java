@@ -52,7 +52,9 @@ public class ElasticClient {
             logger.info("Elastic client created!");
         }
 
-        return client;
+        logger.info("====================================get client================================");
+        logger.info(""+client);
+        return clientMap.get(clusterName);
     }
 
     public static JestClient getHttpClient(String clusterName){
