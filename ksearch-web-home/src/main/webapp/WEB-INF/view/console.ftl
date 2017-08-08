@@ -284,12 +284,23 @@
                         //$(this).children("i").remove();
 					$("#cluster_info").find(".icon-ok").remove();
 					$(this).prepend('<i class="icon-ok"></i>');
-					Util.cookie.set("cluster-name",$(this).text(),30*24*60*60*1000);
+					var clusterName = $(this).text();
+					Util.cookie.set("cluster-name",clusterName,30*24*60*60*1000);
                     // 初始化健康信息
                     //initClusterHealth($(this).text());
                     $('#cluster_health_table').bootstrapTable('refresh');
                     $('#indices_table').bootstrapTable('refresh');
                     initClusterStatistics($(this).text());
+                    
+                    // 更新菜单栏上集群选中
+                    var clusterSelect = $("#sidebar-shortcuts-mini");
+                    clusterSelect.find("span").each(function (i,item) {
+						if($(item).data("clustername") == clusterName){
+                            $(item).addClass("btn-border");
+						}else {
+                            $(item).removeClass("btn-border");
+						}
+                    });
                 });
 
 

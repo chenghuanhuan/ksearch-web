@@ -27,3 +27,8 @@
 <#--<link rel="stylesheet" href="/assets/css/chosen.css" />-->
 
 <link rel="stylesheet" href="/assets/css/select2.css" />
+<style>
+    .btn-border{
+        border-color: #abbac3;
+    }
+</style>

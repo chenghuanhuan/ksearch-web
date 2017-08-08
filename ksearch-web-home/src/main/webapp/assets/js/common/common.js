@@ -79,6 +79,10 @@
  */
 var userInfo;
 $(function () {
+
+    /**
+     * 菜单选中
+     */
     $(".left-menu").each(function () {
         console.log($(this).attr("href"));
         console.log(window.location.pathname);
@@ -104,6 +108,9 @@ $(function () {
     ajax.start();
 
 
+    /**
+     * 修改密码
+     */
     $("#modify-pwd").on("click",function () {
         BootstrapDialog.show({
             type:BootstrapDialog.TYPE_PRIMARY,
@@ -209,5 +216,59 @@ $(function () {
             }
         });
     });
+
+    // 初始化集群信息
+    var ajax = new $ax("/console/clusters", function (data) {
+        if (data.status){
+            var clusterNames = data.data.split(",");
+            var clusterSelect = $("#sidebar-shortcuts-mini");
+            var clusterName = Util.cookie.get("cluster-name");
+            $.each(clusterNames,function (i,item) {
+
+                var ajax = new $ax({url:"/console/cluster/state/nodes",async:false}, function (data) {
+                    if (data.status===true) {
+                        var datalist = data.data;
+                        if (datalist.length>0){
+                            var html =' <div class="col-xs-12"><p>';
+                            $.each(datalist,function (i,t) {
+                                var cls = "success";
+                                if (t.status == "yellow") {
+                                    cls = "warning";
+                                } else if (t.status == "red") {
+                                    cls = "danger";
+                                }
+
+                                var span =$('<span data-rel="cluster-select" class="btn btn-'+cls+'" title="'+clusterName+'" data-clusterName="'+clusterName+'" onclick="clusterBtnClick(this)"></span>');
+                                if(clusterName == item){
+                                    span.addClass("btn-border");
+                                }
+                                span.tooltip();
+                                clusterSelect.append(span);
+                            });
+                        }
+                    }
+                });
+                ajax.set("clusterName",clusterName);
+                ajax.start();
+
+
+            });
+
+        }
+
+    });
+    ajax.start();
+    
+    window.clusterBtnClick= function (el) {
+
+        $(el).parent().find('span').each(function (i,item) {
+            console.log(item);
+            $(item).removeClass("btn-border");
+        });
+        $(el).addClass("btn-border");
+
+        // 更新cookie
+        Util.cookie.set("cluster-name",$(el).data("clusterName"),30*24*60*60*1000);
+    }
 
 });
