@@ -8,7 +8,10 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import la.kaike.ksearch.biz.dal.mapper.UserMapper;
 import la.kaike.ksearch.biz.service.UserService;
 import la.kaike.ksearch.model.dbo.user.User;
+import la.kaike.ksearch.model.vo.user.UserPageReqVO;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -16,4 +19,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    @Override
+    public List<User> selectListPage(UserPageReqVO userPageReqVO) {
+        return this.baseMapper.selectListPage(userPageReqVO);
+    }
 }

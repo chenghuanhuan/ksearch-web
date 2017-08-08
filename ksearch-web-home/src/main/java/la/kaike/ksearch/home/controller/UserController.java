@@ -4,8 +4,9 @@
  */
 package la.kaike.ksearch.home.controller;
 
-import com.baomidou.mybatisplus.mapper.Condition;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import la.kaike.ksearch.biz.service.RoleService;
 import la.kaike.ksearch.biz.service.UserService;
 import la.kaike.ksearch.home.base.BaseController;
 import la.kaike.ksearch.model.PageResponse;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -32,7 +34,8 @@ public class UserController extends BaseController{
 
     @Resource
     private UserService userService;
-
+    @Resource
+    private RoleService roleService;
     @RequestMapping
     public String index(){
         return "user_manager";
@@ -51,7 +54,18 @@ public class UserController extends BaseController{
         query.setSize(userPageReqVO.getLimit());
         query.setSearchCount(true);
         query.setCurrent(userPageReqVO.getOffset());
-        Page<User> userPage = userService.selectPage(query, Condition.create().eq("status",1));
+        //Page<User> userPage = userService.selectPage(query, Condition.create().eq("status",1));
+        Page<User> userPage = new Page<>();
+
+        User user = new User();
+        user.setUserId(userPageReqVO.getUserId());
+        user.setUsername(userPageReqVO.getUsername());
+        int count = userService.selectCount(new EntityWrapper<>(user));
+        if (count>0){
+            List<User> userList = userService.selectListPage(userPageReqVO);
+            userPage.setRecords(userList);
+        }
+        userPage.setTotal(count);
         PageResponse pageResponse = new PageResponse();
         pageResponse.setRows(userPage.getRecords());
         pageResponse.setTotal(userPage.getTotal());
@@ -73,6 +87,7 @@ public class UserController extends BaseController{
             user.setCreateBy(operator.getUserId());
             user.setCreateTime(new Date());
         }
+        user.setPassword("123456");
         user.setUpdateBy(operator.getUserId());
         user.setUpdateTime(new Date());
         userService.insertOrUpdate(user);

@@ -4,47 +4,44 @@
 
 	<!-- 通用查询映射结果 -->
 	<resultMap id="BaseResultMap" type="la.kaike.ksearch.model.dbo.user.User">
-		<id column="id" property="id" />
-		<result column="avatar" property="avatar" />
-		<result column="account" property="account" />
+		<id column="user_id" property="userId" />
+		<result column="username" property="username" />
 		<result column="password" property="password" />
-		<result column="salt" property="salt" />
-		<result column="name" property="name" />
-		<result column="birthday" property="birthday" />
-		<result column="sex" property="sex" />
-		<result column="email" property="email" />
-		<result column="phone" property="phone" />
-		<result column="roleid" property="roleid" />
-		<result column="deptid" property="deptid" />
+		<result column="role_id" property="roleId" />
 		<result column="status" property="status" />
-		<result column="createtime" property="createtime" />
-		<result column="version" property="version" />
+		<result column="create_time" property="createTime" />
+		<result column="update_time" property="updateTime" />
+		<result column="create_by" property="createBy" />
+		<result column="update_by" property="updateBy" />
+		<association property="role" column="role_id" javaType="la.kaike.ksearch.model.dbo.user.Role">
+			<result column="role_id" property="roleId" />
+			<result column="role_name" property="roleName" />
+			<result column="permissions" property="permissions" />
+		</association>
 	</resultMap>
 
-	<sql id="Base_Column_List">
-		id, account, name, birthday, sex, email, avatar,
-		phone, roleid,
-		deptid, status,
-		createtime, version
-	</sql>
 
-
-	<select id="selectUsers" resultType="map">
-		select
-		<include refid="Base_Column_List" />
-		from user
-		where status != 3
-		<if test="name != null and name != ''">
-			and (phone like CONCAT('%',#{name},'%')
-			or account like CONCAT('%',#{name},'%')
-			or name like CONCAT('%',#{name},'%'))
+	<select id="selectListPage" parameterType="la.kaike.ksearch.model.vo.user.UserPageReqVO" resultMap="BaseResultMap">
+		SELECT t1.user_id,
+		t1.username,
+		t1.role_id,
+		t1.status,
+		t1.create_time,
+		t1.update_time,
+		t1.create_by,
+		t1.update_by,
+		t2.role_id,
+		t2.role_name,
+		t2.permissions
+		FROM user t1,role t2
+		WHERE t1.role_id = t2.role_id and t1.status = 1
+		  <if test="userId != null and userId !=''">
+			AND t1.user_id = #{userId}
+		  </if>
+		<if test="username != null and username !=''">
+			AND t1.username = LIKE CONCAT('%',#{username},'%')
 		</if>
-		<if test="deptid != null and deptid != 0">
-			and deptid = #{deptid}
-		</if>
-		<if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
-			and (createTime between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
-		</if>
+	  	limit #{offset},#{limit}
 	</select>
 
 

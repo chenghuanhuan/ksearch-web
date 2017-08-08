@@ -21,7 +21,6 @@ public class UserSaveReqVO extends BaseRequest {
     /**
      * 密码
      */
-    @Validate(required = true,isNotBlank = true)
     private String password;
 
     /**

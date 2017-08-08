@@ -103,12 +103,12 @@
                                             <div class="row">
                                                 <div class="col-xs-12">
                                                     <div id="toolbar">
-                                                        <button id="addIndex" class="btn btn-sm btn-success">
+                                                        <button id="addUser" class="btn btn-sm btn-success">
                                                             <i class="icon-ok bigger-110"></i>
                                                             添加用户
                                                         </button>
                                                     </div>
-                                                    <table id="indices_table"></table>
+                                                    <table id="user_table"></table>
                                                 </div>
                                             </div>
                                         </div>
@@ -140,9 +140,201 @@
     var clusterName = Util.cookie.get("cluster-name");
     jQuery(function($) {
 
+        $('#user_table').bootstrapTable({
+            striped:true,
+            classes:"table table-no-bordered",
+            //showHeader:false,
+            //cardView:true,
+            url:"/user/list",
+            pageSize:15,
+            sidePagination:'server',
+            pagination:true,
+            queryParams:function (params) {
+                params.clusterName = clusterName;
+                return params;
+            },
+            columns: [{
+                field: 'userId',
+                title: '工号'
+            }, {
+                field: 'username',
+                title: '用户名'
+            }, {
+                field: 'role',
+                title: '角色',
+                formatter: function (value, row, index) {
+                    return value.roleName;
+                }
+            }, {
+                field: 'updateTime',
+                title: '更新时间'
+            }, {
+                field: 'updateBy',
+                title: '更新人'
+            }, {
+                field: '',
+                title: '操作',
+                events: operateEvents,
+                formatter: function (value, row, index) {
+                    var btns = '<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">'
+                            +'<button class="btn btn-xs btn-success tooltip-success edit" data-rel="tooltip" title="编辑">'
+                            +'<i class="icon-edit bigger-120"></i>'
+                            +'</button>';
+
+                    btns+='<button class="btn btn-xs btn-danger tooltip-danger del" data-rel="tooltip" title="删除">'
+                            +'<i class="icon-trash bigger-120"></i>'
+                            +'</button>';
+
+                        btns +='</div>';
+                        return btns;
+                }
+            }]
+        });
+
+
+        
+        $("#addUser").on("click",function () {
+            showDialog(null);
+        });
+
+
+
 
     });
 
+    window.operateEvents = {
+        'click .del': function (e, value, row, index) {
+            var msg = '确认要删除吗?';
+
+            $myDialog.confirm(msg, BootstrapDialog.TYPE_DANGER,
+                    function (result) {
+                        // result will be true if button was click, while it will be false if users close the dialog directly.
+                        if (result) {
+                            var ajax = new $ax("/user/delete", function (data) {
+                                // 成功
+                                if (data.status === true) {
+                                    $myNotify.success("删除成功");
+                                    // 刷新表格
+                                    $('#user_table').bootstrapTable('refresh');
+                                } else {
+                                    $myNotify.danger(data.msg);
+                                }
+                            }, function (data) {
+
+                            });
+                            ajax.set("userId", row.userId);
+                            ajax.start();
+                        }
+                    }
+            );
+        },
+        'click .edit': function (e, value, row, index) {
+            showDialog(row);
+
+        }
+    };
+
+    function showDialog(row) {
+        BootstrapDialog.show({
+            type:BootstrapDialog.TYPE_PRIMARY,
+            title: '添加索引',
+            closeByBackdrop: false,
+            closeByKeyboard: false,
+            //size:BootstrapDialog.SIZE_LARGE,
+            message: function(dialog) {
+                var form ='<div class="widget-main">'
+                        +'<form class="form-horizontal" role="form">'
+                        +'<div class="form-group">'
+                        +'<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 工号 :</label>'
+                        +'<div class="col-sm-10">'
+                        +'<input class="form-control input-mask-date" placeholder="请输入工号" type="text" id="userId" />'
+                        +'</div>'
+                        +'</div>'
+
+                        +'<div class="form-group">'
+                        +'<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 用户名 :</label>'
+                        +'<div class="col-sm-10">'
+                        +'<input class="form-control input-mask-date" placeholder="请输入用户名" type="text" id="username" />'
+                        +'</div>'
+                        +'</div>'
+
+                        +'<div class="form-group">'
+                        +'<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 角色 :</label>'
+                        +'<div class="col-sm-10">'
+                        +'<input type="hidden" id="roleId" class="width-100 select2">'
+                        +'</div>'
+                        +'</div>'
+                        +'</form>'
+                        +'</div>';
+                return form;
+            },
+            buttons: [{
+                icon: 'icon-ok',
+                label: '保存',
+                cssClass: 'btn-success',
+                //autospin: true,
+                action: function(dialogRef){
+                    var aj= new $ax("/user/save", function (data) {
+                        if (data.status){
+                            $('#user_table').bootstrapTable('refresh');
+                            $myNotify.success("保存成功");
+                            dialogRef.close();
+
+                        }else {
+                            $myNotify.danger(data.msg);
+                        }
+                    });
+
+                    var userId = $.trim($("#userId").val());
+                    if (!userId){
+                        $myNotify.danger("请输入工号！");
+                    }
+                    var username = $.trim($("#username").val());
+
+                    if (!username){
+                        $myNotify.danger("请输入用户名！");
+                    }
+
+                    var roleId = $.trim($("#roleId").val());
+                    if (!roleId){
+                        $myNotify.danger("请选择角色！");
+                    }
+                    aj.set("userId",userId);
+                    aj.set("roleId",roleId);
+                    aj.set("username",username);
+                    aj.start();
+                }
+            }, {
+                icon:'icon-remove',
+                label: '关闭',
+                action: function(dialogRef){
+                    dialogRef.close();
+                }
+            }],
+            onshown:function () {
+                // 获取角色信息
+                var aj= new $ax("/common/role/select", function (data) {
+                    if (data.status){
+                        $("#roleId").select2({
+                            allowClear: true,
+                            placeholder: "请选择类型",
+                            data:data.data
+                        });
+                    }
+                });
+                aj.start();
+
+                if(row){
+                    // 初始化数据
+                    $("#userId").val(row.userId);
+                    $("#username").val(row.username);
+                    $("#roleId").val(row.role.roleId);
+                    $("#userId").attr("readOnly",true);
+                }
+
+            }
+        });
+    }
 </script>
 </body>
 </html>

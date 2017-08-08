@@ -5,8 +5,10 @@
 package la.kaike.ksearch.home.controller;
 
 import la.kaike.ksearch.biz.service.ElasticSearchService;
+import la.kaike.ksearch.biz.service.RoleService;
 import la.kaike.ksearch.home.base.BaseController;
 import la.kaike.ksearch.model.Response;
+import la.kaike.ksearch.model.dbo.user.Role;
 import la.kaike.ksearch.model.vo.SelectVO;
 import la.kaike.ksearch.model.vo.common.FieldsVO;
 import la.kaike.ksearch.model.vo.elastic.IndicesVO;
@@ -34,6 +36,8 @@ public class CommonController extends BaseController {
     @Resource
     private ElasticSearchService elasticSearchService;
 
+    @Resource
+    private RoleService roleService;
     /**
      * 索引下拉
      * @param simpleQueryReqVO
@@ -75,6 +79,23 @@ public class CommonController extends BaseController {
         }
         return succeed(selectVOList);
     }
+
+    @RequestMapping("/role/select")
+    @ResponseBody
+    public Response roleSelect(){
+        List<SelectVO> selectVOList = new ArrayList<>();
+        List<Role> roleList = roleService.selectList(null);
+        if(CollectionUtils.isNotEmpty(roleList)){
+            for (Role role:roleList){
+                SelectVO selectVO = new SelectVO();
+                selectVO.setId(role.getRoleId().toString());
+                selectVO.setText(role.getRoleName());
+                selectVOList.add(selectVO);
+            }
+        }
+        return succeed(selectVOList);
+    }
+
 
     @RequestMapping("/fields")
     @ResponseBody

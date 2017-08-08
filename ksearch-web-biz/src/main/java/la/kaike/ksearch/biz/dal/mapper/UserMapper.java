@@ -2,6 +2,9 @@ package la.kaike.ksearch.biz.dal.mapper;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import la.kaike.ksearch.model.dbo.user.User;
+import la.kaike.ksearch.model.vo.user.UserPageReqVO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import la.kaike.ksearch.model.dbo.user.User;
  */
 public interface UserMapper extends BaseMapper<User> {
 
+    List<User> selectListPage(UserPageReqVO userPageReqVO);
 }
