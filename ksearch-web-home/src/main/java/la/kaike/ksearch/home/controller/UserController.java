@@ -17,6 +17,7 @@ import la.kaike.ksearch.model.vo.user.UserDelReqVO;
 import la.kaike.ksearch.model.vo.user.UserPageReqVO;
 import la.kaike.ksearch.model.vo.user.UserSaveReqVO;
 import la.kaike.ksearch.util.util.MD5Util;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,7 @@ public class UserController extends BaseController{
     private UserService userService;
     @Resource
     private RoleService roleService;
+    @RequiresRoles({"2"})
     @RequestMapping
     public String index(){
         return "user_manager";
@@ -50,6 +52,7 @@ public class UserController extends BaseController{
      */
     @RequestMapping("/list")
     @ResponseBody
+    @RequiresRoles({"2"})
     public Response user(UserPageReqVO userPageReqVO){
 
         Page<User> query = new Page<>();
@@ -79,6 +82,7 @@ public class UserController extends BaseController{
      * @param userSaveReqVO
      * @return
      */
+    @RequiresRoles({"2"})
     @RequestMapping("/save")
     @ResponseBody
     public Response save(UserSaveReqVO userSaveReqVO){
@@ -105,6 +109,7 @@ public class UserController extends BaseController{
      * @param delReqVO
      * @return
      */
+    @RequiresRoles({"2"})
     @RequestMapping("/delete")
     @ResponseBody
     public Response delete(UserDelReqVO delReqVO){
@@ -120,6 +125,7 @@ public class UserController extends BaseController{
      * @param delReqVO
      * @return
      */
+    @RequiresRoles({"2"})
     @RequestMapping("/get")
     @ResponseBody
     public Response get(UserDelReqVO delReqVO){
@@ -135,6 +141,7 @@ public class UserController extends BaseController{
      * @param modifyPwdReqVO
      * @return
      */
+    @RequiresRoles({"2"})
     @RequestMapping("/password")
     @ResponseBody
     public Response password(ModifyPwdReqVO modifyPwdReqVO){

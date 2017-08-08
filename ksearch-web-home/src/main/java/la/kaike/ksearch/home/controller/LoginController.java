@@ -9,6 +9,7 @@ import la.kaike.ksearch.home.base.BaseController;
 import la.kaike.ksearch.model.Response;
 import la.kaike.ksearch.model.dbo.user.User;
 import la.kaike.ksearch.model.vo.login.LoginReqVO;
+import la.kaike.ksearch.util.constant.WebConstant;
 import la.kaike.ksearch.util.util.MD5Util;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -67,7 +68,7 @@ public class LoginController extends BaseController {
     public String logout(){
 
         SecurityUtils.getSubject().logout();
-
+        SecurityUtils.getSubject().getSession().removeAttribute(WebConstant.SESSION_USER_KEY);
         return "login";
     }
 

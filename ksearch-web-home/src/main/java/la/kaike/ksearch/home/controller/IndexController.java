@@ -11,6 +11,7 @@ import la.kaike.ksearch.home.base.BaseController;
 import la.kaike.ksearch.model.Response;
 import la.kaike.ksearch.model.bo.index.PropertiesBO;
 import la.kaike.ksearch.model.vo.index.*;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.slf4j.Logger;
@@ -48,6 +49,7 @@ public class IndexController extends BaseController{
      * @param addIndexVO
      * @return
      */
+    @RequiresPermissions({"add"})
     @RequestMapping("/add")
     @ResponseBody
     public Response add(AddIndexReqVO addIndexVO){
@@ -60,6 +62,7 @@ public class IndexController extends BaseController{
      * @param delIndexVO
      * @return
      */
+    @RequiresPermissions({"delete"})
     @RequestMapping("/del")
     @ResponseBody
     public Response del(DelIndexReqVO delIndexVO){
@@ -73,6 +76,7 @@ public class IndexController extends BaseController{
      * @param refreshIndexVO
      * @return
      */
+    @RequiresPermissions({"edit"})
     @RequestMapping("/refresh")
     @ResponseBody
     public Response refresh(RefreshIndexReqVO refreshIndexVO){
@@ -85,6 +89,7 @@ public class IndexController extends BaseController{
      * @param closeIndexVO
      * @return
      */
+    @RequiresPermissions({"edit"})
     @RequestMapping("/close")
     @ResponseBody
     public Response refresh(CloseIndexReqVO closeIndexVO){
@@ -98,6 +103,7 @@ public class IndexController extends BaseController{
      * @return
      */
     @RequestMapping("/open")
+    @RequiresPermissions({"edit"})
     @ResponseBody
     public Response refresh(OpenIndexReqVO openIndexReqVO){
         elasticSearchService.openIndex(openIndexReqVO);
@@ -109,6 +115,7 @@ public class IndexController extends BaseController{
      * @param flushIndexVO
      * @return
      */
+    @RequiresPermissions({"edit"})
     @RequestMapping("/flush")
     @ResponseBody
     public Response flush(FlushIndexReqVO flushIndexVO){
@@ -121,6 +128,7 @@ public class IndexController extends BaseController{
      * @param optimizeIndexVO
      * @return
      */
+    @RequiresPermissions({"edit"})
     @RequestMapping("/optimize")
     @ResponseBody
     public Response optimize(OptimizeIndexReqVO optimizeIndexVO){
@@ -134,6 +142,7 @@ public class IndexController extends BaseController{
      * @param createAliasVO
      * @return
      */
+    @RequiresPermissions({"add"})
     @RequestMapping("/addAlias")
     @ResponseBody
     public Response addAlias(CreateAliasReqVO createAliasVO){
@@ -146,6 +155,7 @@ public class IndexController extends BaseController{
      * @param delAliasVO
      * @return
      */
+    @RequiresPermissions({"delete"})
     @RequestMapping("/delAlias")
     @ResponseBody
     public Response delAlias(DelAliasReqVO delAliasVO){
@@ -159,6 +169,7 @@ public class IndexController extends BaseController{
      * {"properties":{"hhh":{"type":"integer","analyzer":"standard","index":"on"}},"include_in_all":false}
      * @return
      */
+    @RequiresPermissions({"add"})
     @RequestMapping("/addMapping")
     @ResponseBody
     public Response addMapping(AddMappingReqVO addMappingVO){
@@ -230,6 +241,7 @@ public class IndexController extends BaseController{
      * @param addDocReqVO
      * @return
      */
+    @RequiresPermissions({"add"})
     @RequestMapping("/addDoc")
     @ResponseBody
     public Response addDoc(AddDocReqVO addDocReqVO){

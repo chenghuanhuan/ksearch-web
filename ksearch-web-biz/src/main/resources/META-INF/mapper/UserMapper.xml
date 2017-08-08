@@ -39,7 +39,10 @@
 			AND t1.user_id = #{userId}
 		  </if>
 		<if test="username != null and username !=''">
-			AND t1.username = LIKE CONCAT('%',#{username},'%')
+			AND t1.username  LIKE CONCAT('%',#{username},'%')
+		</if>
+		<if test="search != null and search !=''">
+			AND (t1.username LIKE CONCAT('%',#{search},'%') OR t1.user_id LIKE CONCAT('%',#{search},'%'))
 		</if>
 	  	limit #{offset},#{limit}
 	</select>

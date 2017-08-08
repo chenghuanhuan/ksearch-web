@@ -146,11 +146,12 @@
             //showHeader:false,
             //cardView:true,
             url:"/user/list",
+            search:true,
             pageSize:15,
             sidePagination:'server',
             pagination:true,
             queryParams:function (params) {
-                params.clusterName = clusterName;
+                //params.clusterName = clusterName;
                 return params;
             },
             columns: [{

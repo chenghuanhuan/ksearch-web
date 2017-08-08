@@ -43,7 +43,7 @@ public class ShiroFilter implements Filter {
             // 为了简单，这里初始化一个用户。实际项目项目中应该去数据库里通过名字取用户：
             // 例如：User user = userService.getByAccount(principal.getName());
             User user = userService.selectById(principal.getName());
-            if (user.getUsername().equals(principal.getName())) {
+            if (user.getUserId().equals(principal.getName())) {
                /* UsernamePasswordToken token = new UsernamePasswordToken(
                         user.getUsername(), user.getPassword());
                 subjects = SecurityUtils.getSubject();

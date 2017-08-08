@@ -54,11 +54,11 @@ public class ShiroRealm extends AuthorizingRealm {
         List<String> permissions = new ArrayList<>();
         // 通过当前登陆用户的姓名查找到相应的用户的所有信息
         //User user = userService.getUserById(userId);
-        if (user.getUsername().equals(userId)) {
+        if (user.getUserId().equals(userId)) {
             Role role = roleService.selectById(user.getRoleId());
             if (role!=null) {
                 // 装配用户的角色和权限 delete
-                roles.add(role.getRoleName());
+                roles.add(role.getRoleId().toString());
                 String permissionsStr = role.getPermissions();
                 String[] arrPermission = permissionsStr.split(",");
                 for (String permission:arrPermission) {
@@ -100,7 +100,7 @@ public class ShiroRealm extends AuthorizingRealm {
             info = new SimpleAuthenticationInfo(dbUser.getUserId(),
                     dbUser.getPassword(), getName());
             //将该User村放入session作用域中
-            dbUser.setPassword(null);
+            //dbUser.setPassword(null);
             this.setSession(WebConstant.SESSION_USER_KEY, dbUser);
         }
 
