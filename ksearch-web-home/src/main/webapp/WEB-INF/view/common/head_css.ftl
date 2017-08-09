@@ -29,6 +29,7 @@
 <link rel="stylesheet" href="/assets/css/select2.css" />
 <style>
     .btn-border{
-        border-color: #abbac3;
+        border-color: #fafafa;
+        background-color:#fafafa!important;
     }
 </style>

@@ -142,7 +142,7 @@ $(function () {
     });
 
     // 初始化集群信息
-    var ajax = new $ax("/console/clusters", function (data) {
+    /*var ajax = new $ax("/console/clusters", function (data) {
         if (data.status){
             var clusterNames = data.data.split(",");
             var clusterSelect = $("#sidebar-shortcuts-mini");
@@ -193,6 +193,6 @@ $(function () {
 
         // 更新cookie
         Util.cookie.set("cluster-name",$(el).data("clusterName"),30*24*60*60*1000);
-    }
+    }*/
 
 });
