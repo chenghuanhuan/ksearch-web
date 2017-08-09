@@ -129,14 +129,6 @@ $(function () {
                 });
                 aj.start();
 
-                if(row){
-                    // 初始化数据
-                    $("#userId").val(row.userId);
-                    $("#username").val(row.username);
-                    $("#roleId").val(row.role.roleId);
-                    $("#userId").attr("readOnly",true);
-                }
-
             }
         });
     });

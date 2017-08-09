@@ -141,14 +141,15 @@ public class UserController extends BaseController{
      * @param modifyPwdReqVO
      * @return
      */
-    @RequiresRoles({"2"})
+    //@RequiresRoles({"2"})
     @RequestMapping("/password")
     @ResponseBody
     public Response password(ModifyPwdReqVO modifyPwdReqVO){
         if (!modifyPwdReqVO.getPassword().equals(modifyPwdReqVO.getSecondPwd())){
             return failed("两次输入的密码不相同！");
         }
-        User user = userService.selectById(modifyPwdReqVO.getUserId());
+        //User user = userService.selectById(modifyPwdReqVO.getUserId());
+        User user = this.getLoginUser();
         String currPwd = modifyPwdReqVO.getCurrPwd();
         if (!MD5Util.encrypt(currPwd).equals(user.getPassword())){
             return failed("原密码不正确");
