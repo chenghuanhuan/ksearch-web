@@ -35,6 +35,10 @@
 					
 				},
 		        success: function(data) {
+		        	if(data.code===1000){
+						window.location.href=data.data;
+						return;
+					}
 		        	me.success(data);
 		        },
 		        error: function(data) {

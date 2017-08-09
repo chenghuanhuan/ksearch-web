@@ -26,6 +26,18 @@ public class Response {
      */
     private Object data;
 
+    /**
+     * 状态码
+     */
+    private Integer code;
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
+    }
 
     public boolean isStatus() {
         return status;

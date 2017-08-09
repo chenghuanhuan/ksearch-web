@@ -4,8 +4,11 @@
  */
 package la.kaike.ksearch.home.filter;
 
+import com.alibaba.fastjson.JSON;
 import la.kaike.ksearch.biz.service.UserService;
+import la.kaike.ksearch.model.Response;
 import la.kaike.ksearch.model.dbo.user.User;
+import la.kaike.ksearch.util.constant.ErrorCode;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
@@ -58,8 +61,19 @@ public class ShiroFilter implements Filter {
             chain.doFilter(httpRequest, httpResponse);
         }else {
             // TODO 判断请求是否是ajax
-
-            ((HttpServletResponse) response).sendRedirect("/login");
+            HttpServletRequest req = (HttpServletRequest)request;
+            String headReqWith = req.getHeader("x-requested-with");
+            if ("XMLHttpRequest".equals(headReqWith)){
+                Response obj = new Response();
+                obj.setStatus(false);
+                obj.setData("/login");
+                obj.setMsg("用户未登录");
+                obj.setCode(ErrorCode.NO_LOGIN.getCode());
+                response.setContentType("text/html;charset=UTF-8");
+                response.getWriter().print(JSON.toJSONString(obj));
+            }else {
+                ((HttpServletResponse) response).sendRedirect("/login");
+            }
         }
 
 
