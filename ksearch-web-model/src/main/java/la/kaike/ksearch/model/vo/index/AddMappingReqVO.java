@@ -5,6 +5,7 @@
 package la.kaike.ksearch.model.vo.index;
 
 import la.kaike.ksearch.model.ClusterRequest;
+import la.kaike.ksearch.model.validate.Validate;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -12,15 +13,19 @@ import la.kaike.ksearch.model.ClusterRequest;
  */
 public class AddMappingReqVO extends ClusterRequest {
 
+    @Validate(required = true,isNotBlank = true,maxLength = 128,regexp = "^[0-9A-Za-z]")
     private String index;
 
+    @Validate(required = true,isNotBlank = true)
     private String type;
 
+    @Validate(required = true,isNotBlank = true)
     private Boolean include_in_all;
 
     /**
      * mapping的json配置字符串
      */
+    @Validate(required = true,isNotBlank = true)
     private String mappingsJson;
 
     public Boolean getInclude_in_all() {

@@ -15,7 +15,7 @@ public class AddIndexReqVO extends ClusterRequest {
 
     @Validate(required = true)
     private String clusterName;
-    @Validate(required = true,isNotBlank = true,desc = "索引名称")
+    @Validate(required = true,isNotBlank = true,maxLength = 128,regexp = "^[0-9A-Za-z]{1,128}")
     private String index;
     @Validate(required = true,minValue = "1")
     private Integer numberOfShards;
