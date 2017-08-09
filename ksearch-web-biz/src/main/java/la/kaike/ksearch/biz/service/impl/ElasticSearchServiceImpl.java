@@ -26,6 +26,7 @@ import la.kaike.ksearch.util.exception.BussinessException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
@@ -391,16 +392,22 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         JestResult jestResult = null;
         JestClient client = ElasticClient.getHttpClient(clusterName);
         if (MethodNameEnum.PUT.getValue().equals(method)||MethodNameEnum.POST.getValue().equals(method)){
-            //method = MethodNameEnum.POST.getValue();
-            IndexExt index = new IndexExt.Builder(dsl).setURI("/test2/test1/1").build();
-            jestResult = client.execute(index);
+            // 校验权限
+            SecurityUtils.getSecurityManager().checkPermission(SecurityUtils.getSubject().getPrincipals(),"edit");
+            jestResult = postAndPut(dsl,uri,client);
         }else {
             SearchExt searchExt = new SearchExt.Builder(dsl).setURI(uri).setRestMethod(method).build();
-            jestResult = ElasticClient.getHttpClient(clusterName).execute(searchExt);
+            jestResult = client.execute(searchExt);
         }
         return jestResult.getJsonString();
     }
 
+    private JestResult postAndPut(String dsl,String uri,JestClient client) throws IOException {
+        //method = MethodNameEnum.POST.getValue();
+        IndexExt index = new IndexExt.Builder(dsl).setURI(uri).build();
+        JestResult jestResult = client.execute(index);
+        return  jestResult;
+    }
     /**
      * 将map转换成属性对象
      * @param params
