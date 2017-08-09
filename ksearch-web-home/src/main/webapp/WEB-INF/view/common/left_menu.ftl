@@ -1,8 +1,8 @@
 <div class="sidebar-shortcuts" id="sidebar-shortcuts">
 
-    <div class="cluster_select" id="sidebar-shortcuts-mini">
+    <#--<div class="cluster_select" id="sidebar-shortcuts-mini">
         <span data-rel="cluster-select" class="btn btn-border"></span>
-    </div>
+    </div>-->
 </div><!-- #sidebar-shortcuts -->
 <ul class="nav nav-list">
     <li >

@@ -1,3 +1,4 @@
+<#--
 <div class="ace-settings-container" id="ace-settings-container">
     <div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
         <i class="icon-cog bigger-150"></i>
@@ -44,4 +45,4 @@
             </label>
         </div>
     </div>
-</div>
+</div>-->

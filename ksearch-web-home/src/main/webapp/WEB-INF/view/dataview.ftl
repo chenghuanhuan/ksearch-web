@@ -95,7 +95,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="select_index">索引（index）:</label>
 
-                                    <div class="col-xs-12 col-sm-4">
+                                    <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
                                             <input type="hidden" id="select_index" class="width-100 select2">
                                             </input>
@@ -103,16 +103,24 @@
                                     </div>
                                     <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="select_type">类型（type）:</label>
 
-                                    <div class="col-xs-12 col-sm-4">
+                                    <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
                                             <input type="hidden" id="select_type" class="width-100 select2">
                                             </input>
                                         </div>
                                     </div>
+
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">关键字:</label>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="clearfix">
+                                            <input type="text" id="keyword"  class="col-xs-12 col-sm-12" />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <hr>
-                            <div class="col-xs-12">
+                            <#--<div class="col-xs-12">
                                 <div class="form-group">
                                     <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">关键字:</label>
 
@@ -122,7 +130,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                             <div class="col-xs-5" style="width: 47.5%;">
                                 <div class="hr hr32 hr-dotted" style="margin:12px 0"></div>
                             </div>
@@ -176,9 +184,9 @@
                             
                             <div class="col-xs-12" id="query-btn">
                                 <div class="form-group">
-                                    <div class="col-xs-12 col-sm-10">
+                                    <div class="col-xs-13 col-sm-11" style="width: 94%;">
                                     </div>
-                                    <div class="col-xs-12 col-sm-2">
+                                    <div class="col-xs-13 col-sm-1" style="width: 6%;">
                                         <button class="btn btn-success btn-query">
                                            查询
                                         </button>
