@@ -137,12 +137,11 @@
 <#include "/common/foot_js.ftl"/>
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
-    var clusterName = Util.cookie.get("cluster-name");
     jQuery(function($) {
 
         $('#user_table').bootstrapTable({
             striped:true,
-            classes:"table table-no-bordered",
+            //classes:"table table-no-bordered",
             //showHeader:false,
             //cardView:true,
             url:"/user/list",
