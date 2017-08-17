@@ -184,6 +184,9 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
                         .put(IndexSettingConstant.NUMBER_OF_SHARDS,addIndexVO.getNumberOfShards())
                         .put(IndexSettingConstant.NUMBER_OF_REPLICAS,addIndexVO.getNumberOfReplicas())
         ).get();
+
+        // 设置索引不动态添加字段映射
+        client.admin().indices().prepareUpdateSettings(addIndexVO.getIndex()).setSettings("{\"index.mapper.dynamic\":false}",XContentType.JSON);
     }
 
     @Override
@@ -288,6 +291,10 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
                         Boolean include_in_all = (Boolean) sourceAsMap.get("include_in_all");
                         mappingVO.setInclude_in_all(include_in_all);
                     }
+                    if (sourceAsMap.containsKey("dynamic")){
+                        mappingVO.setDynamic((String) sourceAsMap.get("dynamic"));
+                    }
+                    //String ss = mappingMetaData.source().toString();
                     List<PropertiesVO> properties = mapToProperties(sourceAsMap);
                     mappingVO.setProperties(properties);
                     mappingVOList.add(mappingVO);

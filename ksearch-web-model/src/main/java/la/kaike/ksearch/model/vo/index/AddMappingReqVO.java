@@ -13,7 +13,10 @@ import la.kaike.ksearch.model.validate.Validate;
  */
 public class AddMappingReqVO extends ClusterRequest {
 
-    @Validate(required = true,isNotBlank = true,maxLength = 128,regexp = "^[0-9A-Za-z]")
+    /**
+     * 索引：数字、字母下划线、不能以下划线开头
+     */
+    @Validate(required = true,isNotBlank = true,maxLength = 128,regexp = "^(?!_)[a-zA-Z0-9_]+")
     private String index;
 
     @Validate(required = true,isNotBlank = true)
@@ -23,10 +26,23 @@ public class AddMappingReqVO extends ClusterRequest {
     private Boolean include_in_all;
 
     /**
+     * 动态映射规则
+     */
+    private String dynamic;
+    /**
      * mapping的json配置字符串
      */
     @Validate(required = true,isNotBlank = true)
     private String mappingsJson;
+
+
+    public String getDynamic() {
+        return dynamic;
+    }
+
+    public void setDynamic(String dynamic) {
+        this.dynamic = dynamic;
+    }
 
     public Boolean getInclude_in_all() {
         return include_in_all;

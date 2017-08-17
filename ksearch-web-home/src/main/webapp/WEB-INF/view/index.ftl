@@ -791,6 +791,7 @@
                     var index=row.index;
                     var type_name = $("#type_name").val();
                     var include_in_all = $("#include_in_all").prop("checked");
+                    var dynamic = $("#dynamic").val();
                     var mappingsJson = JSON.stringify($("#dd_list").nestable('serialize'));
                     var ajax = new $ax("/index/addMapping", function (data) {
                         // 成功
@@ -815,6 +816,7 @@
                     ajax.set("include_in_all",include_in_all);
                     ajax.set("mappingsJson",mappingsJson);
                     ajax.set("clusterName",clusterName);
+                    ajax.set("dynamic",dynamic);
                     ajax.start();
 
 
@@ -846,7 +848,18 @@
                 // 初始化数据
                 if (type===2){
                     $("#type_name").val(row.type);
-                    $("#include_in_all").attr("checked",row.include_in_all);
+
+                    if (!row.include_in_all){
+                        $("#include_in_all").attr("checked",true);// 默认
+                    }else {
+                        $("#include_in_all").attr("checked",row.include_in_all);
+                    }
+                    if (row.dynamic){
+                        $("#dynamic").val(row.dynamic);
+                    }else {
+                        $("#dynamic").val("true");// 默认
+                    }
+
                     // 初始化拖拽数据
                     var properties = row.properties;
                     var html = initNestableData(properties);

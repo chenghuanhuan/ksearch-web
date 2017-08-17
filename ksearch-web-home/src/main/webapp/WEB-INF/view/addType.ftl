@@ -57,6 +57,19 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="password">动态映射规则(dynamic):</label>
+
+                                    <div class="col-xs-12 col-sm-9">
+                                        <div class="clearfix">
+                                            <select id="dynamic" name="dynamic" class="col-xs-12 col-sm-6" data-placeholder="Click to Choose...">
+                                                <option value="true">true</option>
+                                                <option value="false">false</option>
+                                                <option value="strict">strict</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
 
                             </form>
                         </div>

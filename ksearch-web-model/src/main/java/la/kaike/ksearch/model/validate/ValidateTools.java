@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 参数较验器<br>
@@ -196,5 +197,11 @@ public class ValidateTools {
         }
 		return null;
     }
+
+	public static void main(String[] args) {
+		Pattern pattern = Pattern.compile("^(?!_)[a-zA-Z0-9_]+");
+		Matcher matcher = pattern.matcher("1z_ssdd_dd23");
+		System.out.println(matcher.matches());
+	}
 
 }

@@ -20,7 +20,17 @@ public class MappingVO {
 
     private Boolean include_in_all;
 
+    private String dynamic;
+
     private List<PropertiesVO> properties;
+
+    public String getDynamic() {
+        return dynamic;
+    }
+
+    public void setDynamic(String dynamic) {
+        this.dynamic = dynamic;
+    }
 
     public String getIndex() {
         return index;
