@@ -54,6 +54,7 @@
                                 <option value="date">date</option>
                                 <option value="nested">nested</option>
                                 <option value="object">object</option>
+                                <option value="completion">completion</option>
                             </select>
                         </div>
                     </div>
