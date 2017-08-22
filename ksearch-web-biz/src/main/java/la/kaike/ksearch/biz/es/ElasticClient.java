@@ -43,13 +43,19 @@ public class ElasticClient {
 
         if (client == null){
             synchronized (ElasticClient.class) {
-                if (clientMap.get(clusterName)==null) {
-                    String clusterHosts = IKuKoConfDataGetter.getStringValue(clusterName + ".hosts");
-                    client = Builder.builder().setClusterName(clusterName).addNode(clusterHosts)._client;
-                    clientMap.put(clusterName, client);
+                try {
+                    if (clientMap.get(clusterName) == null) {
+                        String clusterHosts = IKuKoConfDataGetter.getStringValue(clusterName + ".hosts");
+                        client = Builder.builder().setClusterName(clusterName).addNode(clusterHosts)._client;
+                        ElasticClientUtil.getClusterHealth(client);
+                        clientMap.put(clusterName, client);
+                        logger.info("Elastic client created!");
+                    }
+                }catch (Exception e){
+                    logger.error("create elastic client fail !",e);
                 }
             }
-            logger.info("Elastic client created!");
+
         }
 
         logger.info("====================================get client================================");
