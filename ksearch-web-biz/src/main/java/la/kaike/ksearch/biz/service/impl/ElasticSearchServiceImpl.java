@@ -252,6 +252,26 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         builder.setType(addMappingVO.getType())
                 .setSource(addMappingVO.getMappingsJson(), XContentType.JSON)
                 .get();
+
+        /*String template = "{\n" +
+                "    \"template\" : \"te*\",\n" +
+                "    \"settings\" : {\n" +
+                "        \"number_of_shards\" : 1\n" +
+                "    },\n" +
+                "    \"aliases\" : {\n" +
+                "        \"alias1\" : {},\n" +
+                "        \"alias2\" : {\n" +
+                "            \"filter\" : {\n" +
+                "                \"term\" : {\"user\" : \"kimchy\" }\n" +
+                "            },\n" +
+                "            \"routing\" : \"kimchy\"\n" +
+                "        },\n" +
+                "        \"{index}-alias\" : {} \n" +
+                "    }\n" +
+                "}";
+        ElasticClient.getClient(addMappingVO.getClusterName()).admin().indices().preparePutTemplate("template1")
+                .setSource(template.getBytes(),XContentType.JSON).get();*/
+        //TODO 添加模板功能
     }
 
     @Override
