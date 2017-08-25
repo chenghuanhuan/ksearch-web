@@ -377,9 +377,15 @@
                         title: '操作',
                         events: operateEvents,
                         formatter: function (value, row, index) {
-                            var btn = '<button class="btn btn-xs btn-info tooltip-info modifyType" data-rel="tooltip" title="修改类型">'
+                            var btn = '<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">';
+                            btn += '<button class="btn btn-xs btn-info tooltip-info modifyType" data-rel="tooltip" title="修改类型">'
                                     +'<i class="icon-edit bigger-120"></i>'
                                     +'</button>';
+
+                            btn+='<button class="btn btn-xs btn-danger tooltip-danger clearData" data-rel="tooltip" title="删除">'
+                                    +'<i class="icon-trash bigger-120"></i>'
+                                    +'</button>';
+                            btn +='</div>';
                             return btn;
                         }
                     }],
@@ -412,6 +418,33 @@
 
                                     });
                                     ajax.set("indices",row.index);
+                                    ajax.set("clusterName",clusterName);
+                                    ajax.start();
+                                }
+                            }
+                    );
+                },
+                'click .clearData': function (e, value, row, index) {
+                    var msg = '确认要清空索引:<strong style="color: red;">'+row.index+'</strong>中所有数据吗？删除后数据无法恢复，请确认后再操作！！！';
+
+                    $myDialog.confirm(msg,BootstrapDialog.TYPE_DANGER,
+                            function(result) {
+                                // result will be true if button was click, while it will be false if users close the dialog directly.
+                                if(result) {
+                                    var ajax = new $ax("/index/clearData", function (data) {
+                                        // 成功
+                                        if (data.status===true){
+                                            $myNotify.success("删除成功");
+                                            // 刷新表格
+                                            $('#indices_table').bootstrapTable('refresh');
+                                        }else {
+                                            $myNotify.danger(data.msg);
+                                        }
+                                    },function (data) {
+
+                                    });
+                                    ajax.set("index",row.index);
+                                    ajax.set("type",row.type);
                                     ajax.set("clusterName",clusterName);
                                     ajax.start();
                                 }

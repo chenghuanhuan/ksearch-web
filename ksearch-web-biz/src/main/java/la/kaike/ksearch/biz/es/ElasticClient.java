@@ -70,7 +70,12 @@ public class ElasticClient {
                 if (httpClientMap.get(clusterName)==null) {
                     JestClientFactory factory = new JestClientFactory();
                     List<String> urls = new ArrayList<>();
-                    urls.add("http://172.16.70.76:9200");
+                    String host = IKuKoConfDataGetter.getStringValue(clusterName + ".hosts");
+                    String infos[] = host.split(":");
+                    if (infos.length>1){
+                        urls.add("http://"+host);
+                    }
+                    urls.add("http://"+host+":9200");
                     factory.setHttpClientConfig(new HttpClientConfig
                             .Builder(urls)
                             .multiThreaded(true)

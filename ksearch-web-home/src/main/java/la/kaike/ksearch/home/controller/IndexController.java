@@ -137,6 +137,14 @@ public class IndexController extends BaseController{
     }
 
 
+    @RequiresPermissions({"delete"})
+    @RequestMapping("/clearData")
+    @ResponseBody
+    public Response clearData(ClearDataReqVO clearDataReqVO) throws IOException {
+        elasticSearchService.clearData(clearDataReqVO);
+        return succeed("优化成功！");
+    }
+
     /**
      * 添加别名
      * @param createAliasVO

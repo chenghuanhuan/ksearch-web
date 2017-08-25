@@ -409,6 +409,20 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         return jestResult.getJsonString();
     }
 
+    @Override
+    public String clearData(ClearDataReqVO clearDataReqVO) throws IOException {
+        JestClient jestClient = ElasticClient.getHttpClient(clearDataReqVO.getClusterName());
+        String dsl = "{\n" +
+                "  \"query\": {\n" +
+                "    \"match_all\": {}\n" +
+                "  }\n" +
+                "}";
+        String url = "/"+clearDataReqVO.getIndex()+"/"+clearDataReqVO.getType()+"/_delete_by_query";
+        SearchExt searchExt = new SearchExt.Builder(dsl).setURI(url).setRestMethod(MethodNameEnum.POST.getValue()).build();
+        String res = jestClient.execute(searchExt).getJsonString();
+        return res;
+    }
+
     private JestResult postAndPut(String dsl,String uri,JestClient client) throws IOException {
         //method = MethodNameEnum.POST.getValue();
         IndexExt index = new IndexExt.Builder(dsl).setURI(uri).build();

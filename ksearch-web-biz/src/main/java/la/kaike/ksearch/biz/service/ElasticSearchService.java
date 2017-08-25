@@ -133,4 +133,10 @@ public interface ElasticSearchService {
      * @return
      */
     String executeDSL(String method,String uri,String dsl,String clusterName) throws IOException;
+
+    /**
+     * 清空数据
+     * @param clearDataReqVO
+     */
+    String clearData(ClearDataReqVO clearDataReqVO) throws IOException;
 }
