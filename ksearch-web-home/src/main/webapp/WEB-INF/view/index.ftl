@@ -877,6 +877,50 @@
                     var html = initNestableData(properties);
                     $($(".dd .dd-list")[0]).html(html);
                 });
+                // 查看json字符串
+                $("#json_view").on("click",function () {
+                    var mappingsJson = JSON.stringify($("#dd_list").nestable('serialize'));
+                    BootstrapDialog.show({
+                        type:BootstrapDialog.TYPE_PRIMARY,
+                        title: 'json',
+                        closeByBackdrop: false,
+                        closeByKeyboard: false,
+                        cssClass:'modal-add-type',
+                        message: function (dialogRef) {
+                            var form = '<textarea class="form-control" id="json_text" rows="20">'+mappingsJson+'</textarea>'
+                            return form;
+                        },buttons: [{
+                            icon: 'icon-ok',
+                            label: '确定',
+                            cssClass: 'btn-success',
+                            //autospin: true,
+                            action: function(dialogRef){
+                                // 更新
+                                var text = $.trim($("#json_text").val());
+                                if (text) {
+                                    try {
+                                        var jsonValue = JSON.parse(text);
+                                        var html = initNestableData(jsonValue);
+                                        $($(".dd .dd-list")[0]).html(html);
+                                    } catch (err) {
+                                        $myNotify.danger("json 格式错误！");
+                                        return;
+                                    }
+
+                                }
+                                dialogRef.close();
+                            }
+                        }, {
+                            icon:'icon-remove',
+                            label: '关闭',
+                            action: function(dialogRef){
+                                dialogRef.close();
+                            }
+                        }],
+                        onshown:function (dialogRef) {
+                        }
+                    });
+                });
 
                 // 初始化数据
                 if (type===2){

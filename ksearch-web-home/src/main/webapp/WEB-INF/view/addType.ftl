@@ -83,11 +83,12 @@
                                 <div class="center">
                                     <button type="button" class="btn btn-sm btn-success" id="add_mapping_btn">
                                         添加
-                                        <i class="icon-arrow-right icon-on-right bigger-110"></i>
                                     </button>
                                     <button type="button" class="btn btn-sm btn-primary" id="reset_field">
                                         重置
-                                        <i class="icon-arrow-right icon-on-right bigger-110"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary" id="json_view">
+                                        JSON
                                     </button>
                                 </div>
                             </div>
