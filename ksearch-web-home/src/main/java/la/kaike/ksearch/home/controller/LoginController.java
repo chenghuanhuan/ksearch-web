@@ -54,6 +54,7 @@ public class LoginController extends BaseController {
                     .getPassword().toString());
             Subject subject = SecurityUtils.getSubject();
             subject.login(token);
+            subject.getSession().setTimeout(1800000);
             return succeed();
         }
 
