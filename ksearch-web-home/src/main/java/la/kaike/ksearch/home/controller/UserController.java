@@ -65,6 +65,7 @@ public class UserController extends BaseController{
         User user = new User();
         user.setUserId(userPageReqVO.getUserId());
         user.setUsername(userPageReqVO.getUsername());
+        user.setStatus(Integer.valueOf(1));
         int count = userService.selectCount(new EntityWrapper<>(user));
         if (count>0){
             List<User> userList = userService.selectListPage(userPageReqVO);
