@@ -183,10 +183,30 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
                 Settings.builder()
                         .put(IndexSettingConstant.NUMBER_OF_SHARDS,addIndexVO.getNumberOfShards())
                         .put(IndexSettingConstant.NUMBER_OF_REPLICAS,addIndexVO.getNumberOfReplicas())
-        ).get();
+        ).setSource("{\n" +
+                "    \"analysis\": {\n" +
+                "      \"analyzer\": {\n" +
+                "        \"ik_en_max_word\": {\n" +
+                "          \"type\": \"custom\",\n" +
+                "          \"tokenizer\": \"ik_max_word\",\n" +
+                "          \"filter\": [\n" +
+                "            \"stemmer\"\n" +
+                "          ]\n" +
+                "        },\n" +
+                "        \"ik_en_smart\": {\n" +
+                "          \"type\": \"custom\",\n" +
+                "          \"tokenizer\": \"ik_smart\",\n" +
+                "          \"filter\": [\n" +
+                "            \"stemmer\"\n" +
+                "          ]\n" +
+                "        }\n" +
+                "      }\n" +
+                "    }\n" +
+                "  }",XContentType.JSON).get();
 
         // 设置索引不动态添加字段映射
         client.admin().indices().prepareUpdateSettings(addIndexVO.getIndex()).setSettings("{\"index.mapper.dynamic\":false}",XContentType.JSON);
+
     }
 
     @Override
