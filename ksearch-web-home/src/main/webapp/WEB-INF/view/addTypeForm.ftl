@@ -71,7 +71,9 @@
                                 <option value=""></option>
                                 <option value="standard">standard （标准分词器）</option>
                                 <option value="english">english （英文分词）</option>
-                                <option value="chinese">chinese （中文分词）</option>
+                                <option value="ik_max_word">ik_max_word（中文分词，细粒度）</option>
+                                <option value="ik_smart">ik_smart（中文分词，粗粒度）</option>
+                                <#--<option value="chinese">chinese （中文分词）</option>-->
                                 <option value="pattern">pattern</option>
                                 <option value="simple">simple</option>
                                 <option value="whitespace">whitespace</option>
@@ -101,12 +103,12 @@
                             <span class="lbl"></span>
                         </div>
                     </div>
-                    <label class="control-label col-xs-12 col-sm-2 no-padding-right" for="boost">boost:</label>
+                    <#--<label class="control-label col-xs-12 col-sm-2 no-padding-right" for="boost">boost:</label>-->
 
-                    <div class="col-xs-12 col-sm-4">
+                  <#--  <div class="col-xs-12 col-sm-4">
                         <div class="clearfix">
                             <input type="text" name="boost" id="boost"  class="col-xs-12 col-sm-12" />
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </form>

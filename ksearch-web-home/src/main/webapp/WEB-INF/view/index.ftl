@@ -982,7 +982,7 @@
                             '<li class="dd-item dd2-item" ' +
                             'data-type="'+item.type+'" ' +
                             'data-analyzer="'+item.analyzer+'" ' +
-                            'data-boost="'+item.boost+'" ' +
+                            /*'data-boost="'+item.boost+'" ' +*/
                             'data-null_value="'+item.null_value+'" ' +
                             'data-fielddata="'+item.fielddata+'" ' +
                             'data-store="'+item.store+'" ' +
@@ -1095,7 +1095,7 @@
                         });
                         //$('#ignore_above').ace_spinner({value:0,min:0,max:200,disabled:false,step:10, btn_up_class:'btn-info' , btn_down_class:'btn-info'})
                         $('#ignore_above').ace_spinner({value:'',min:1,max:100,disabled:false,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
-                        $('#boost').ace_spinner({value:'',min:1,max:10000,disabled:false,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
+                        //$('#boost').ace_spinner({value:'',min:1,max:10000,disabled:false,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});
 
                         if (type===2){
                             // 填充值
@@ -1113,9 +1113,9 @@
                             if (li.data('ignore_above')){
                                 $("#ignore_above").val(parseInt(li.data('ignore_above')));
                             }
-                            if (li.data('boost')){
+                            /*if (li.data('boost')){
                                 $("#boost").val(parseInt(li.data('boost')));
-                            }
+                            }*/
 
                             // 未保存至数据库可以修改任何值
                             if(li.data("new")!==1) {
@@ -1157,14 +1157,14 @@
                 var fielddata = $("#fielddata").prop("checked");
                 var store = $("#store").prop("checked");
                 var ignore_above = $("#ignore_above").val();
-                var boost = $("#boost").val();
+                /*var boost = $("#boost").val();*/
 
                 var template =
                         '<li class="dd-item dd2-item" ' +
                         'data-new="1" ' +
                         'data-type="'+pro_type+'" ' +
                         'data-analyzer="'+analyzer+'" ' +
-                        'data-boost="'+boost+'" ' +
+                        /*'data-boost="'+boost+'" ' +*/
                         'data-fielddata="'+fielddata+'" ' +
                         'data-store="'+store+'" ' +
                         'data-ignore_above="'+ignore_above+'" ' +
@@ -1222,7 +1222,7 @@
                 var fielddata = $("#fielddata").prop("checked");
                 var store = $("#store").prop("checked");
                 var ignore_above = $("#ignore_above").val();
-                var boost = $("#boost").val();
+                /*var boost = $("#boost").val();*/
                 var null_value = $("#null_value").val();
                 li.data("name",pro_name);
                 li.data("analyzer",analyzer);
@@ -1232,7 +1232,7 @@
                 li.data("type",pro_type);
                 li.data("ignore_above",ignore_above);
                 li.data("null_value",null_value);
-                li.data("boost",boost);
+                /*li.data("boost",boost);*/
                 if(li.data("new")=="1"&&(pro_type==="nested"||pro_type==="object")){
                     if(li.find(".icon-plus").length==0) {
                         var template = '<a class="green" href="#">'
