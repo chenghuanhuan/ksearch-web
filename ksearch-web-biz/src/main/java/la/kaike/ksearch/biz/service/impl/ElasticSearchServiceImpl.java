@@ -183,25 +183,25 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
                 Settings.builder()
                         .put(IndexSettingConstant.NUMBER_OF_SHARDS,addIndexVO.getNumberOfShards())
                         .put(IndexSettingConstant.NUMBER_OF_REPLICAS,addIndexVO.getNumberOfReplicas())
-        ).setSource("{\n" +
-                "    \"analysis\": {\n" +
-                "      \"analyzer\": {\n" +
-                "        \"ik_en_max_word\": {\n" +
-                "          \"type\": \"custom\",\n" +
-                "          \"tokenizer\": \"ik_max_word\",\n" +
-                "          \"filter\": [\n" +
-                "            \"stemmer\"\n" +
-                "          ]\n" +
-                "        },\n" +
-                "        \"ik_en_smart\": {\n" +
-                "          \"type\": \"custom\",\n" +
-                "          \"tokenizer\": \"ik_smart\",\n" +
-                "          \"filter\": [\n" +
-                "            \"stemmer\"\n" +
-                "          ]\n" +
-                "        }\n" +
-                "      }\n" +
-                "    }\n" +
+        ).setSource("{" +
+                "    \"analysis\": {" +
+                "      \"analyzer\": {" +
+                "        \"ik_en_max_word\": {" +
+                "          \"type\": \"custom\"," +
+                "          \"tokenizer\": \"ik_max_word\"," +
+                "          \"filter\": [" +
+                "            \"stemmer\"" +
+                "          ]" +
+                "        }," +
+                "        \"ik_en_smart\": {" +
+                "          \"type\": \"custom\"," +
+                "          \"tokenizer\": \"ik_smart\"," +
+                "          \"filter\": [" +
+                "            \"stemmer\"" +
+                "          ]" +
+                "        }" +
+                "      }" +
+                "    }" +
                 "  }",XContentType.JSON).get();
 
         // 设置索引不动态添加字段映射
@@ -273,21 +273,21 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
                 .setSource(addMappingVO.getMappingsJson(), XContentType.JSON)
                 .get();
 
-        /*String template = "{\n" +
-                "    \"template\" : \"te*\",\n" +
-                "    \"settings\" : {\n" +
-                "        \"number_of_shards\" : 1\n" +
-                "    },\n" +
-                "    \"aliases\" : {\n" +
-                "        \"alias1\" : {},\n" +
-                "        \"alias2\" : {\n" +
-                "            \"filter\" : {\n" +
-                "                \"term\" : {\"user\" : \"kimchy\" }\n" +
-                "            },\n" +
-                "            \"routing\" : \"kimchy\"\n" +
-                "        },\n" +
-                "        \"{index}-alias\" : {} \n" +
-                "    }\n" +
+        /*String template = "{" +
+                "    \"template\" : \"te*\"," +
+                "    \"settings\" : {" +
+                "        \"number_of_shards\" : 1" +
+                "    }," +
+                "    \"aliases\" : {" +
+                "        \"alias1\" : {}," +
+                "        \"alias2\" : {" +
+                "            \"filter\" : {" +
+                "                \"term\" : {\"user\" : \"kimchy\" }" +
+                "            }," +
+                "            \"routing\" : \"kimchy\"" +
+                "        }," +
+                "        \"{index}-alias\" : {} " +
+                "    }" +
                 "}";
         ElasticClient.getClient(addMappingVO.getClusterName()).admin().indices().preparePutTemplate("template1")
                 .setSource(template.getBytes(),XContentType.JSON).get();*/
@@ -452,10 +452,10 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     @Override
     public String clearData(ClearDataReqVO clearDataReqVO) throws IOException {
         JestClient jestClient = ElasticClient.getHttpClient(clearDataReqVO.getClusterName());
-        String dsl = "{\n" +
-                "  \"query\": {\n" +
-                "    \"match_all\": {}\n" +
-                "  }\n" +
+        String dsl = "{" +
+                "  \"query\": {" +
+                "    \"match_all\": {}" +
+                "  }" +
                 "}";
         String url = "/"+clearDataReqVO.getIndex()+"/"+clearDataReqVO.getType()+"/_delete_by_query";
         SearchExt searchExt = new SearchExt.Builder(dsl).setURI(url).setRestMethod(MethodNameEnum.POST.getValue()).build();
