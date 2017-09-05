@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 	<head>
 		<meta charset="utf-8" />
 		<title>Bootstrap表格插件 - Bootstrap后台管理系统模版Ace下载</title>
