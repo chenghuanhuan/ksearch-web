@@ -451,9 +451,9 @@
                         for (var v in value) {
                             $("#" + v).html(value[v]);
                         }
-
-                        var html = '<span class="percent">'+value.successfulShards+'</span>%';
-                        var successfulShardsPercent = $("#successfulShardsPercent").attr("data-percent",value.successfulShards);
+						var percent = value.successfulShards/value.totalShards*100;
+                        var html = '<span class="percent">'+percent+'</span>%';
+                        var successfulShardsPercent = $("#successfulShardsPercent").attr("data-percent",percent);
                         successfulShardsPercent.html(html);
                         // 百分比图
                         $('.easy-pie-chart.percentage').each(function () {
