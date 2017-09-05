@@ -207,7 +207,7 @@
 		</layout>
 	</appender>
 
-	 <logger name="dao" level="DEBUG" additivity="false">
+	 <logger name="dao" level="${sys_loggingLevel}" additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>
 
