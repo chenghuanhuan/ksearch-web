@@ -1,12 +1,16 @@
 package la.kaike.ksearch.model.validate;
 
+import la.kaike.ksearch.util.util.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -195,6 +199,24 @@ public class ValidateTools {
         if (fieldValidator.getEnumValues() != null && !fieldValidator.getEnumValues().contains(value.toString())) {
     		return "parameter[" + desc + "] value[" + value + "] format error, must in " + fieldValidator.getEnumValues();
         }
+
+        // Collection 类型校验
+		if (value instanceof Collection && fieldValidator.getRegexpPattern() != null){
+			Type fc = field.getGenericType();
+			if(fc instanceof ParameterizedType) // 如果是泛型参数的类型
+			{
+				ParameterizedType pt = (ParameterizedType) fc;
+				Class genericClazz = (Class)pt.getActualTypeArguments()[0]; //得到泛型里的class类型对象。
+				if (genericClazz == String.class){
+					for (String val:(Collection<String>)value){
+						Matcher matcher = fieldValidator.getRegexpPattern().matcher(val);
+						if (!matcher.matches()) {
+							return "parameter[" + desc + "] value[" + val + "] format error, must regexp:" + validate.regexp();
+						}
+					}
+				}
+			}
+		}
 		return null;
     }
 
@@ -202,6 +224,11 @@ public class ValidateTools {
 		Pattern pattern = Pattern.compile("^(?!_)[a-zA-Z0-9_]+");
 		Matcher matcher = pattern.matcher("1z_ssdd_dd23");
 		System.out.println(matcher.matches());
+		List<String> list = new ArrayList<>();
+		System.out.println(list instanceof Collection);
+		//System.out.println(ClassUtils.getGenericTypes(list.getClass()));
+		Type [] types = ClassUtils.getGenericTypes(list.getClass());
+		System.out.println(types);
 	}
 
 }

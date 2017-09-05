@@ -174,6 +174,9 @@
                         field: 'index',
                         title: '<span class="text-primary">索引</span>'
                     }, {
+                        field: 'aliases',
+                        title: '<span class="text-primary">别名</span>'
+                    }, {
                         field: 'docs',
                         title: '<span class="text-primary">文档</span>'
                     }, {
@@ -382,13 +385,16 @@
                                     +'<i class="icon-edit bigger-120"></i>'
                                     +'</button>';
 
-                            btn+='<button class="btn btn-xs btn-danger tooltip-danger clearData" data-rel="tooltip" title="删除">'
+                            btn+='<button class="btn btn-xs btn-danger tooltip-danger clearData" data-rel="tooltip" title="清空数据">'
                                     +'<i class="icon-trash bigger-120"></i>'
                                     +'</button>';
                             btn +='</div>';
                             return btn;
                         }
                     }],
+                    onLoadSuccess:function () {
+                        $('[data-rel=tooltip]').tooltip();
+                    },
                     onExpandRow: function (index, row, $detail) {
                         //expandField(index,row,$detail);
                     }

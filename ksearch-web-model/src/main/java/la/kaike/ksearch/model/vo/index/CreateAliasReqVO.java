@@ -22,7 +22,7 @@ public class CreateAliasReqVO extends ClusterRequest {
     /**
      * 别名
      */
-    @Validate(isNotBlank = true)
+    @Validate(isNotBlank = true,regexp = "^(?!_)[a-zA-Z0-9_]+")
     private List<String> aliases;
 
     public List<String> getAliases() {
