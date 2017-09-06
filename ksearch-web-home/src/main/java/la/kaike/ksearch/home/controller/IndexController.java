@@ -223,6 +223,10 @@ public class IndexController extends BaseController{
                 propertiesBO.setFielddata(null);
             }
 
+            if (!"text".equals(propertiesBO.getType())){
+                propertiesBO.setFielddata(null);
+            }
+
             if (!CollectionUtils.isEmpty(propertiesVO.getChildren())){
                 JSONObject child = toPropertiesJson(propertiesVO.getChildren());
                 propertiesBO.setProperties(child);
