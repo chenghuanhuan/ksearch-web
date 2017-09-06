@@ -217,7 +217,7 @@
                                     +'</button>';
                             if (row.status === "OPEN") {
                                 btns+='<button class="btn btn-xs btn-info tooltip-info close-index" data-rel="tooltip" title="关闭">'
-                                + '<i class="icon-edit bigger-120"></i>'
+                                + '<i class="icon-off bigger-120"></i>'
                                 + '</button>';
                             }else {
                                 btns+='<button class="btn btn-xs btn-info tooltip-info close-index" data-rel="tooltip" title="打开">'
@@ -390,7 +390,7 @@
                                     +'</button>';
 
                             btn+='<button class="btn btn-xs btn-danger tooltip-danger clearData" data-rel="tooltip" title="清空数据">'
-                                    +'<i class="icon-trash bigger-120"></i>'
+                                    +'<i class="icon-eraser bigger-120"></i>'
                                     +'</button>';
                             btn +='</div>';
                             return btn;
