@@ -58,7 +58,7 @@
                                         </div>
                                     </div>
                                     <div class="col-xs-12 col-sm-1" style="padding-top: 4px;">
-                                        <a class="red" href="#" class="col-xs-12 col-sm-1" data-placement="top" data-trigger="hover" data-rel="popover" data-content="当选为YES时，所有字段被包含在_all字</br>段中，未指定字段匹配时将会被匹配
+                                        <a class="red" style="text-decoration: none" href="#" class="col-xs-12 col-sm-1" data-placement="top" data-trigger="hover" data-rel="popover" data-content="当选为YES时，所有字段被包含在_all字</br>段中，未指定字段匹配时将会被匹配
 在</br>每个字段上的该设置将会覆盖此处设置。">
                                             <i class="icon-question-sign bigger-130"></i>
                                         </a>
@@ -77,7 +77,7 @@
                                         </div>
                                     </div>
                                     <div class="col-xs-12 col-sm-1" style="padding-top: 4px;">
-                                        <a class="red" href="#" class="col-xs-12 col-sm-1" data-placement="top" data-trigger="hover" data-rel="popover" data-content="true：默认值。动态添加字段</br>false：忽略新字段</br>strict：如果碰到陌生字段，抛出异常">
+                                        <a class="red" style="text-decoration: none" href="#" class="col-xs-12 col-sm-1" data-placement="top" data-trigger="hover" data-rel="popover" data-content="true：默认值。动态添加字段</br>false：忽略新字段</br>strict：如果碰到陌生字段，抛出异常">
                                             <i class="icon-question-sign bigger-130"></i>
                                         </a>
                                     </div>

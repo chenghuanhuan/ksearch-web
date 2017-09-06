@@ -1154,7 +1154,10 @@
                             }else {
                                 $("#null_value").attr("readonly",false);
                             }
+
                         });
+
+                        $('[data-rel=popover]').popover({html:true});
                     }
                 });
             }
