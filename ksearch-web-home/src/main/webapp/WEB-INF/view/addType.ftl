@@ -37,11 +37,12 @@
                                 <div class="form-group">
                                     <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="type_name">名称（type）:</label>
 
-                                    <div class="col-xs-12 col-sm-9">
+                                    <div class="col-xs-12 col-sm-7">
                                         <div class="clearfix">
-                                            <input type="text" name="type_name" id="type_name" class="col-xs-12 col-sm-6" />
+                                            <input type="text" name="type_name" id="type_name" class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
+
                                 </div>
 
                                 <div class="space-2"></div>
@@ -49,25 +50,36 @@
                                 <div class="form-group">
                                     <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="password">是否被加入到_all域(include_in_all):</label>
 
-                                    <div class="col-xs-12 col-sm-9">
+                                    <div class="col-xs-12 col-sm-7">
                                         <div class="clearfix">
                                             <input id="include_in_all" name="include_in_all" class="ace ace-switch ace-switch-2" type="checkbox" />
                                             <span class="lbl"></span>
                                             <#--<input type="password" name="password" id="password" class="col-xs-12 col-sm-4" />-->
                                         </div>
                                     </div>
+                                    <div class="col-xs-12 col-sm-1" style="padding-top: 4px;">
+                                        <a class="red" href="#" class="col-xs-12 col-sm-1" data-placement="top" data-trigger="hover" data-rel="popover" data-content="当选为YES时，所有字段被包含在_all字</br>段中，未指定字段匹配时将会被匹配
+在</br>每个字段上的该设置将会覆盖此处设置。">
+                                            <i class="icon-question bigger-130"></i>
+                                        </a>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="password">动态映射规则(dynamic):</label>
 
-                                    <div class="col-xs-12 col-sm-9">
+                                    <div class="col-xs-12 col-sm-7">
                                         <div class="clearfix">
-                                            <select id="dynamic" name="dynamic" class="col-xs-12 col-sm-6" data-placeholder="Click to Choose...">
+                                            <select id="dynamic" name="dynamic" class="col-xs-12 col-sm-12" data-placeholder="Click to Choose...">
                                                 <option value="true">true</option>
                                                 <option value="false">false</option>
                                                 <option value="strict">strict</option>
                                             </select>
                                         </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-1" style="padding-top: 4px;">
+                                        <a class="red" href="#" class="col-xs-12 col-sm-1" data-placement="top" data-trigger="hover" data-rel="popover" data-content="true：默认值。动态添加字段</br>false：忽略新字段</br>strict：如果碰到陌生字段，抛出异常">
+                                            <i class="icon-question bigger-130"></i>
+                                        </a>
                                     </div>
                                 </div>
 

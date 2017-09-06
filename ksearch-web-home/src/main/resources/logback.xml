@@ -75,17 +75,6 @@
 		</encoder>
 	</appender>
 	
-	<!-- 定时任务日志 -->
-	<!--<appender name="SYS-BIZ-APPENDER-TASK"-->
-		<!--class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">-->
-		<!--<file>${logging_root}/${app_name}-biz-task.log</file>-->
-		<!--<param name="append" value="true" />-->
-		<!--<encoder>-->
-			<!--<charset>${sys_logging_encoding}</charset>-->
-			<!--<pattern>%d %-5p %c{2} - %m %X{TimeKey}%n</pattern>-->
-		<!--</encoder>-->
-	<!--</appender>-->
-	
 	<!-- web层摘要日志 -->
 	<appender name="SYS-WEB-PAGE-DIGEST-APPENDER"
 		class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">
@@ -149,12 +138,6 @@
 	<!-- DAL 摘要日志 -->
 	<logger name="SYS-DAL-DIGEST" level="${sys_loggingLevel}" additivity="false">
 		<appender-ref ref="SYS-DAL-DIGEST-APPENDER" />
-		<appender-ref ref="SYS-ERROR-APPENDER" />
-	</logger>
-
-	<!-- Integration 摘要日志 -->
-	<logger name="SYS-INTEGRATION-DIGEST" level="${sys_loggingLevel}" additivity="false">
-		<appender-ref ref="SYS-INTEGRATION-DIGEST-APPENDER" />
 		<appender-ref ref="SYS-ERROR-APPENDER" />
 	</logger>
 

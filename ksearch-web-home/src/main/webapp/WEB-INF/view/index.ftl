@@ -20,6 +20,10 @@
             .modal-add-type .modal-dialog{
                 width: 1024px;
             }
+
+            .popover-content {
+                width: 400px;
+            }
         </style>
 		<!-- ace settings handler -->
 
@@ -788,6 +792,7 @@
                         message: $('<div class="row-fluid"></div>').load('/index/addTypeHtml'),
                         onshown:function (dialogRef) {
                             initAddType(row,dialogRef,1);
+                            $('[data-rel=popover]').popover({html:true});
                         }
                     });
                 },
