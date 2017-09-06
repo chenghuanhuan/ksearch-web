@@ -112,5 +112,14 @@
                             <input type="text" name="boost" id="boost"  class="col-xs-12 col-sm-12" />
                         </div>
                     </div>-->
-                </div>
+
+                    <label class="control-label col-xs-12 col-sm-2 no-padding-right" for="boost">include_in_all:</label>
+
+                    <div class="col-xs-12 col-sm-4">
+                          <div class="clearfix">
+                              <input id="include_in_all_pro" checked name="include_in_all" class="ace ace-switch ace-switch-2" type="checkbox" />
+                              <span class="lbl"></span>
+                          </div>
+                      </div>
+                    </div>
             </form>

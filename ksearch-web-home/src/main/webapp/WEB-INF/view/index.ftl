@@ -996,6 +996,7 @@
                             /*'data-boost="'+item.boost+'" ' +*/
                             'data-null_value="'+item.null_value+'" ' +
                             'data-fielddata="'+item.fielddata+'" ' +
+                            'data-include_in_all="'+item.include_in_all+'" ' +
                             'data-store="'+item.store+'" ' +
                             'data-name="'+item.name+'">';
                     if(item.children){
@@ -1117,6 +1118,7 @@
                             $("#pro_index").attr("checked",li.data('index'));
 
                             $("#fielddata").attr("checked",li.data('fielddata'));
+                            $("#include_in_all_pro").attr("checked",li.data('include_in_all'));
                             $("#store").attr("checked",li.data('store'));
 
                             $("#pro_name").val(li.data('name'));
@@ -1166,6 +1168,7 @@
                 var pro_type = $("#pro_type").val();
                 var pro_index = $("#pro_index").prop("checked");
                 var fielddata = $("#fielddata").prop("checked");
+                var include_in_all_pro = $("#include_in_all_pro").prop("checked");
                 var store = $("#store").prop("checked");
                 var ignore_above = $("#ignore_above").val();
                 /*var boost = $("#boost").val();*/
@@ -1177,6 +1180,7 @@
                         'data-analyzer="'+analyzer+'" ' +
                         /*'data-boost="'+boost+'" ' +*/
                         'data-fielddata="'+fielddata+'" ' +
+                        'data-include_in_all="'+include_in_all_pro+'" ' +
                         'data-store="'+store+'" ' +
                         'data-ignore_above="'+ignore_above+'" ' +
                         'data-null_value="'+null_value+'" ' +
@@ -1231,6 +1235,7 @@
                 var pro_type = $("#pro_type").val();
                 var pro_index = $("#pro_index").prop("checked");
                 var fielddata = $("#fielddata").prop("checked");
+                var include_in_all = $("#include_in_all_pro").prop("checked");
                 var store = $("#store").prop("checked");
                 var ignore_above = $("#ignore_above").val();
                 /*var boost = $("#boost").val();*/
@@ -1239,6 +1244,7 @@
                 li.data("analyzer",analyzer);
                 li.data("index",pro_index);
                 li.data("fielddata",fielddata);
+                li.data("include_in_all",include_in_all)
                 li.data("store",store);
                 li.data("type",pro_type);
                 li.data("ignore_above",ignore_above);
