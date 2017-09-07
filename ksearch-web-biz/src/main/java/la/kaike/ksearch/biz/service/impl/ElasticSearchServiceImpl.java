@@ -179,33 +179,40 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     @Override
     public void addIndex(AddIndexReqVO addIndexVO) {
         TransportClient client = ElasticClient.getClient(addIndexVO.getClusterName());
-        client.admin().indices().prepareCreate(addIndexVO.getIndex()).setSettings(
-                Settings.builder()
-                        .put(IndexSettingConstant.NUMBER_OF_SHARDS,addIndexVO.getNumberOfShards())
-                        .put(IndexSettingConstant.NUMBER_OF_REPLICAS,addIndexVO.getNumberOfReplicas())
-        ).setSource("{" +
-                "    \"analysis\": {" +
-                "      \"analyzer\": {" +
-                "        \"ik_en_max_word\": {" +
-                "          \"type\": \"custom\"," +
-                "          \"tokenizer\": \"ik_max_word\"," +
-                "          \"filter\": [" +
-                "            \"stemmer\"" +
-                "          ]" +
-                "        }," +
-                "        \"ik_en_smart\": {" +
-                "          \"type\": \"custom\"," +
-                "          \"tokenizer\": \"ik_smart\"," +
-                "          \"filter\": [" +
-                "            \"stemmer\"" +
-                "          ]" +
+        String defaultSetting = "{" +
+                "    \"analysis\":{" +
+                "        \"analyzer\":{" +
+                "            \"ik_en_max_word\":{" +
+                "                \"type\":\"custom\"," +
+                "                \"char_filter\":[" +
+                "                    \"html_strip\"" +
+                "                ]," +
+                "                \"tokenizer\":\"ik_max_word\"," +
+                "                \"filter\":[" +
+                "                    \"stemmer\"," +
+                "                    \"stop\"" +
+                "                ]" +
+                "            }," +
+                "            \"ik_en_smart\":{" +
+                "                \"type\":\"custom\"," +
+                "                \"char_filter\":[" +
+                "                    \"html_strip\"" +
+                "                ]," +
+                "                \"tokenizer\":\"ik_smart\"," +
+                "                \"filter\":[" +
+                "                    \"stemmer\"," +
+                "                    \"stop\"" +
+                "                ]" +
+                "            }" +
                 "        }" +
-                "      }" +
                 "    }" +
-                "  }",XContentType.JSON).get();
-
+                "}";
+        Map<String,Object> setting = JSON.parseObject(defaultSetting,Map.class);
+        setting.put("number_of_shards",addIndexVO.getNumberOfShards());
+        setting.put("number_of_replicas",addIndexVO.getNumberOfReplicas());
+        client.admin().indices().prepareCreate(addIndexVO.getIndex()).setSettings(JSON.toJSONString(setting),XContentType.JSON).get();
         // 设置索引不动态添加字段映射
-        client.admin().indices().prepareUpdateSettings(addIndexVO.getIndex()).setSettings("{\"index.mapper.dynamic\":false}",XContentType.JSON);
+        //client.admin().indices().prepareUpdateSettings(addIndexVO.getIndex()).setSettings("{\"index.mapper.dynamic\":false}",XContentType.JSON);
 
     }
 
