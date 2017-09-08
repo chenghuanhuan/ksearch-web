@@ -729,7 +729,7 @@
                         },
                         buttons: [{
                             icon: 'icon-ok',
-                            label: '保存',
+                            label: '提交',
                             cssClass: 'btn-success',
                             //autospin: true,
                             action: function(dialogRef){
