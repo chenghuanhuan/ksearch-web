@@ -1108,7 +1108,7 @@
                             allowClear:true
                         });
                         $("#analyzer").select2({
-                            allowClear:true
+                            //allowClear:true
                         });
                         //$('#ignore_above').ace_spinner({value:0,min:0,max:200,disabled:false,step:10, btn_up_class:'btn-info' , btn_down_class:'btn-info'})
                         $('#ignore_above').ace_spinner({value:'',min:1,max:100,disabled:false,step:1, on_sides: true, icon_up:'icon-plus smaller-75', icon_down:'icon-minus smaller-75', btn_up_class:'btn-success' , btn_down_class:'btn-danger'});

@@ -77,7 +77,7 @@
                         <div class="clearfix">
                             <select id="analyzer" name="analyzer" class="width-100 select2"  data-placeholder="Click to Choose...">
                                 <option value=""></option>
-                                <option value="standard">standard （标准分词器）</option>
+                                <option selected value="standard">standard （标准分词器）</option>
                                 <option value="english">english （英文分词）</option>
                                 <option value="ik_max_word">ik_max_word（中文分词，细粒度）</option>
                                 <option value="ik_smart">ik_smart（中文分词，粗粒度）</option>
