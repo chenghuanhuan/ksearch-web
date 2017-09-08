@@ -807,6 +807,7 @@
                         message: $('<div class="row-fluid"></div>').load('/index/addTypeHtml'),
                         onshown:function (dialogRef) {
                             initAddType(row,dialogRef,2);
+                            $('[data-rel=popover]').popover({html:true});
                         }
                     });
                 }
@@ -936,7 +937,7 @@
                 // 初始化数据
                 if (type===2){
                     $("#type_name").val(row.type);
-
+                    $("#type_name").attr('disabled','disabled');
                     if (row.include_in_all==null){
                         $("#include_in_all").attr("checked",true);// 默认
                     }else {
