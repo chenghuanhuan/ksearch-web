@@ -1089,9 +1089,13 @@
                         dialogRef.close();
                     }
                 });
+                var title = "添加属性";
+                if(type==2){
+                    title = "修改属性";
+                }
                 BootstrapDialog.show({
                     type:BootstrapDialog.TYPE_PRIMARY,
-                    title: '添加属性',
+                    title: title,
                     closeByBackdrop: false,
                     closeByKeyboard: false,
                     draggable: true,
