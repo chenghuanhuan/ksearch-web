@@ -937,7 +937,7 @@
                 if (type===2){
                     $("#type_name").val(row.type);
 
-                    if (!row.include_in_all){
+                    if (row.include_in_all==null){
                         $("#include_in_all").attr("checked",true);// 默认
                     }else {
                         $("#include_in_all").attr("checked",row.include_in_all);
