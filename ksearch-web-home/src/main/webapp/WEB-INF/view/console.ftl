@@ -451,7 +451,7 @@
                         for (var v in value) {
                             $("#" + v).html(value[v]);
                         }
-						var percent = value.successfulShards/value.totalShards*100;
+						var percent = Math.round(value.successfulShards/value.totalShards*100);
                         var html = '<span class="percent">'+percent+'</span>%';
                         var successfulShardsPercent = $("#successfulShardsPercent").attr("data-percent",percent);
                         successfulShardsPercent.html(html);
