@@ -135,22 +135,25 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
                 // 获取MetaData
                 IndexMetaData indexMetaData = metadata.index(entry.getKey());
-                Settings settings = indexMetaData.getSettings();
-                Integer replicas = settings.getAsInt(IndexSettingConstant.NUMBER_OF_REPLICAS,null);
-                Integer shards = settings.getAsInt(IndexSettingConstant.NUMBER_OF_SHARDS,null);
-                indicesVO.setReplicas(replicas);
-                indicesVO.setShards(shards);
-                indicesVO.setStatus(indexMetaData.getState().name());
+                if (indexMetaData != null){
+                    Settings settings = indexMetaData.getSettings();
+                    Integer replicas = settings.getAsInt(IndexSettingConstant.NUMBER_OF_REPLICAS,null);
+                    Integer shards = settings.getAsInt(IndexSettingConstant.NUMBER_OF_SHARDS,null);
+                    indicesVO.setReplicas(replicas);
+                    indicesVO.setShards(shards);
+                    indicesVO.setStatus(indexMetaData.getState().name());
 
-                ImmutableOpenMap<String,AliasMetaData> aliasMetaMap =  indexMetaData.getAliases();
-                Iterator<ObjectObjectCursor<String,AliasMetaData>> objectObjectCursorIterator = aliasMetaMap.iterator();
-                List<String> aliases = new ArrayList<>();
-                while (objectObjectCursorIterator.hasNext()){
-                    ObjectObjectCursor<String,AliasMetaData> dataObjectObjectCursor = objectObjectCursorIterator.next();
-                    AliasMetaData aliasMetaData = dataObjectObjectCursor.value;
-                    aliases.add(aliasMetaData.getAlias());
+                    ImmutableOpenMap<String,AliasMetaData> aliasMetaMap =  indexMetaData.getAliases();
+                    Iterator<ObjectObjectCursor<String,AliasMetaData>> objectObjectCursorIterator = aliasMetaMap.iterator();
+                    List<String> aliases = new ArrayList<>();
+                    while (objectObjectCursorIterator.hasNext()){
+                        ObjectObjectCursor<String,AliasMetaData> dataObjectObjectCursor = objectObjectCursorIterator.next();
+                        AliasMetaData aliasMetaData = dataObjectObjectCursor.value;
+                        aliases.add(aliasMetaData.getAlias());
+                    }
+                    indicesVO.setAliases(aliases);
                 }
-                indicesVO.setAliases(aliases);
+
                 indicesVOList.add(indicesVO);
             }
         }

@@ -15,7 +15,7 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.transport.client.PreBuiltTransportClient;
+import org.elasticsearch.xpack.client.PreBuiltXPackTransportClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +46,7 @@ public class ElasticClient {
                 try {
                     if (clientMap.get(clusterName) == null) {
                         String clusterHosts = IKuKoConfDataGetter.getStringValue(clusterName + ".hosts");
+                        //client = new PreBuiltXPackTransportClient(Builder.builder().setClusterName(clusterName).addNode(clusterHosts));
                         client = Builder.builder().setClusterName(clusterName).addNode(clusterHosts)._client;
                         ElasticClientUtil.getClusterHealth(client);
                         clientMap.put(clusterName, client);
@@ -100,7 +101,8 @@ public class ElasticClient {
             return new Builder();
         }
         public ElasticClient.Builder setClusterName(String clusterName) {
-            this._client = new PreBuiltTransportClient(getSettings(clusterName));;
+            //this._client = new PreBuiltTransportClient(getSettings(clusterName));;
+            this._client = new PreBuiltXPackTransportClient(getSettings(clusterName));
             return this;
         }
 
