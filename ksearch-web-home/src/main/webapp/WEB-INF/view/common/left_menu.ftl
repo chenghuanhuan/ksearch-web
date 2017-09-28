@@ -32,13 +32,13 @@
             <span class="menu-text"> 查询控制台 </span>
         </a>
     </li>
-<#--
+
     <li>
-        <a href="/abnormal" class="left-menu">
+        <a href="/applog" class="left-menu">
             <i class="icon-list-alt"></i>
-            <span class="menu-text"> 异常监控 </span>
+            <span class="menu-text"> app日志 </span>
         </a>
-    </li>-->
+    </li>
 
     <li>
         <a href="/user" class="left-menu">
