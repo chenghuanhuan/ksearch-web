@@ -8,6 +8,8 @@ import la.kaike.ksearch.biz.service.AppLogService;
 import la.kaike.ksearch.home.base.BaseController;
 import la.kaike.ksearch.model.PageResponse;
 import la.kaike.ksearch.model.Response;
+import la.kaike.ksearch.model.bo.applog.AppLogBO;
+import la.kaike.ksearch.model.vo.applog.AppLogIdVO;
 import la.kaike.ksearch.model.vo.applog.AppLogVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,10 +34,27 @@ public class AppLogController extends BaseController {
         return "applog";
     }
 
+    /**
+     * 查询日志列表
+     * @param appLogVO
+     * @return
+     */
     @RequestMapping("query")
     @ResponseBody
     public Response query(AppLogVO appLogVO){
         PageResponse pageResponse = appLogService.query(appLogVO);
         return pageResponse;
+    }
+
+    /**
+     * 日志详情
+     * @param appLogIdVO
+     * @return
+     */
+    @RequestMapping("detail")
+    @ResponseBody
+    public Response detail(AppLogIdVO appLogIdVO) throws Exception {
+        AppLogBO appLogBO = appLogService.queryById(appLogIdVO);
+        return succeed(appLogBO);
     }
 }

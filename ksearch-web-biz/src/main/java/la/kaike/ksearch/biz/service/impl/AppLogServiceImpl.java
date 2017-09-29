@@ -7,8 +7,12 @@ package la.kaike.ksearch.biz.service.impl;
 import la.kaike.ksearch.biz.es.ElasticClient;
 import la.kaike.ksearch.biz.service.AppLogService;
 import la.kaike.ksearch.model.PageResponse;
+import la.kaike.ksearch.model.bo.applog.AppLogBO;
+import la.kaike.ksearch.model.vo.applog.AppLogIdVO;
 import la.kaike.ksearch.model.vo.applog.AppLogVO;
+import la.kaike.ksearch.util.util.BeanUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
@@ -30,6 +34,11 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
  */
 @Service
 public class AppLogServiceImpl implements AppLogService {
+
+    private static final String INDEX = "applog";
+
+    private static final String TYPE = "applog";
+
     @Override
     public PageResponse query(AppLogVO appLogVO) {
         PageResponse pageResponse = new PageResponse();
@@ -71,9 +80,9 @@ public class AppLogServiceImpl implements AppLogService {
                 //.should(termQuery("content", "test3"))
                 //.filter(termQuery("content", "test5"))
                 //.filter(prefixQuery("version","ver"));
-
         builder.setQuery(boolQueryBuilder);
-
+        builder.setFetchSource(new String[]{},new String[]{"contentData"});
+        //builder.setSource(SearchSourceBuilder)
         // 查询总条数
         SearchResponse countRes = builder.setSize(0).get();
         pageResponse.setTotal(countRes.getHits().getTotalHits());
@@ -96,5 +105,14 @@ public class AppLogServiceImpl implements AppLogService {
             pageResponse.setRows(hashMapList);
         }
         return pageResponse;
+    }
+
+    @Override
+    public AppLogBO queryById(AppLogIdVO appLogIdVO) throws Exception {
+        TransportClient client = ElasticClient.getClient(appLogIdVO.getClusterName());
+        GetResponse response = client.prepareGet(INDEX,TYPE,appLogIdVO.getId()).get();
+        Map<String,Object> objectMap = response.getSourceAsMap();
+        AppLogBO appLogBO = BeanUtil.mapToObject(objectMap,AppLogBO.class);
+        return appLogBO;
     }
 }

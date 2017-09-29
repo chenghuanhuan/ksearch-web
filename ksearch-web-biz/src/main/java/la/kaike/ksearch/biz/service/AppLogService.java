@@ -5,6 +5,8 @@
 package la.kaike.ksearch.biz.service;
 
 import la.kaike.ksearch.model.PageResponse;
+import la.kaike.ksearch.model.bo.applog.AppLogBO;
+import la.kaike.ksearch.model.vo.applog.AppLogIdVO;
 import la.kaike.ksearch.model.vo.applog.AppLogVO;
 
 /**
@@ -19,4 +21,11 @@ public interface AppLogService {
      * @return
      */
     PageResponse query(AppLogVO appLogVO);
+
+    /**
+     * 通过id获取
+     * @param appLogIdVO
+     * @return
+     */
+    AppLogBO queryById(AppLogIdVO appLogIdVO) throws Exception;
 }
