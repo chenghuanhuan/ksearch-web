@@ -57,8 +57,8 @@ public class AppLogServiceImpl implements AppLogService {
             boolQueryBuilder.filter(prefixQuery("osVersion",appLogVO.getOsVersion()));
         }
 
-        if (StringUtils.isNotEmpty(appLogVO.getUserToken())){
-            boolQueryBuilder.filter(matchQuery("userToken",appLogVO.getUserToken()));
+        if (StringUtils.isNotEmpty(appLogVO.getClientToken())){
+            boolQueryBuilder.filter(matchQuery("clientToken",appLogVO.getClientToken()));
         }
 
         if (StringUtils.isNotEmpty(appLogVO.getBundleIdentifier())){
@@ -76,6 +76,27 @@ public class AppLogServiceImpl implements AppLogService {
         if (StringUtils.isNotEmpty(appLogVO.getUploadDate())){
             boolQueryBuilder.filter(rangeQuery("uploadDate").gte(appLogVO.getStartTime()).lte(appLogVO.getEndTime()));
         }
+
+        if (StringUtils.isNotEmpty(appLogVO.getBrand())){
+            boolQueryBuilder.filter(prefixQuery("brand",appLogVO.getBrand()));
+        }
+
+        if (StringUtils.isNotEmpty(appLogVO.getResolution())){
+            boolQueryBuilder.filter(termQuery("resolution",appLogVO.getResolution()));
+        }
+
+        if (StringUtils.isNotEmpty(appLogVO.getChannel())){
+            boolQueryBuilder.filter(termQuery("channel",appLogVO.getChannel()));
+        }
+
+        if (StringUtils.isNotEmpty(appLogVO.getDeviceModel())){
+            boolQueryBuilder.filter(prefixQuery("deviceModel",appLogVO.getDeviceModel()));
+        }
+
+        if (StringUtils.isNotEmpty(appLogVO.getImei())){
+            boolQueryBuilder.filter(termQuery("imei",appLogVO.getImei()));
+        }
+
 
         //QueryBuilder qb = boolQuery()
                 //.must(termQuery("content", "test1"))

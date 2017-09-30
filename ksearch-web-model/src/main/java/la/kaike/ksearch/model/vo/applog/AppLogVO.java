@@ -44,7 +44,7 @@ public class AppLogVO extends PageVO {
      * 用户id
      */
     @Validate(maxLength = 1024)
-    private String userToken;
+    private String clientToken;
 
     /**
      * 日志内容
@@ -52,12 +52,84 @@ public class AppLogVO extends PageVO {
     @Validate(maxLength = 1024)
     private String contentData;
 
-    @Validate(maxLength = 64)
+    @Validate(maxLength = 128)
     private String uploadDate;
+
+    /**
+     * 手机品牌
+     */
+    @Validate(maxLength = 128)
+    private String brand;
+
+    /**
+     * 手机屏幕尺寸
+     */
+    @Validate(maxLength = 128)
+    private String resolution;
+    /**
+     * app安装来源
+     */
+    @Validate(maxLength = 128)
+    private String channel;
+
+    /**
+     * 手机型号
+     */
+    @Validate(maxLength = 128)
+    private String deviceModel;
+
+    /**
+     * 国际手机唯一标示码
+     */
+    @Validate(maxLength = 256)
+    private String imei;
+
+
 
     private String startTime;
 
     private String endTime;
+
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getResolution() {
+        return resolution;
+    }
+
+    public void setResolution(String resolution) {
+        this.resolution = resolution;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+
+    public String getDeviceModel() {
+        return deviceModel;
+    }
+
+    public void setDeviceModel(String deviceModel) {
+        this.deviceModel = deviceModel;
+    }
+
+    public String getImei() {
+        return imei;
+    }
+
+    public void setImei(String imei) {
+        this.imei = imei;
+    }
 
     public String getStartTime() {
         return startTime;
@@ -123,12 +195,12 @@ public class AppLogVO extends PageVO {
         this.bundleIdentifier = bundleIdentifier;
     }
 
-    public String getUserToken() {
-        return userToken;
+    public String getClientToken() {
+        return clientToken;
     }
 
-    public void setUserToken(String userToken) {
-        this.userToken = userToken;
+    public void setClientToken(String clientToken) {
+        this.clientToken = clientToken;
     }
 
     public String getContentData() {

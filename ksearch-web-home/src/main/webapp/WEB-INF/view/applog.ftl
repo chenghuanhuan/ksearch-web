@@ -101,7 +101,7 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="form-group">
-                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">version:</label>
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">app版本号:</label>
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
@@ -109,7 +109,7 @@
                                         </div>
                                     </div>
 
-                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">platform:</label>
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">操作系统:</label>
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
@@ -121,7 +121,7 @@
                                         </div>
                                     </div>
 
-                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">osVersion:</label>
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">操作系统版本:</label>
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
@@ -134,7 +134,7 @@
 
                             <div class="col-xs-12">
                                 <div class="form-group">
-                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">bundleIdentifier:</label>
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">唯一标识符:</label>
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
@@ -142,15 +142,15 @@
                                         </div>
                                     </div>
 
-                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">userToken:</label>
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">用户令牌:</label>
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="userToken"  class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="clientToken"  class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
 
-                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">log:</label>
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">日志内容:</label>
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
@@ -163,6 +163,53 @@
 
                             <div class="col-xs-12">
                                 <div class="form-group">
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">手机品牌:</label>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="clearfix">
+                                            <input type="text" id="brand" name="brand" placeholder="支持模糊查询" class="col-xs-12 col-sm-12" />
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">屏幕尺寸:</label>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="clearfix">
+                                            <input type="text" id="resolution" name="resolution" class="col-xs-12 col-sm-12" />
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">安装来源:</label>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="clearfix">
+                                            <input type="text" id="channel" name="channel" placeholder="支持模糊查询" class="col-xs-12 col-sm-12" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space"></div>
+
+
+                            <div class="col-xs-12">
+                                <div class="form-group">
+
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">手机型号:</label>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="clearfix">
+                                            <input type="text" id="deviceModel" name="deviceModel" placeholder="支持模糊查询" class="col-xs-12 col-sm-12" />
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">imei:</label>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="clearfix">
+                                            <input type="text" id="imei" name="imei" placeholder="" class="col-xs-12 col-sm-12" />
+                                        </div>
+                                    </div>
+
                                     <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">上报时间:</label>
 
                                     <div class="col-xs-12 col-sm-3">
@@ -283,19 +330,34 @@
             pageSize:10,
             columns: [{
                 field: 'version',
-                title: '<span class="text-primary">version</span>'
+                title: '<span class="text-primary">app版本号</span>'
             }, {
                 field: 'platform',
-                title: '<span class="text-primary">platform</span>'
+                title: '<span class="text-primary">操作系统</span>'
             }, {
                 field: 'osVersion',
-                title: '<span class="text-primary">osVersion</span>'
+                title: '<span class="text-primary">操作系统版本</span>'
             }, {
                 field: 'bundleIdentifier',
-                title: '<span class="text-primary">bundleIdentifier</span>'
+                title: '<span class="text-primary">唯一标识符</span>'
             }, {
-                field: 'userToken',
-                title: '<span class="text-primary">userToken</span>'
+                field: 'clientToken',
+                title: '<span class="text-primary">用户令牌</span>'
+            }, {
+                field: 'brand',
+                title: '<span class="text-primary">品牌</span>'
+            }, {
+                field: 'resolution',
+                title: '<span class="text-primary">屏幕尺寸</span>'
+            }, {
+                field: 'channel',
+                title: '<span class="text-primary">安装来源</span>'
+            }, {
+                field: 'deviceModel',
+                title: '<span class="text-primary">手机型号</span>'
+            }, {
+                field: 'imei',
+                title: '<span class="text-primary">imei</span>'
             }, {
                 field: 'uploadDate',
                 title: '<span class="text-primary">上报时间</span>'
@@ -306,9 +368,14 @@
                 params.osVersion = $.trim($("#osVersion").val());
                 params.platform = $.trim($("#platform").val());
                 params.bundleIdentifier = $.trim($("#bundleIdentifier").val());
-                params.userToken = $.trim($("#userToken").val());
+                params.clientToken = $.trim($("#clientToken").val());
                 params.contentData = $.trim($("#contentData").val());
                 params.uploadDate = $.trim($("#uploadDate").val());
+                params.brand = $.trim($("#brand").val());
+                params.resolution = $.trim($("#resolution").val());
+                params.channel = $.trim($("#channel").val());
+                params.deviceModel = $.trim($("#deviceModel").val());
+                params.imei = $.trim($("#imei").val());
                 params.clusterName = clusterName;
                 return params;
             },
