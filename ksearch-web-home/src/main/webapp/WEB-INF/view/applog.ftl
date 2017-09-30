@@ -320,7 +320,7 @@
             //toolbar:"#toolbar",
             sidePagination:'server',
             url:"/applog/query",
-            pageList:[10, 20, 40, 60],
+            pageList:[10, 20, 30],
             pagination:true,
             detailView:true,
             //showRefresh:true,
@@ -345,7 +345,7 @@
                 title: '<span class="text-primary">用户令牌</span>'
             }, {
                 field: 'brand',
-                title: '<span class="text-primary">品牌</span>'
+                title: '<span class="text-primary">手机品牌</span>'
             }, {
                 field: 'resolution',
                 title: '<span class="text-primary">屏幕尺寸</span>'
