@@ -58,7 +58,7 @@ public class AppLogServiceImpl implements AppLogService {
         }
 
         if (StringUtils.isNotEmpty(appLogVO.getUserToken())){
-            boolQueryBuilder.filter(termQuery("userToken",appLogVO.getUserToken()));
+            boolQueryBuilder.filter(matchQuery("userToken",appLogVO.getUserToken()));
         }
 
         if (StringUtils.isNotEmpty(appLogVO.getBundleIdentifier())){
@@ -70,7 +70,11 @@ public class AppLogServiceImpl implements AppLogService {
         }
 
         if (StringUtils.isNotEmpty(appLogVO.getContentData())){
-            boolQueryBuilder.filter(termQuery("contentData",appLogVO.getContentData()));
+            boolQueryBuilder.filter(matchQuery("contentData",appLogVO.getContentData()));
+        }
+
+        if (StringUtils.isNotEmpty(appLogVO.getUploadDate())){
+            boolQueryBuilder.filter(rangeQuery("uploadDate").gte(appLogVO.getStartTime()).lte(appLogVO.getEndTime()));
         }
 
         //QueryBuilder qb = boolQuery()

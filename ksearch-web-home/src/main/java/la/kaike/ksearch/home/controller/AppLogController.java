@@ -11,6 +11,7 @@ import la.kaike.ksearch.model.Response;
 import la.kaike.ksearch.model.bo.applog.AppLogBO;
 import la.kaike.ksearch.model.vo.applog.AppLogIdVO;
 import la.kaike.ksearch.model.vo.applog.AppLogVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -42,6 +43,15 @@ public class AppLogController extends BaseController {
     @RequestMapping("query")
     @ResponseBody
     public Response query(AppLogVO appLogVO){
+        if (StringUtils.isNotEmpty(appLogVO.getUploadDate())) {
+            String uploadDate = appLogVO.getUploadDate();
+            String[] arr = uploadDate.split(" - ");
+            String startTime = arr[0];
+            String endTime = arr[1];
+            appLogVO.setStartTime(startTime);
+            appLogVO.setEndTime(endTime);
+        }
+
         PageResponse pageResponse = appLogService.query(appLogVO);
         return pageResponse;
     }

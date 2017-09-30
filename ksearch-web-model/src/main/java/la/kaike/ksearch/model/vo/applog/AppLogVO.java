@@ -52,6 +52,37 @@ public class AppLogVO extends PageVO {
     @Validate(maxLength = 1024)
     private String contentData;
 
+    @Validate(maxLength = 64)
+    private String uploadDate;
+
+    private String startTime;
+
+    private String endTime;
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getUploadDate() {
+        return uploadDate;
+    }
+
+    public void setUploadDate(String uploadDate) {
+        this.uploadDate = uploadDate;
+    }
+
     public String getClusterName() {
         return clusterName;
     }

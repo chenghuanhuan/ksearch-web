@@ -9,7 +9,7 @@
 
     <!-- basic styles -->
 <#include "/common/head_css.ftl"/>
-    <link rel="stylesheet" href="/assets/css/jsonFormater.css" />
+    <link rel="stylesheet" href="assets/css/daterangepicker.css" />
     <style>
         .modal-optimize .modal-dialog{
             width: 500px;
@@ -20,6 +20,14 @@
 
         .modal-add-type .modal-dialog{
             width: 1024px;
+        }
+
+        .space {
+            width: 1px;
+            max-height: 1px;
+            min-height: 1px;
+            overflow: hidden;
+            margin: 6px 0
         }
     </style>
     <!-- ace settings handler -->
@@ -97,7 +105,7 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="version"  class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="version" placeholder="支持模糊匹配" class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
 
@@ -106,7 +114,7 @@
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
                                             <select id="platform" name="platform" class="width-100 select2"  data-placeholder="Click to Choose...">
-                                                <option value=""></option>
+                                                <option value="" selected> </option>
                                                 <option value="1">IOS</option>
                                                 <option value="2">Android</option>
                                             </select>
@@ -117,12 +125,12 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="osVersion"  class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="osVersion" placeholder="支持模糊查询"  class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <hr>
+                            <div class="space"></div>
 
                             <div class="col-xs-12">
                                 <div class="form-group">
@@ -146,12 +154,25 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="contentData"  class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="contentData" placeholder="支持模糊查询" class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <hr>
+                            <div class="space"></div>
+
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">上报时间:</label>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="clearfix">
+                                            <input class="form-control" type="text" name="uploadDate" id="uploadDate" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space"></div>
 
 
                             <div class="col-xs-12" id="query-btn" style="padding-top: 10px;">
@@ -198,104 +219,13 @@
 <!-- basic scripts -->
 
 <#include "/common/foot_js.ftl"/>
-<script src="/assets/js/jsonFormater.js"></script>
+<script src="/assets/js/date-time/daterangepicker.min.js"></script>
+<script src="/assets/js/date-time/moment.min.js"></script>
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
-    var columns=[];
     var clusterName = Util.cookie.get("cluster-name");
-    var template = "";
-
-
     jQuery(function($) {
-        template = $("#query_1").html();
 
-        $(document).on("click",".add-query",function () {
-            var af = $('<div class="col-xs-12 hide-form" style="padding-top: 10px;"><div class="form-group"></div></div>');
-            af.html(template);
-            $("#query-btn").before(af);
-            // 更新下拉框
-            var select = $("#query-btn").prev().find('select[name="field"]');
-            initFieldSelect(select);
-        });
-
-        $(document).on("click",".del-query",function () {
-            if($(".del-query").length===1){
-                return;
-            }
-            $(this).parent().parent().parent().remove();
-        });
-
-        $(document).on("change","select[name='field']",function () {
-            if($(this).val()==="_all"){
-                $($(this).parent().parent().parent().find("select[name='op']")[0]).html("<option value='query_string'>query_string</option>");
-            }else {
-                $($(this).parent().parent().parent().find("select[name='op']")[0]).html('<option value="term">term</option> <option value="prefix">prefix</option> <option value="query_string">query_string</option>');
-            }
-        });
-
-
-        var ajIndex = new $ax("/common/index/select", function (data) {
-            if(data.status){
-                $("#select_index").select2({
-                    allowClear: true,
-                    placeholder: "请选择索引",
-                    data:data.data
-                });
-
-                /*  索引变更**/
-                $("#select_index").on("change", function (e) {
-                    console.log("select2:select", e);
-                    resetDetailQuery();
-                    var aj= new $ax("/common/type/select", function (data) {
-                        if(data.status){
-                            $("#select_type").select2({
-                                allowClear: true,
-                                placeholder: "请选择类型",
-                                data:data.data
-                            });
-                            // 类型下拉事件
-                            $("#select_type").on("change",function () {
-                                resetDetailQuery();
-                                var type = $("#select_type").select2("val");
-
-                                var index = $("#select_index").select2("val");
-                                var type_aj = new $ax("/common/fields",function (data) {
-                                    if (data.status){
-                                        fieldData = [{id:"_all",text:"_all"}];
-                                        getFieldData(data.data,"");
-                                        initFieldSelect($($("#query_1").find("select[name='field']")[0]));
-
-                                        // 初始化表格信息
-                                        columns=[];
-                                        $.each(data.data,function (i,item) {
-                                            var column = {field:item.fieldName,title:item.fieldName}
-                                            if (item.type !="object" && item.type !="array"){
-                                                column.sortable=true;
-                                            }
-                                            columns.push(column);
-                                        });
-
-                                    }
-                                });
-                                type_aj.set("type",type);
-                                type_aj.set("index",index);
-                                type_aj.set("clusterName",clusterName);
-                                type_aj.start();
-                            });
-                        }
-                    });
-                    aj.set("clusterName",clusterName);
-                    aj.set("index",$(this).val());
-                    aj.start();
-
-                });
-            }
-        });
-        ajIndex.set("clusterName",clusterName);
-        ajIndex.start();
-
-
-        //$('#indices_table').bootstrapTable();
         /**
          * 查询
          */
@@ -303,6 +233,35 @@
             $('#indices_table').bootstrapTable("removeAll");
             $('#indices_table').bootstrapTable("refresh");
         });
+
+        $('input[name=uploadDate]').daterangepicker({
+            timePicker : true,
+            format : 'YYYY-MM-DD HH:mm:ss',
+            dateLimit : {
+                days : 7
+            }, //起止时间的最大间隔
+            ranges : {
+                //'最近1小时': [moment().subtract('hours',1), moment()],
+                '今日': [moment().startOf('day'), moment()],
+                '昨日': [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
+                '最近7日': [moment().subtract('days', 6), moment()]//,
+                //'最近30日': [moment().subtract('days', 29), moment()]
+            },
+            locale : {
+                applyLabel : '确定',
+                cancelLabel : '取消',
+                fromLabel : '起始时间',
+                toLabel : '结束时间',
+                customRangeLabel : '自定义',
+                daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],
+                monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月',
+                    '七月', '八月', '九月', '十月', '十一月', '十二月' ],
+                firstDay : 1
+            }
+        }).prev().on(ace.click_event, function(){
+            $(this).next().focus();
+        });
+
 
         $('#indices_table').bootstrapTable({
             striped:true,
@@ -316,7 +275,7 @@
             url:"/applog/query",
             pageList:[10, 20, 40, 60],
             pagination:true,
-            //detailView:true,
+            detailView:true,
             //showRefresh:true,
             showColumns:true,
             //showPaginationSwitch:true,
@@ -338,8 +297,8 @@
                 field: 'userToken',
                 title: '<span class="text-primary">userToken</span>'
             }, {
-                field: 'contentData',
-                title: '<span class="text-primary">log</span>'
+                field: 'uploadDate',
+                title: '<span class="text-primary">上报时间</span>'
             }],
             silentSort:false,
             queryParams:function (params) {
@@ -349,8 +308,23 @@
                 params.bundleIdentifier = $.trim($("#bundleIdentifier").val());
                 params.userToken = $.trim($("#userToken").val());
                 params.contentData = $.trim($("#contentData").val());
+                params.uploadDate = $.trim($("#uploadDate").val());
                 params.clusterName = clusterName;
                 return params;
+            },
+            onExpandRow: function (index, row, $detail) {
+
+
+                $detail.html('<pre>正在加载...</pre>');
+                var type_aj = new $ax("/applog/detail",function (data) {
+                    if (data.status){
+                        var contentData = data.data.contentData;
+                        $detail.html('<pre>'+contentData+'</pre>');
+                    }
+                });
+                type_aj.set("id",row.id);
+                type_aj.set("clusterName",clusterName);
+                type_aj.start();
             },
             onLoadSuccess:function () {
             }
