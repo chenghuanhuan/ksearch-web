@@ -70,7 +70,9 @@ public class AppLogServiceImpl implements AppLogService {
         }
 
         if (StringUtils.isNotEmpty(appLogVO.getContentData())){
-            boolQueryBuilder.filter(matchQuery("contentData",appLogVO.getContentData()));
+            //boolQueryBuilder.filter(matchQuery("contentData",appLogVO.getContentData()));
+            boolQueryBuilder.must(matchQuery("contentData",appLogVO.getContentData()));
+            boolQueryBuilder.should(matchPhraseQuery("contentData",appLogVO.getContentData()));
         }
 
         if (StringUtils.isNotEmpty(appLogVO.getUploadDate())){
