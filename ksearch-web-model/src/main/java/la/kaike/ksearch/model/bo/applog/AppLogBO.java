@@ -63,6 +63,19 @@ public class AppLogBO {
      */
     private String imei;
 
+    /**
+     * 日志上报时间
+     */
+    private String uploadDate;
+
+    public String getUploadDate() {
+        return uploadDate;
+    }
+
+    public void setUploadDate(String uploadDate) {
+        this.uploadDate = uploadDate;
+    }
+
     public String getBrand() {
         return brand;
     }

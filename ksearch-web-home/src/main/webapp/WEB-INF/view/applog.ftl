@@ -333,7 +333,14 @@
                 title: '<span class="text-primary">app版本号</span>'
             }, {
                 field: 'platform',
-                title: '<span class="text-primary">操作系统</span>'
+                title: '<span class="text-primary">操作系统</span>',
+                formatter: function (value, row, index) {
+                    if(row.platform===1){
+                        return "IOS";
+                    }else {
+                        return "Android";
+                    }
+                }
             }, {
                 field: 'osVersion',
                 title: '<span class="text-primary">操作系统版本</span>'
@@ -383,10 +390,20 @@
 
 
                 $detail.html('<pre>正在加载...</pre>');
+                var id = row.id;
                 var type_aj = new $ax("/applog/detail",function (data) {
                     if (data.status){
-                        var contentData = data.data.contentData;
-                        $detail.html('<pre>'+contentData+'</pre>');
+                        contentData = data.data.contentData;
+                        var displayData = "";
+                        var more = '';
+                        if(contentData.length>limit){
+                            displayData = contentData.substr(0,limit);
+                            more = '<a data-start='+limit+' class="load-data">&nbsp;更多...</a>&nbsp;<a class="load-all">&nbsp;展开全部</a>';
+                        }else {
+                            displayData = contentData;
+                        }
+
+                        $detail.html('<pre>'+displayData+'</pre>'+more+'&nbsp;<a class="download" href="/applog/download?id='+id+'&clusterName='+clusterName+'" >&nbsp;下载</a>');
                     }
                 });
                 type_aj.set("id",row.id);
@@ -398,8 +415,46 @@
 
         });
 
+        $(document).on("click",".load-data",function () {
+            var start = parseInt($(this).data("start"));
+            console.log(start);
+            var preNode = $(this).prev();
+            preNode.append(contentData.substr(start,limit));
+            if(start+limit>=contentData.length){
+                $(this).remove();
+            }
+            $(this).data("start",start+limit);
+        });
+
+
+        $(document).on("click",".load-all",function () {
+            var preNode = $(this).prev();
+            var start = parseInt(preNode.data("start"));
+            $(this).after('<span>请稍后,正在玩命加载中...</span>');
+            var next = $(this).next();
+            //preNode.prev().text("请稍后,正在玩命加载...");
+            var  size= Math.ceil((contentData.length-start)/limit);
+            var context = preNode.prev();
+            var i=0;
+            var timmer = setInterval(function () {
+                                    context.append(contentData.substr(start+i*limit,limit));
+                                    i++;
+                                if(i==size){
+                                    clearInterval(timmer);
+                                    next.text('加载完毕');
+                                }
+                            },1000);
+
+
+
+
+            preNode.remove();
+            $(this).remove();
+        });
     });
 
+    var contentData = "";
+    var limit =30;
 
 </script>
 </body>

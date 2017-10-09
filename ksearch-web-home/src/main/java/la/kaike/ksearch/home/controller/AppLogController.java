@@ -12,11 +12,18 @@ import la.kaike.ksearch.model.bo.applog.AppLogBO;
 import la.kaike.ksearch.model.vo.applog.AppLogIdVO;
 import la.kaike.ksearch.model.vo.applog.AppLogVO;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 /**
  * app日志查询管理
@@ -26,6 +33,8 @@ import javax.annotation.Resource;
 @Controller
 @RequestMapping("/applog")
 public class AppLogController extends BaseController {
+
+    private final static Logger log = LoggerFactory.getLogger(AppLogController.class);
 
     @Resource
     private AppLogService appLogService;
@@ -66,5 +75,39 @@ public class AppLogController extends BaseController {
     public Response detail(AppLogIdVO appLogIdVO) throws Exception {
         AppLogBO appLogBO = appLogService.queryById(appLogIdVO);
         return succeed(appLogBO);
+    }
+
+    @RequestMapping("download")
+    public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        AppLogIdVO appLogIdVO = new AppLogIdVO();
+        String id = request.getParameter("id");
+        String clusterName = request.getParameter("clusterName");
+        appLogIdVO.setId(id);
+        appLogIdVO.setClusterName(clusterName);
+        AppLogBO appLogBO = appLogService.queryById(appLogIdVO);
+
+        String fileName = appLogBO.getClientToken()+"_"+appLogBO.getUploadDate();
+        OutputStream os = new BufferedOutputStream(response.getOutputStream());
+        try {
+            response.setContentType("application/octet-stream");
+            if (request.getHeader("User-Agent").toUpperCase().indexOf("MSIE") > 0) {   //IE浏览器
+                fileName = URLEncoder.encode(fileName + ".log", "UTF-8");
+            } else {
+                fileName = URLDecoder.decode(fileName + ".log","UTF-8");//其他浏览器
+            }
+
+            response.setHeader("Content-disposition", "attachment; filename="
+                    + new String(fileName.getBytes("utf-8"), "ISO8859-1")); // 指定下载的文件名
+            os.write(appLogBO.getContentData().getBytes("UTF-8"));
+            os.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error("download fail ",e);
+        } finally {
+            if(os != null){
+                os.close();
+            }
+        }
+
     }
 }
