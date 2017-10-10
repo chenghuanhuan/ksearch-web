@@ -42,6 +42,7 @@
                 /console/**=authc
                 /index/**=authc
                 /dataview/**=authc
+                /applog/**=authc
                 /query/**=authc
                 /user/**=authc
                 /edit=authc,roles["edit"],perms["delete1"]
