@@ -125,7 +125,7 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="osVersion" placeholder="支持模糊查询"  class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="osVersion" placeholder="支持前缀模糊查询"  class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
                                 </div>
@@ -167,7 +167,7 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="brand" name="brand" placeholder="支持模糊查询" class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="brand" name="brand" placeholder="支持前缀模糊查询" class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
 
@@ -198,7 +198,7 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="deviceModel" name="deviceModel" placeholder="支持模糊查询" class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="deviceModel" name="deviceModel" placeholder="支持前缀模糊查询" class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
 

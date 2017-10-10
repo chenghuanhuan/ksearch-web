@@ -57,7 +57,7 @@ public class AppLogServiceImpl implements AppLogService {
         }
 
         if (StringUtils.isNotEmpty(appLogVO.getOsVersion())){
-            boolQueryBuilder.filter(prefixQuery("osVersion",appLogVO.getOsVersion()));
+            boolQueryBuilder.filter(prefixQuery("osVersion",appLogVO.getOsVersion().toLowerCase()));
         }
 
         if (StringUtils.isNotEmpty(appLogVO.getClientToken())){

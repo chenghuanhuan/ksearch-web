@@ -184,30 +184,33 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         TransportClient client = ElasticClient.getClient(addIndexVO.getClusterName());
         String defaultSetting = "{" +
                 "    \"analysis\":{" +
-                "        \"analyzer\":{" +
-                "            \"ik_en_max_word\":{" +
-                "                \"type\":\"custom\"," +
-                "                \"char_filter\":[" +
-                "                    \"html_strip\"" +
-                "                ]," +
-                "                \"tokenizer\":\"ik_max_word\"," +
-                "                \"filter\":[" +
-                "                    \"stemmer\"," +
-                "                    \"stop\"" +
-                "                ]" +
-                "            }," +
-                "            \"ik_en_smart\":{" +
-                "                \"type\":\"custom\"," +
-                "                \"char_filter\":[" +
-                "                    \"html_strip\"" +
-                "                ]," +
-                "                \"tokenizer\":\"ik_smart\"," +
-                "                \"filter\":[" +
-                "                    \"stemmer\"," +
-                "                    \"stop\"" +
-                "                ]" +
-                "            }" +
-                "        }" +
+                    "    \"analyzer\": {" +
+                    "        \"ik_en_max_word\": {" +
+                    "          \"type\": \"custom\"," +
+                    "          \"char_filter\":  [\"html_strip\"]," +
+                    "          \"tokenizer\": \"ik_max_word\"," +
+                    "          \"filter\": [" +
+                    "            \"stemmer\"," +
+                    "            \"stop\"" +
+                    "          ]" +
+                    "        }," +
+                    "        \"ik_en_smart\": {" +
+                    "          \"type\": \"custom\"," +
+                    "          \"char_filter\":  [\"html_strip\"]," +
+                    "          \"tokenizer\": \"ik_smart\"," +
+                    "          \"filter\": [" +
+                    "            \"stemmer\"," +
+                    "            \"stop\"" +
+                    "          ]" +
+                    "        }," +
+                    "        \"keyword_lowercase\": {" +
+                    "          \"type\": \"custom\"," +
+                    "          \"tokenizer\": \"keyword\"," +
+                    "          \"filter\": [" +
+                    "            \"lowercase\"" +
+                    "          ]" +
+                    "        }" +
+                    "      }"+
                 "    }" +
                 "}";
         Map<String,Object> setting = JSON.parseObject(defaultSetting,Map.class);

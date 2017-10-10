@@ -84,6 +84,7 @@
                                 <#--<option value="chinese">chinese （中文分词）</option>-->
                                 <option value="ik_en_max_word">ik_en_max_word（中英文混合分词，细粒度）</option>
                                 <option value="ik_en_smart">ik_en_smart（中英文混合分词，粗粒度）</option>
+                                <option value="keyword_lowercase">keyword_lowercase</option>
                                 <option value="pattern">pattern</option>
                                 <option value="simple">simple</option>
                                 <option value="whitespace">whitespace</option>
