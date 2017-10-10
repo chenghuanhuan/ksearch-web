@@ -66,13 +66,13 @@ public class AppLogBO {
     /**
      * 日志上报时间
      */
-    private String uploadDate;
+    private Long uploadDate;
 
-    public String getUploadDate() {
+    public Long getUploadDate() {
         return uploadDate;
     }
 
-    public void setUploadDate(String uploadDate) {
+    public void setUploadDate(Long uploadDate) {
         this.uploadDate = uploadDate;
     }
 

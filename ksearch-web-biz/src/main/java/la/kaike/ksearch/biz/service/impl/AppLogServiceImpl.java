@@ -11,6 +11,7 @@ import la.kaike.ksearch.model.bo.applog.AppLogBO;
 import la.kaike.ksearch.model.vo.applog.AppLogIdVO;
 import la.kaike.ksearch.model.vo.applog.AppLogVO;
 import la.kaike.ksearch.util.util.BeanUtil;
+import la.kaike.platform.common.lang.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -21,6 +22,7 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -40,7 +42,7 @@ public class AppLogServiceImpl implements AppLogService {
     private static final String TYPE = "applog";
 
     @Override
-    public PageResponse query(AppLogVO appLogVO) {
+    public PageResponse query(AppLogVO appLogVO) throws ParseException {
         PageResponse pageResponse = new PageResponse();
 
         TransportClient client = ElasticClient.getClient(appLogVO.getClusterName());
@@ -76,7 +78,8 @@ public class AppLogServiceImpl implements AppLogService {
         }
 
         if (StringUtils.isNotEmpty(appLogVO.getUploadDate())){
-            boolQueryBuilder.filter(rangeQuery("uploadDate").gte(appLogVO.getStartTime()).lte(appLogVO.getEndTime()));
+            boolQueryBuilder.filter(rangeQuery("uploadDate").gte(DateUtils.parseDate(appLogVO.getStartTime(),"yyyy-MM-dd HH:mm:ss").getTime())
+                    .lte(DateUtils.parseDate(appLogVO.getEndTime(),"yyyy-MM-dd HH:mm:ss").getTime()));
         }
 
         if (StringUtils.isNotEmpty(appLogVO.getBrand())){
@@ -141,5 +144,9 @@ public class AppLogServiceImpl implements AppLogService {
         Map<String,Object> objectMap = response.getSourceAsMap();
         AppLogBO appLogBO = BeanUtil.mapToObject(objectMap,AppLogBO.class);
         return appLogBO;
+    }
+
+    public static void main(String[] args) throws ParseException {
+        System.out.println(DateUtils.parseDate("2017-10-10 00:00:00","yyyy-MM-dd HH:mm:ss").getTime());
     }
 }

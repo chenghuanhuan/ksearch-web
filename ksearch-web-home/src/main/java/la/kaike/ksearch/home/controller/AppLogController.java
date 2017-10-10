@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.text.ParseException;
 
 /**
  * app日志查询管理
@@ -51,7 +52,7 @@ public class AppLogController extends BaseController {
      */
     @RequestMapping("query")
     @ResponseBody
-    public Response query(AppLogVO appLogVO){
+    public Response query(AppLogVO appLogVO) throws ParseException {
         if (StringUtils.isNotEmpty(appLogVO.getUploadDate())) {
             String uploadDate = appLogVO.getUploadDate();
             String[] arr = uploadDate.split(" - ");

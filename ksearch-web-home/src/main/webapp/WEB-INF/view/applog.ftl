@@ -424,6 +424,7 @@
             var preNode = $(this).prev();
             preNode.append(contentData.substr(start,limit));
             if(start+limit>=contentData.length){
+                $(this).next().remove();
                 $(this).remove();
             }
             $(this).data("start",start+limit);
