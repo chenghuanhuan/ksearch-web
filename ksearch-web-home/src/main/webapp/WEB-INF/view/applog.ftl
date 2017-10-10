@@ -367,7 +367,10 @@
                 title: '<span class="text-primary">imei</span>'
             }, {
                 field: 'uploadDate',
-                title: '<span class="text-primary">上报时间</span>'
+                title: '<span class="text-primary">上报时间</span>',
+                formatter: function (value, row, index) {
+                    return formatDateTime(row.uploadDate);
+                }
             }],
             silentSort:false,
             queryParams:function (params) {
@@ -456,6 +459,21 @@
     var contentData = "";
     var limit =5000;
 
+    function formatDateTime(inputTime) {
+        var date = new Date(inputTime);
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        second = second < 10 ? ('0' + second) : second;
+        return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;
+    };
 </script>
 </body>
 </html>
