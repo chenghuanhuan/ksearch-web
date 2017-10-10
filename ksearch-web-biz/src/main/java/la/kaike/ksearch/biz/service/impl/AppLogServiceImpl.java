@@ -20,6 +20,7 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -115,6 +116,9 @@ public class AppLogServiceImpl implements AppLogService {
         //builder.setSource(SearchSourceBuilder)
         // 查询总条数
         SearchResponse countRes = builder.setSize(0).get();
+
+        builder.addSort("uploadDate", SortOrder.DESC);
+
         pageResponse.setTotal(countRes.getHits().getTotalHits());
         if (countRes.getHits().getTotalHits()>0) {
 

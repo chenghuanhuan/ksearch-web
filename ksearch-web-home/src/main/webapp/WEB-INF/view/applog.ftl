@@ -320,14 +320,14 @@
             //toolbar:"#toolbar",
             sidePagination:'server',
             url:"/applog/query",
-            pageList:[10, 20, 30],
+            pageList:[5, 10],
             pagination:true,
             detailView:true,
             //showRefresh:true,
             showColumns:true,
             //showPaginationSwitch:true,
             //showFooter:true,
-            pageSize:10,
+            pageSize:5,
             columns: [{
                 field: 'version',
                 title: '<span class="text-primary">app版本号</span>'
