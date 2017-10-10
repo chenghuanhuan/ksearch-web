@@ -183,7 +183,7 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="channel" name="channel" placeholder="支持模糊查询" class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="channel" name="channel" placeholder="" class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
                                 </div>
