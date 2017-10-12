@@ -213,7 +213,7 @@
                         formatter: function (value, row, index) {
 							var btns = '<div class="visible-md visible-lg hidden-sm hidden-xs btn-group">'
                                     +'<button class="btn btn-xs btn-success tooltip-success refresh" data-rel="tooltip" title="刷新">'
-                                    +'<i class="icon-ok bigger-120"></i>'
+                                    +'<i class="icon-refresh bigger-120"></i>'
                                     +'</button>';
                             if (row.status === "OPEN") {
                                 btns+='<button class="btn btn-xs btn-info tooltip-info close-index" data-rel="tooltip" title="关闭">'
@@ -1262,7 +1262,9 @@
                 li.data("type",pro_type);
                 li.data("ignore_above",ignore_above);
                 li.data("null_value",null_value);
+                var child = $($(li[0]).find(".dd2-content")[0]).children();
                 $($(li[0]).find(".dd2-content")[0]).html(pro_name+" ("+pro_type+")");
+                $($(li[0]).find(".dd2-content")[0]).append(child);
                 /*li.data("boost",boost);*/
                 if(li.data("new")=="1"&&(pro_type==="nested"||pro_type==="object")){
                     if(li.find(".icon-plus").length==0) {
