@@ -196,8 +196,8 @@
 
 	<root>
 		<level value="${sys_loggingLevel}" />
-		<!--<appender-ref ref="DEFAULT-APPENDER" />
-		<appender-ref ref="SYS-ERROR-APPENDER" />-->
-		<appender-ref ref="STDOUT" />
+		<appender-ref ref="DEFAULT-APPENDER" />
+		<appender-ref ref="SYS-ERROR-APPENDER" />
+		<!--<appender-ref ref="STDOUT" />-->
 	</root>
 </configuration>
