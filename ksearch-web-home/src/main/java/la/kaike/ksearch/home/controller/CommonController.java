@@ -117,7 +117,7 @@ public class CommonController extends BaseController {
             fieldsVO.setFieldName(propertiesVO.getName());
             fieldsVO.setType(propertiesVO.getType());
             fieldsVOList.add(fieldsVO);
-            if (propertiesVO.getType().equals("object")||propertiesVO.getType().equals("nested")){
+            if (propertiesVO.getType()!=null&&(propertiesVO.getType().equals("object")||propertiesVO.getType().equals("nested"))){
                 List<FieldsVO> children = converFieldList(propertiesVO.getChildren());
                 fieldsVO.setChildren(children);
             }
