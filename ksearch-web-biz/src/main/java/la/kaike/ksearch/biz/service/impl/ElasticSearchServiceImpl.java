@@ -57,6 +57,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -477,6 +479,65 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         return res;
     }
 
+    @Override
+    public void clearOldIndex(String clusterName) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+        Calendar nowC = Calendar.getInstance();
+        int year = nowC.get(Calendar.YEAR);
+        logger.info("当前日期:"+sdf.format(nowC.getTime()));
+        nowC.add(Calendar.DAY_OF_MONTH,-7);
+
+        List<IndicesVO> indicesVOList = getIndicesVO(clusterName);
+
+        // 删除小于此月份的所有索引
+        int month = nowC.get(Calendar.MONTH)+1;
+        int day = nowC.get(Calendar.DAY_OF_MONTH);
+        List<String> deleteIndexList = new ArrayList<>();
+        /*for (int i=1;i<month;i++){
+            StringBuffer errorIndexName = new StringBuffer("nginx_error_log_");
+            errorIndexName.append(year).append("-").append(i).append("*");
+            deleteIndexList.add(errorIndexName.toString());
+
+            StringBuffer accessIndexName = new StringBuffer("nginx_access_log_");
+            accessIndexName.append(year).append("-").append(i).append("*");
+            deleteIndexList.add(accessIndexName.toString());
+        }*/
+
+        // 删除小于此日期的所有索引
+        /*for (int i=1;i<=day;i++){
+            StringBuffer errorIndexName = new StringBuffer("nginx_error_log_");
+            errorIndexName.append(year).append("-").append(i).append(month).append("_").append("*");
+            deleteIndexList.add(errorIndexName.toString());
+
+            StringBuffer accessIndexName = new StringBuffer("nginx_access_log_");
+            accessIndexName.append(year).append("-").append(i).append(month).append("_").append("*");
+            deleteIndexList.add(accessIndexName.toString());
+        }*/
+
+        // 过滤出需要删除的index
+        if (indicesVOList!=null&& indicesVOList.size()>0){
+            for (IndicesVO indicesVO:indicesVOList){
+                String index = indicesVO.getIndex();
+                if (index.startsWith("nginx_access_log_")||index.startsWith("nginx_error_log_")){
+                    String [] strs = index.split("log_");
+                    String strDate = strs[1];
+                    Date date = sdf.parse(strDate);
+                    if (date.getTime()<=nowC.getTimeInMillis()){
+                        deleteIndexList.add(index);
+                    }
+                }
+            }
+
+            logger.info(deleteIndexList.toString());
+            if (CollectionUtils.isNotEmpty(deleteIndexList)) {
+                TransportClient client = ElasticClient.getClient(clusterName);
+                client.admin().indices().prepareDelete(deleteIndexList.toArray(new String[]{})).get();
+            }
+        }
+
+
+    }
+
     private JestResult postAndPut(String dsl,String uri,JestClient client) throws IOException {
         //method = MethodNameEnum.POST.getValue();
         IndexExt index = new IndexExt.Builder(dsl).setURI(uri).build();
@@ -528,4 +589,15 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         return propertiesVOList;
     }
 
+    public static void main(String[] args) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar nowC = Calendar.getInstance();
+        logger.info("当前日期:"+sdf.format(nowC.getTime()));
+        nowC.add(Calendar.DATE,-7);
+        System.out.println(sdf.format(nowC.getTime()));
+        int month = nowC.get(Calendar.MONTH);
+        int day = nowC.get(Calendar.DAY_OF_MONTH);
+        System.out.println(month);
+        System.out.println(day);
+    }
 }

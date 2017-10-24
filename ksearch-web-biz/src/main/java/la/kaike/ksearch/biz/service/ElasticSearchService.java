@@ -13,6 +13,7 @@ import la.kaike.ksearch.model.vo.query.SimpleQueryReqVO;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -139,4 +140,9 @@ public interface ElasticSearchService {
      * @param clearDataReqVO
      */
     String clearData(ClearDataReqVO clearDataReqVO) throws IOException;
+
+    /**
+     * 清除较早的索引
+     */
+    void clearOldIndex(String clusterName) throws ParseException;
 }
