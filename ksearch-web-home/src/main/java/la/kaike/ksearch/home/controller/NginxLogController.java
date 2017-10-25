@@ -9,6 +9,7 @@ import la.kaike.ksearch.home.base.BaseController;
 import la.kaike.ksearch.model.PageResponse;
 import la.kaike.ksearch.model.Response;
 import la.kaike.ksearch.model.vo.nginx.NginxErrorLogVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -39,6 +40,14 @@ public class NginxLogController extends BaseController{
     @RequestMapping("/error/list")
     @ResponseBody()
     public Response errorList(NginxErrorLogVO nginxErrorLogVO) throws ParseException {
+        if (StringUtils.isNotEmpty(nginxErrorLogVO.getTimestamp())) {
+            String uploadDate = nginxErrorLogVO.getTimestamp();
+            String[] arr = uploadDate.split(" - ");
+            String startTime = arr[0];
+            String endTime = arr[1];
+            nginxErrorLogVO.setStartTime(startTime);
+            nginxErrorLogVO.setEndTime(endTime);
+        }
         PageResponse pageResponse = nginxLogService.errorList(nginxErrorLogVO);
         return succeed(pageResponse);
     }

@@ -20,10 +20,7 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
 import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
@@ -66,12 +63,23 @@ public class NginxLogServiceImpl implements NginxLogService {
         }
 
         if (StringUtils.isNotEmpty(nginxErrorLogVO.getTimestamp())){
-            builder.setQuery(rangeQuery("@timestamp").gte(DateUtils.parseDate(nginxErrorLogVO.getStartTime(),"yyyy-MM-dd HH:mm:ss").getTime())
-                    .lte(DateUtils.parseDate(nginxErrorLogVO.getEndTime(),"yyyy-MM-dd HH:mm:ss").getTime()));
+            Calendar start = Calendar.getInstance();
+            start.setTime(DateUtils.parseDate(nginxErrorLogVO.getStartTime(),"yyyy-MM-dd HH:mm:ss"));
+            start.add(Calendar.HOUR_OF_DAY,8);
+
+            Calendar end = Calendar.getInstance();
+            end.setTime(DateUtils.parseDate(nginxErrorLogVO.getEndTime(),"yyyy-MM-dd HH:mm:ss"));
+            end.add(Calendar.HOUR_OF_DAY,8);
+            builder.setQuery(rangeQuery("@timestamp").gte(start.getTimeInMillis())
+                    .lte(end.getTimeInMillis()));
         }
 
         if (StringUtils.isNotEmpty(nginxErrorLogVO.getMessage())){
-            builder.setQuery(matchQuery("message",nginxErrorLogVO.getMessage()));
+            builder.setQuery(matchQuery("nginx.error.message",nginxErrorLogVO.getMessage()));
+        }
+
+        if (StringUtils.isNotEmpty(nginxErrorLogVO.getLevel())){
+            builder.setQuery(matchQuery("nginx.error.level",nginxErrorLogVO.getLevel()));
         }
 
 
