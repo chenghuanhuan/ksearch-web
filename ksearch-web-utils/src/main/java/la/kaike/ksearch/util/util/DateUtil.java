@@ -15,6 +15,8 @@
  */
 package la.kaike.ksearch.util.util;
 
+import la.kaike.platform.common.lang.DateUtils;
+
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -331,4 +333,11 @@ public class DateUtil {
 		System.out.println(getAfterDayWeek("3"));
 	}
 
+
+	public static Calendar toUTCTime(String time) throws ParseException {
+		Calendar end = Calendar.getInstance();
+		end.setTime(DateUtils.parseDate(time,"yyyy-MM-dd HH:mm:ss"));
+		end.add(Calendar.HOUR_OF_DAY,8);
+		return end;
+	}
 }

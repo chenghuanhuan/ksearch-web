@@ -5,6 +5,7 @@
 package la.kaike.ksearch.biz.service;
 
 import la.kaike.ksearch.model.PageResponse;
+import la.kaike.ksearch.model.vo.nginx.NginxAccessLogVO;
 import la.kaike.ksearch.model.vo.nginx.NginxErrorLogVO;
 
 import java.text.ParseException;
@@ -20,4 +21,12 @@ public interface NginxLogService {
      * @return
      */
     PageResponse errorList(NginxErrorLogVO errorLogVO) throws ParseException;
+
+
+    /**
+     * 访问日志
+     * @param accessLogVO
+     * @return
+     */
+    PageResponse accessList(NginxAccessLogVO accessLogVO) throws ParseException;
 }

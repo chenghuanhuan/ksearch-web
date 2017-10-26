@@ -8,6 +8,7 @@ import la.kaike.ksearch.biz.service.NginxLogService;
 import la.kaike.ksearch.home.base.BaseController;
 import la.kaike.ksearch.model.PageResponse;
 import la.kaike.ksearch.model.Response;
+import la.kaike.ksearch.model.vo.nginx.NginxAccessLogVO;
 import la.kaike.ksearch.model.vo.nginx.NginxErrorLogVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -28,10 +29,16 @@ public class NginxLogController extends BaseController{
     @Resource
     private NginxLogService nginxLogService;
 
-    @RequestMapping
-    public String index(){
+    @RequestMapping("error")
+    public String error(){
         return "nginx_error_log";
     }
+
+    @RequestMapping("access")
+    public String access(){
+        return "nginx_access_log";
+    }
+
 
     /**
      * 查询错误日志
@@ -41,24 +48,34 @@ public class NginxLogController extends BaseController{
     @ResponseBody()
     public Response errorList(NginxErrorLogVO nginxErrorLogVO) throws ParseException {
         if (StringUtils.isNotEmpty(nginxErrorLogVO.getTimestamp())) {
-            String uploadDate = nginxErrorLogVO.getTimestamp();
-            String[] arr = uploadDate.split(" - ");
-            String startTime = arr[0];
-            String endTime = arr[1];
-            nginxErrorLogVO.setStartTime(startTime);
-            nginxErrorLogVO.setEndTime(endTime);
+            String nginxErrorLogVOTimestamp = nginxErrorLogVO.getTimestamp();
+            String[] arr = nginxErrorLogVOTimestamp.split(" - ");
+            nginxErrorLogVO.setStartTime(arr[0]);
+            nginxErrorLogVO.setEndTime(arr[1]);
         }
         PageResponse pageResponse = nginxLogService.errorList(nginxErrorLogVO);
         return succeed(pageResponse);
     }
 
+
     /**
-     * 查询错误日志
+     * 访问日志
+     * @param accessLogVO
      * @return
+     * @throws ParseException
      */
     @RequestMapping("/access/list")
     @ResponseBody()
-    public Response accessList(){
-        return succeed();
+    public Response accessList(NginxAccessLogVO accessLogVO) throws ParseException {
+        if (StringUtils.isNotEmpty(accessLogVO.getTimestamp())) {
+            String accessLogVOTimestamp = accessLogVO.getTimestamp();
+            String[] arr = accessLogVOTimestamp.split(" - ");
+            accessLogVO.setEndTime(arr[1]);
+            accessLogVO.setStartTime(arr[0]);
+        }
+        PageResponse pageResponse = nginxLogService.accessList(accessLogVO);
+        return succeed(pageResponse);
     }
+
+
 }

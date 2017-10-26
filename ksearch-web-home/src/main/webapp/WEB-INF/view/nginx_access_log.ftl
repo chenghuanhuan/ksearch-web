@@ -109,14 +109,31 @@
                                         </div>
                                     </div>
 
-                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">错误等级:</label>
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">来源:</label>
 
                                     <div class="col-xs-12 col-sm-5">
                                         <div class="clearfix">
-                                            <select id="level" name="level" class="width-100 select2"  data-placeholder="Click to Choose...">
-                                                <option value="" selected> </option>
-                                                <option value="1">error</option>
-                                                <option value="2">notice</option>
+                                            <select id="source" name="source" class="width-100 select2"  data-placeholder="Click to Choose...">
+                                                <option value="" selected>--</option>
+                                                <option value="/var/log/nginx/log/www.kaike.la.log">www.kaike.la.log</option>
+                                                <option value="/var/log/nginx/log/mobile.kaike.la.log">mobile.kaike.la.log</option>
+                                                <option value="/var/log/nginx/log/auth.kaike.la.log">auth.kaike.la.log</option>
+                                                <option value="/var/log/nginx/log/kapi.kaike.la.log">kapi.kaike.la.log</option>
+                                                <option value="/var/log/nginx/log/m.kaike.la.log">m.kaike.la.log</option>
+                                                <option value="/var/log/nginx/log/static.kaike.la.log">static.kaike.la.log</option>
+                                                <option value="/var/log/nginx/log/www.estudy.cn.log">www.estudy.cn.log</option>
+                                                <option value="/var/log/nginx/log/member.kaike.la.log">member.kaike.la.log</option>
+                                                <option value="/var/log/nginx/log/community.kaike.la.log">community.kaike.la.log</option>
+                                                <option value="/var/log/nginx/log/access-all.kaike.la.log">access-all.kaike.la.log</option>
+                                                <option value="/var/log/nginx/log/wechat.kaike.la.log">wechat.kaike.la.log</option>
+                                                <option value="/var/log/nginx/log/stream.kaike.la.log">stream.kaike.la.log</option>
+                                                <option value="/var/log/nginx/log/fm.kaike.la.log">fm.kaike.la.log</option>
+                                                <option value="/var/log/nginx/log/img0.kaike.la.log">img0.kaike.la.log</option>
+                                                <option value="/var/log/nginx/log/my.kaike.la.log">my.kaike.la.log</option>
+                                                <option value="/var/log/nginx/log/zimg.kaike.la.log">zimg.kaike.la.log</option>
+                                                <option value="/var/log/nginx/log/pay.kaike.la.log">pay.kaike.la.log</option>
+                                                <option value="/var/log/nginx/log/bss.kaike.la.log">bss.kaike.la.log</option>
+                                                <option value="/var/log/nginx/log/static.estudy.cn.log">static.estudy.cn.log</option>
                                             </select>
                                         </div>
                                     </div>
@@ -127,11 +144,11 @@
 
                             <div class="col-xs-12">
                                 <div class="form-group">
-                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">connection_id:</label>
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">IP:</label>
 
                                     <div class="col-xs-12 col-sm-5">
                                         <div class="clearfix">
-                                            <input type="text" id="connectionId"  class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="ip"  class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
 
@@ -151,11 +168,19 @@
                             <div class="col-xs-12">
                                 <div class="form-group">
 
-                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">错误信息:</label>
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">message:</label>
 
-                                    <div class="col-xs-12 col-sm-11">
+                                    <div class="col-xs-12 col-sm-5">
                                         <div class="clearfix">
                                             <input type="text" id="message"  class="col-xs-12 col-sm-12" />
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">错误码:</label>
+
+                                    <div class="col-xs-12 col-sm-5">
+                                        <div class="clearfix">
+                                            <input type="text" id="responseCode"  class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
                                 </div>
@@ -260,7 +285,7 @@
             search:false,
             //toolbar:"#toolbar",
             sidePagination:'server',
-            url:"/nginx/error/list",
+            url:"/nginx/access/list",
             pageList:[10, 20,30],
             pagination:true,
             //detailView:true,
@@ -273,37 +298,56 @@
                 field: '@timestamp',
                 title: '<span class="text-primary">时间</span>'
             }, {
+                field: 'nginx.access.url',
+                title: '<span class="text-primary">请求路径</span>'
+            }, {
                 field: 'beat.hostname',
                 title: '<span class="text-primary">机器名</span>'
             }, {
-                field: 'nginx.error.level',
-                title: '<span class="text-primary">错误等级</span>'
+                field: 'nginx.access.body_sent.bytes',
+                title: '<span class="text-primary">body数据量（byte）</span>'
             }, {
-                field: 'nginx.error.connection_id',
-                title: '<span class="text-primary">connection_id</span>'
+                field: 'message',
+                title: '<span class="text-primary">message</span>'
             }, {
-                field: 'nginx.error.message',
-                title: '<span class="text-primary">错误信息</span>'
+                field: 'nginx.access.geoip.city_name',
+                title: '<span class="text-primary">所在城市</span>'
             }, {
-                field: 'nginx.error.pid',
-                title: '<span class="text-primary">pid</span>'
-            }, {
-                field: 'nginx.error.tid',
-                title: '<span class="text-primary">tid</span>'
+                field: 'nginx.access.geoip.country_name',
+                title: '<span class="text-primary">所在国家</span>'
             }, {
                 field: 'source',
                 title: '<span class="text-primary">来源</span>'
             }, {
-                field: 'type',
-                title: '<span class="text-primary">类型</span>'
+                field: 'nginx.access.remote_ip',
+                title: '<span class="text-primary">ip地址</span>'
+            }, {
+                field: 'nginx.access.response_code',
+                title: '<span class="text-primary">返回码</span>'
+            }, {
+                field: 'nginx.access.remote_ip',
+                title: '<span class="text-primary">ip地址</span>'
+            }, {
+                field: 'nginx.access.referrer',
+                title: '<span class="text-primary">referrer</span>'
+            }, {
+                field: 'nginx.access.user_agent',
+                title: '<span class="text-primary">user_agent</span>',
+                formatter: function (value, row, index) {
+                    if (value==null||value==""){
+                        return value;
+                    }
+                    return JSON.stringify(value);
+                }
             }],
             silentSort:false,
             queryParams:function (params) {
                 params.timestamp = $.trim($("#timestamp").val());
                 params.hostname = $.trim($("#hostname").val());
-                params.connectionId = $.trim($("#connectionId").val());
+                params.ip = $.trim($("#ip").val());
                 params.message = $.trim($("#message").val());
-                params.level = $.trim($("#level").val());
+                params.responseCode = $.trim($("#responseCode").val());
+                params.source = $.trim($("#source").val());
                 params.clusterName = clusterName;
                 return params;
             },

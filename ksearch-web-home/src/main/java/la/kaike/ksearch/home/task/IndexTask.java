@@ -27,8 +27,8 @@ public class IndexTask {
     private ElasticSearchService elasticSearchService;
 
     //每天凌晨1:00执行
-    //@Scheduled(cron = "0 00 1 * * ?")
-    @Scheduled(cron = "10 * * * * ?")
+    @Scheduled(cron = "0 00 1 * * ?")
+    //@Scheduled(cron = "10 * * * * ?")
     public void TestTask() {
 
         String clusterNames = IKuKoConfDataGetter.getStringValue("ksearch.cluster.name");

@@ -7,12 +7,14 @@ package la.kaike.ksearch.biz.service.impl;
 import la.kaike.ksearch.biz.es.ElasticClient;
 import la.kaike.ksearch.biz.service.NginxLogService;
 import la.kaike.ksearch.model.PageResponse;
+import la.kaike.ksearch.model.vo.nginx.NginxAccessLogVO;
 import la.kaike.ksearch.model.vo.nginx.NginxErrorLogVO;
-import la.kaike.platform.common.lang.DateUtils;
+import la.kaike.ksearch.util.util.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -22,8 +24,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.util.*;
 
-import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
-import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -43,7 +44,7 @@ public class NginxLogServiceImpl implements NginxLogService {
 
         // 索引
         builder = client.prepareSearch("nginx_error_log_*");
-
+        BoolQueryBuilder boolQueryBuilder = boolQuery();
 
         // 类型
         builder.setTypes("error_log");
@@ -54,35 +55,31 @@ public class NginxLogServiceImpl implements NginxLogService {
         }
 
         if (nginxErrorLogVO.getConnectionId()!=null){
-            builder.setQuery(QueryBuilders.matchQuery("nginx.error.connection_id",nginxErrorLogVO.getConnectionId()));
+            boolQueryBuilder.must((QueryBuilders.matchQuery("nginx.error.connection_id",nginxErrorLogVO.getConnectionId())));
         }
 
 
         if (StringUtils.isNotEmpty(nginxErrorLogVO.getHostname())){
-            builder.setQuery(QueryBuilders.termQuery("beat.hostname",nginxErrorLogVO.getHostname()));
+            boolQueryBuilder.must((QueryBuilders.termQuery("beat.hostname",nginxErrorLogVO.getHostname())));
         }
 
         if (StringUtils.isNotEmpty(nginxErrorLogVO.getTimestamp())){
-            Calendar start = Calendar.getInstance();
-            start.setTime(DateUtils.parseDate(nginxErrorLogVO.getStartTime(),"yyyy-MM-dd HH:mm:ss"));
-            start.add(Calendar.HOUR_OF_DAY,8);
-
-            Calendar end = Calendar.getInstance();
-            end.setTime(DateUtils.parseDate(nginxErrorLogVO.getEndTime(),"yyyy-MM-dd HH:mm:ss"));
-            end.add(Calendar.HOUR_OF_DAY,8);
-            builder.setQuery(rangeQuery("@timestamp").gte(start.getTimeInMillis())
+            Calendar start = DateUtil.toUTCTime(nginxErrorLogVO.getStartTime());
+            Calendar end = DateUtil.toUTCTime(nginxErrorLogVO.getEndTime());
+            boolQueryBuilder.must(rangeQuery("@timestamp").gte(start.getTimeInMillis())
                     .lte(end.getTimeInMillis()));
         }
 
         if (StringUtils.isNotEmpty(nginxErrorLogVO.getMessage())){
-            builder.setQuery(matchQuery("nginx.error.message",nginxErrorLogVO.getMessage()));
+            boolQueryBuilder.must(matchQuery("nginx.error.message",nginxErrorLogVO.getMessage()));
         }
 
         if (StringUtils.isNotEmpty(nginxErrorLogVO.getLevel())){
-            builder.setQuery(matchQuery("nginx.error.level",nginxErrorLogVO.getLevel()));
+            boolQueryBuilder.must(matchQuery("nginx.error.level",nginxErrorLogVO.getLevel()));
         }
 
 
+        builder.setQuery(boolQueryBuilder);
         SearchResponse countRes = builder.setSize(0).get();
         pageResponse.setTotal(countRes.getHits().getTotalHits());
         List<Map<String, Object>> hashMapList = new ArrayList<>();
@@ -106,6 +103,78 @@ public class NginxLogServiceImpl implements NginxLogService {
         pageResponse.setRows(hashMapList);
         return pageResponse;
 
+    }
+
+    @Override
+    public PageResponse accessList(NginxAccessLogVO accessLogVO) throws ParseException {
+
+        PageResponse pageResponse = new PageResponse();
+
+        TransportClient client = ElasticClient.getClient(accessLogVO.getClusterName());
+
+        // 索引
+        SearchRequestBuilder builder = client.prepareSearch("nginx_access_log_*");
+
+        BoolQueryBuilder boolQueryBuilder = boolQuery();
+        // 类型
+        builder.setTypes("access_log");
+
+        // 排序
+        if (accessLogVO.getSort()!=null && accessLogVO.getOrder()!=null){
+            builder.addSort(accessLogVO.getSort(),SortOrder.valueOf(accessLogVO.getOrder().toUpperCase()));
+        }
+
+
+        if (StringUtils.isNotEmpty(accessLogVO.getHostname())){
+            boolQueryBuilder.must(termQuery("beat.hostname",accessLogVO.getHostname()));
+        }
+
+        if (StringUtils.isNotEmpty(accessLogVO.getTimestamp())){
+            Calendar start = DateUtil.toUTCTime(accessLogVO.getStartTime());
+            Calendar end = DateUtil.toUTCTime(accessLogVO.getEndTime());
+            boolQueryBuilder.must(rangeQuery("@timestamp").gte(start.getTimeInMillis())
+                    .lte(end.getTimeInMillis()));
+        }
+
+        if (StringUtils.isNotEmpty(accessLogVO.getMessage())){
+            boolQueryBuilder.must(matchQuery("message",accessLogVO.getMessage()));
+        }
+
+        if (StringUtils.isNotEmpty(accessLogVO.getSource())){
+            boolQueryBuilder.must(matchQuery("source",accessLogVO.getSource()));
+        }
+
+        if (StringUtils.isNotEmpty(accessLogVO.getIp())){
+            boolQueryBuilder.must(termQuery("nginx.access.geoip.ip",accessLogVO.getIp()));
+        }
+
+        if (StringUtils.isNotEmpty(accessLogVO.getResponseCode())){
+            boolQueryBuilder.must(termQuery("nginx.access.response_code",accessLogVO.getResponseCode()));
+        }
+
+        builder.setQuery(boolQueryBuilder);
+        SearchResponse countRes = builder.setSize(0).get();
+        pageResponse.setTotal(countRes.getHits().getTotalHits());
+        List<Map<String, Object>> hashMapList = new ArrayList<>();
+
+        // 查询数据
+        if (countRes.getHits().getTotalHits()>0) {
+
+            builder.setFrom(accessLogVO.getOffset())
+                    .setSize(accessLogVO.getLimit());
+            SearchResponse searchResponse = builder.get();
+            SearchHits searchHits = searchResponse.getHits();
+
+
+            Iterator<SearchHit> searchHitIterator = searchHits.iterator();
+            while (searchHitIterator.hasNext()) {
+                SearchHit hit = searchHitIterator.next();
+                Map<String, Object> map = hit.getSource();
+                hashMapList.add(map);
+            }
+        }
+        pageResponse.setRows(hashMapList);
+        return pageResponse;
     }
 
 }
