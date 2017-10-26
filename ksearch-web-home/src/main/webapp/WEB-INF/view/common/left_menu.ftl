@@ -39,6 +39,18 @@
             <span class="menu-text"> app日志 </span>
         </a>
     </li>
+    <li>
+        <a href="/nginx/access" class="left-menu">
+            <i class="icon-list-alt"></i>
+            <span class="menu-text"> nginx access日志 </span>
+        </a>
+    </li>
+    <li>
+        <a href="/nginx/error" class="left-menu">
+            <i class="icon-list-alt"></i>
+            <span class="menu-text"> nginx error日志 </span>
+        </a>
+    </li>
 
     <li>
         <a href="/user" class="left-menu">
