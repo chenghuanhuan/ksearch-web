@@ -350,8 +350,8 @@
                 title: '<span class="text-primary">upstream_addr</span>'
             }, {
                 field: 'nginx.access.upstream_response_time',
-                title: '<span class="text-primary">upstream_response_time</span>'
                 sortable:true,
+                title: '<span class="text-primary">upstream_response_time</span>'
             }, {
                 field: 'nginx.access.request_time',
                 sortable:true,
