@@ -296,15 +296,18 @@
             pageSize:10,
             columns: [{
                 field: '@timestamp',
+                sortable:true,
                 title: '<span class="text-primary">时间</span>'
             }, {
                 field: 'nginx.access.url',
+                sortable:true,
                 title: '<span class="text-primary">请求路径</span>'
             }, {
                 field: 'beat.hostname',
                 title: '<span class="text-primary">机器名</span>'
             }, {
                 field: 'nginx.access.body_sent.bytes',
+                sortable:true,
                 title: '<span class="text-primary">body数据量（byte）</span>'
             }, {
                 field: 'message',

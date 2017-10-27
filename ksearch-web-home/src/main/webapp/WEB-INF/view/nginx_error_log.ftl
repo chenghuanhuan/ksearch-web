@@ -272,6 +272,7 @@
             pageSize:10,
             columns: [{
                 field: '@timestamp',
+                sortable:true,
                 title: '<span class="text-primary">时间</span>'
             }, {
                 field: 'beat.hostname',
@@ -294,9 +295,6 @@
             }, {
                 field: 'source',
                 title: '<span class="text-primary">来源</span>'
-            }, {
-                field: 'type',
-                title: '<span class="text-primary">类型</span>'
             }],
             silentSort:false,
             queryParams:function (params) {
