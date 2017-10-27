@@ -342,6 +342,18 @@
                     }
                     return JSON.stringify(value);
                 }
+            }, {
+                field: 'nginx.access.http_x_forwarded_for',
+                title: '<span class="text-primary">http_x_forwarded_for</span>'
+            }, {
+                field: 'nginx.access.upstream_addr',
+                title: '<span class="text-primary">upstream_addr</span>'
+            }, {
+                field: 'nginx.access.upstream_response_time',
+                title: '<span class="text-primary">upstream_response_time</span>'
+            }, {
+                field: 'nginx.access.request_time',
+                title: '<span class="text-primary">request_time</span>'
             }],
             silentSort:false,
             queryParams:function (params) {
