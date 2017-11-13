@@ -7,7 +7,7 @@
 	<!-- [公共Appender] 默认 -->
 	<appender name="DEFAULT-APPENDER"
 		class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">
-		<file>${logging_root}/common-default.log</file>
+		<file>/data/logs/ksearch-web/common-default.log</file>
 		<param name="append" value="true" />
 		<encoder>
 			<charset>${sys_logging_encoding}</charset>
@@ -18,7 +18,7 @@
 	<!-- [公共Appender] 仅记录异常日志 -->
 	<appender name="SYS-ERROR-APPENDER"
 		class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">
-		<file>${logging_root}/common-error.log</file>
+		<file>/data/logs/ksearch-web/common-error.log</file>
 		<param name="append" value="true" />
 		<filter class="ch.qos.logback.classic.filter.LevelFilter">  
             <level>ERROR</level>  
@@ -34,7 +34,7 @@
 	<!-- web层统一日志 -->
 	<!--<appender name="SYS-WEB-APPENDER"-->
 		<!--class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">-->
-		<!--<file>${logging_root}/${app_name}-web.log</file>-->
+		<!--<file>/data/logs/ksearch-web/${app_name}-web.log</file>-->
 		<!--<param name="append" value="true" />-->
 		<!--<encoder>-->
 			<!--<charset>${sys_logging_encoding}</charset>-->
@@ -45,7 +45,7 @@
 	<!-- 服务层日志 -->
 	<appender name="SYS-BIZ-SERVICE-APPENDER"
 		class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">
-		<file>${logging_root}/${app_name}-biz-service.log</file>
+		<file>/data/logs/ksearch-web/${app_name}-biz-service.log</file>
 		<param name="append" value="true" />
 		<encoder>
 			<charset>${sys_logging_encoding}</charset>
@@ -56,7 +56,7 @@
 	<!-- 组件层日志 -->
 	<appender name="SYS-CORE-SERVICE-APPENDER"
 		class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">
-		<file>${logging_root}/${app_name}-core-service.log</file>
+		<file>/data/logs/ksearch-web/${app_name}-core-service.log</file>
 		<param name="append" value="true" />
 		<encoder>
 			<charset>${sys_logging_encoding}</charset>
@@ -67,7 +67,7 @@
 	<!-- DAL统一日志 -->
 	<appender name="DAL-APPENDER"
 		class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">
-		<file>${logging_root}/common-dal.log</file>
+		<file>/data/logs/ksearch-web/common-dal.log</file>
 		<param name="append" value="true" />
 		<encoder>
 			<charset>${sys_logging_encoding}</charset>
@@ -78,7 +78,7 @@
 	<!-- web层摘要日志 -->
 	<appender name="SYS-WEB-PAGE-DIGEST-APPENDER"
 		class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">
-		<file>${logging_root}/${app_name}-page-digest.log</file>
+		<file>/data/logs/ksearch-web/${app_name}-page-digest.log</file>
 		<param name="append" value="true" />
 		<encoder>
 			<charset>${sys_logging_encoding}</charset>
@@ -89,7 +89,7 @@
 	<!-- 外部系统调用本系统接口摘要 -->
 	<appender name="SYS-BIZ-SERVICE-DIGEST-APPENDER"
 		class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">
-		<file>${logging_root}/${app_name}-biz-service-digest.log</file>
+		<file>/data/logs/ksearch-web/${app_name}-biz-service-digest.log</file>
 		<param name="append" value="true" />
 		<encoder>
 			<charset>${sys_logging_encoding}</charset>
@@ -100,7 +100,7 @@
 	<!-- 调用外部接口摘要 -->
 	<appender name="SYS-INTEGRATION-DIGEST-APPENDER"
 		class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">
-		<file>${logging_root}/${app_name}-integration-digest.log</file>
+		<file>/data/logs/ksearch-web/${app_name}-integration-digest.log</file>
 		<param name="append" value="true" />
 		<encoder>
 			<charset>${sys_logging_encoding}</charset>
@@ -111,7 +111,7 @@
 	<!-- DAL接口摘要日志 -->
 	<appender name="SYS-DAL-DIGEST-APPENDER"
 		class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">
-		<file>${logging_root}/${app_name}-dal-digest.log</file>
+		<file>/data/logs/ksearch-web/${app_name}-dal-digest.log</file>
 		<param name="append" value="true" />
 		<encoder>
 			<charset>${sys_logging_encoding}</charset>
