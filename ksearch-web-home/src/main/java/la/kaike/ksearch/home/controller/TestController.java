@@ -8,7 +8,6 @@ import la.kaike.ksearch.biz.service.UserService;
 import la.kaike.ksearch.home.base.BaseController;
 import la.kaike.ksearch.home.warpper.UserWarpper;
 import la.kaike.ksearch.model.Response;
-import la.kaike.ksearch.model.vo.test.TestVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -53,10 +52,13 @@ public class TestController extends BaseController {
         return view;
     }
 
-    @RequestMapping(value = "/validate", method = RequestMethod.GET)
+    @RequestMapping(value = "/logtest", method = RequestMethod.GET)
     @ResponseBody
-    public Response validate(TestVO testVO) {
+    public Response validate() {
 
-        return null;
+
+        userService.testLog();
+
+        return succeed();
     }
 }
