@@ -105,7 +105,7 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="version" placeholder="支持模糊匹配" class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="version" placeholder="支持模糊匹配（version）" class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
 
@@ -113,7 +113,7 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <select id="platform" name="platform" class="width-100 select2"  data-placeholder="Click to Choose...">
+                                            <select id="platform" name="platform" class="width-100 select2"  data-placeholder="platform">
                                                 <option value="" selected> </option>
                                                 <option value="1">IOS</option>
                                                 <option value="2">Android</option>
@@ -125,7 +125,7 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="osVersion" placeholder="支持前缀模糊查询"  class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="osVersion" placeholder="支持前缀模糊查询（osVersion）"  class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
                                 </div>
@@ -138,7 +138,7 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="bundleIdentifier"  class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="bundleIdentifier" placeholder="bundleIdentifier" class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
 
@@ -146,7 +146,7 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="clientToken"  class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="clientToken" placeholder="clientToken"  class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
 
@@ -154,7 +154,7 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="contentData" placeholder="支持模糊查询" class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="contentData" placeholder="支持模糊查询(contentData)" class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
                                 </div>
@@ -167,7 +167,7 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="brand" name="brand" placeholder="支持前缀模糊查询" class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="brand" name="brand" placeholder="支持前缀模糊查询(brand)" class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
 
@@ -175,7 +175,7 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="resolution" name="resolution" class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="resolution" name="resolution" placeholder="resolution" class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
 
@@ -183,7 +183,7 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="channel" name="channel" placeholder="" class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="channel" name="channel" placeholder="channel" class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
                                 </div>
@@ -198,7 +198,7 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="deviceModel" name="deviceModel" placeholder="支持前缀模糊查询" class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="deviceModel" name="deviceModel" placeholder="支持前缀模糊查询(deviceModel)" class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
 
@@ -206,7 +206,7 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="imei" name="imei" placeholder="" class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="imei" name="imei" placeholder="imei" class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
 
@@ -214,11 +214,28 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input class="form-control" type="text" name="uploadDate" id="uploadDate" />
+                                            <input class="form-control" type="text" name="uploadDate" id="uploadDate" placeholder="uploadDate" />
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="space"></div>
+
+                            <div class="col-xs-12">
+                                <div class="form-group">
+
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">用户账号:</label>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="clearfix">
+                                            <input type="text" id="clientAccount" name="clientAccount" placeholder="clientAccount" class="col-xs-12 col-sm-12" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
                             <div class="space"></div>
 
 
@@ -329,6 +346,9 @@
             //showFooter:true,
             pageSize:5,
             columns: [{
+                field: 'clientAccount',
+                title: '<span class="text-primary">用户账号</span>'
+            },{
                 field: 'version',
                 title: '<span class="text-primary">app版本号</span>'
             }, {
@@ -344,7 +364,7 @@
             }, {
                 field: 'osVersion',
                 title: '<span class="text-primary">操作系统版本</span>'
-            }, {
+            },  {
                 field: 'bundleIdentifier',
                 title: '<span class="text-primary">唯一标识符</span>'
             }, {
@@ -387,6 +407,7 @@
                 params.deviceModel = $.trim($("#deviceModel").val());
                 params.imei = $.trim($("#imei").val());
                 params.clusterName = clusterName;
+                params.clientAccount = $.trim($("#clientAccount").val());
                 return params;
             },
             onExpandRow: function (index, row, $detail) {
@@ -399,14 +420,18 @@
                         contentData = data.data.contentData;
                         var displayData = "";
                         var more = '';
-                        if(contentData.length>limit){
-                            displayData = contentData.substr(0,limit);
-                            more = '<a data-start='+limit+' class="load-data">&nbsp;更多...</a>&nbsp;<a class="load-all">&nbsp;展开全部</a>';
-                        }else {
-                            displayData = contentData;
-                        }
+                        if (contentData!==null) {
+                            if (contentData.length > limit) {
+                                displayData = contentData.substr(0, limit);
+                                more = '<a data-start=' + limit + ' class="load-data">&nbsp;更多...</a>&nbsp;<a class="load-all">&nbsp;展开全部</a>';
+                            } else {
+                                displayData = contentData;
+                            }
 
-                        $detail.html('<pre>'+displayData+'</pre>'+more+'&nbsp;<a class="download" href="/applog/download?id='+id+'&clusterName='+clusterName+'" >&nbsp;下载</a>');
+                            $detail.html('<pre>' + displayData + '</pre>' + more + '&nbsp;<a class="download" href="/applog/download?id=' + id + '&clusterName=' + clusterName + '" >&nbsp;下载</a>');
+                        }else {
+                            $detail.html('<pre></pre>');
+                        }
                     }
                 });
                 type_aj.set("id",row.id);

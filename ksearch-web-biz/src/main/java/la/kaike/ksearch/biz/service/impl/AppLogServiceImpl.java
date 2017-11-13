@@ -103,6 +103,10 @@ public class AppLogServiceImpl implements AppLogService {
             boolQueryBuilder.filter(termQuery("imei",appLogVO.getImei()));
         }
 
+        if (StringUtils.isNotEmpty(appLogVO.getClientAccount())){
+            boolQueryBuilder.filter(termQuery("clientAccount",appLogVO.getClientAccount()));
+        }
+
 
         //QueryBuilder qb = boolQuery()
                 //.must(termQuery("content", "test1"))

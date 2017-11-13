@@ -90,6 +90,18 @@ public class AppLogVO extends PageVO {
 
     private String endTime;
 
+    /**
+     * 用户账号
+     */
+    private String clientAccount;
+
+    public String getClientAccount() {
+        return clientAccount;
+    }
+
+    public void setClientAccount(String clientAccount) {
+        this.clientAccount = clientAccount;
+    }
 
     public String getBrand() {
         return brand;
