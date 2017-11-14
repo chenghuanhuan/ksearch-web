@@ -51,4 +51,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             logger.error("出错啦,哎哎哎",e);
         }
     }
+
+    @Override
+    public void testLog2() {
+        logger.error("ahhhhhhhhdsffsfsfsfsf\nfsfsfsfsfsffffffffffffffffff\nsfsffffffffffffffffff");
+    }
 }

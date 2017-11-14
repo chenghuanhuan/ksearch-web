@@ -61,4 +61,13 @@ public class TestController extends BaseController {
 
         return succeed();
     }
+    @RequestMapping(value = "/logtest2", method = RequestMethod.GET)
+    @ResponseBody
+    public Response logtest2() {
+
+
+        userService.testLog2();
+
+        return succeed();
+    }
 }
