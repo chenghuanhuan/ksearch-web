@@ -34,6 +34,13 @@
     </li>
 
     <li>
+        <a href="/tomcat" class="left-menu">
+            <i class="icon-list-alt"></i>
+            <span class="menu-text"> 应用日志 </span>
+        </a>
+    </li>
+
+    <li>
         <a href="/applog" class="left-menu">
             <i class="icon-list-alt"></i>
             <span class="menu-text"> app日志 </span>
