@@ -113,28 +113,7 @@
 
                                     <div class="col-xs-12 col-sm-5">
                                         <div class="clearfix">
-                                            <select id="source" name="source" class="width-100 select2"  data-placeholder="Click to Choose...">
-                                                <option value="" selected>--</option>
-                                                <option value="/var/log/nginx/log/www.kaike.la.log">www.kaike.la.log</option>
-                                                <option value="/var/log/nginx/log/mobile.kaike.la.log">mobile.kaike.la.log</option>
-                                                <option value="/var/log/nginx/log/auth.kaike.la.log">auth.kaike.la.log</option>
-                                                <option value="/var/log/nginx/log/kapi.kaike.la.log">kapi.kaike.la.log</option>
-                                                <option value="/var/log/nginx/log/m.kaike.la.log">m.kaike.la.log</option>
-                                                <option value="/var/log/nginx/log/static.kaike.la.log">static.kaike.la.log</option>
-                                                <option value="/var/log/nginx/log/www.estudy.cn.log">www.estudy.cn.log</option>
-                                                <option value="/var/log/nginx/log/member.kaike.la.log">member.kaike.la.log</option>
-                                                <option value="/var/log/nginx/log/community.kaike.la.log">community.kaike.la.log</option>
-                                                <option value="/var/log/nginx/log/access-all.kaike.la.log">access-all.kaike.la.log</option>
-                                                <option value="/var/log/nginx/log/wechat.kaike.la.log">wechat.kaike.la.log</option>
-                                                <option value="/var/log/nginx/log/stream.kaike.la.log">stream.kaike.la.log</option>
-                                                <option value="/var/log/nginx/log/fm.kaike.la.log">fm.kaike.la.log</option>
-                                                <option value="/var/log/nginx/log/img0.kaike.la.log">img0.kaike.la.log</option>
-                                                <option value="/var/log/nginx/log/my.kaike.la.log">my.kaike.la.log</option>
-                                                <option value="/var/log/nginx/log/zimg.kaike.la.log">zimg.kaike.la.log</option>
-                                                <option value="/var/log/nginx/log/pay.kaike.la.log">pay.kaike.la.log</option>
-                                                <option value="/var/log/nginx/log/bss.kaike.la.log">bss.kaike.la.log</option>
-                                                <option value="/var/log/nginx/log/static.estudy.cn.log">static.estudy.cn.log</option>
-                                            </select>
+                                            <input class="form-control" type="text" name="source" id="source" />
                                         </div>
                                     </div>
 

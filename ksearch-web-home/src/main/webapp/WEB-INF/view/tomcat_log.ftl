@@ -9,7 +9,7 @@
 
     <!-- basic styles -->
 <#include "/common/head_css.ftl"/>
-    <link rel="stylesheet" href="assets/css/daterangepicker.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap-timepicker.css" />
     <style>
         .modal-optimize .modal-dialog{
             width: 500px;
@@ -99,6 +99,7 @@
                         <!-- PAGE CONTENT BEGINS -->
 
                         <div class="row">
+                            <form id="query-form">
                             <div class="col-xs-12">
                                 <div class="form-group">
                                     <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="select_index">应用名称:</label>
@@ -152,15 +153,20 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="host" name="host" placeholder="ip地址" class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="host" name="host" placeholder="" class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
 
                                     <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">时间:</label>
 
-                                    <div class="col-xs-12 col-sm-3">
-                                        <div class="clearfix">
-                                            <input class="form-control" type="text" name="datetime" id="datetime" placeholder="datetime" />
+                                    <div class="col-xs-12 col-sm-1" style="width: 12.5%;">
+                                        <div class="input-group bootstrap-timepicker">
+                                            <input id="startTime" name="startTime" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-1" style="width: 12.5%;">
+                                        <div class="input-group bootstrap-timepicker">
+                                            <input id="endTime" name="endTime" type="text" class="form-control" />
                                         </div>
                                     </div>
                                 </div>
@@ -168,19 +174,46 @@
 
                             <div class="space"></div>
 
+                            <div class="col-xs-12">
+                                <div class="form-group">
 
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">className:</label>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="clearfix">
+                                            <input type="text" id="className" name="className" placeholder="" class="col-xs-12 col-sm-12" />
+                                        </div>
+                                    </div>
+
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="message">message:</label>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="clearfix">
+                                            <input type="text" id="message" name="message" placeholder="" class="col-xs-12 col-sm-12" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
                             <div class="col-xs-12" id="query-btn" style="padding-top: 10px;">
                                 <div class="form-group">
-                                    <div class="col-xs-13 col-sm-11" style="width: 94%;">
+                                    <div class="col-xs-13 col-sm-11" style="width: 88%;">
                                     </div>
                                     <div class="col-xs-13 col-sm-1" style="width: 6%;">
                                         <button class="btn btn-success btn-query">
                                             查询
                                         </button>
                                     </div>
+                                    <div class="col-xs-13 col-sm-1" style="width: 6%;">
+                                        <button class="btn btn-success btn-reset">
+                                            重置
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                         <div class="hr hr32 hr-dotted"></div>
                         <div class="row">
                             <div class="col-xs-12">
@@ -213,7 +246,7 @@
 <!-- basic scripts -->
 
 <#include "/common/foot_js.ftl"/>
-<script src="/assets/js/date-time/daterangepicker.min.js"></script>
+<script src="/assets/js/date-time/bootstrap-timepicker.min.js"></script>
 <script src="/assets/js/date-time/moment.min.js"></script>
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
@@ -240,6 +273,25 @@
         }
         return dateinfoArr;
     }
+
+    $('#startTime').timepicker({
+        minuteStep: 1,
+        showSeconds: true,
+        showMeridian: false,
+        defaultTime: false
+    }).next().on(ace.click_event, function(){
+        $(this).prev().focus();
+    });
+
+    $('#endTime').timepicker({
+        minuteStep: 1,
+        showSeconds: true,
+        showMeridian: false,
+        defaultTime: false
+    }).next().on(ace.click_event, function(){
+        $(this).prev().focus();
+    });
+
 
     jQuery(function($) {
 
@@ -296,7 +348,6 @@
                         placeholder: "请选择日期",
                         data:dateArr
                     });
-
                 });
             }
         });
@@ -311,32 +362,22 @@
             $('#indices_table').bootstrapTable("refresh");
         });
 
-        $('input[name=uploadDate]').daterangepicker({
-            timePicker : true,
-            format : 'YYYY-MM-DD HH:mm:ss',
-            dateLimit : {
-                days : 7
-            }, //起止时间的最大间隔
-            ranges : {
-                //'最近1小时': [moment().subtract('hours',1), moment()],
-                '今日': [moment().startOf('day'), moment()],
-                '昨日': [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
-                '最近7日': [moment().subtract('days', 6), moment()]//,
-                //'最近30日': [moment().subtract('days', 29), moment()]
-            },
-            locale : {
-                applyLabel : '确定',
-                cancelLabel : '取消',
-                fromLabel : '起始时间',
-                toLabel : '结束时间',
-                customRangeLabel : '自定义',
-                daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],
-                monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月',
-                    '七月', '八月', '九月', '十月', '十一月', '十二月' ],
-                firstDay : 1
-            }
-        }).prev().on(ace.click_event, function(){
-            $(this).next().focus();
+        $(".btn-reset").on("click",function () {
+            $('#query-form')[0].reset();
+            $("#appname").select2('val', '');
+            $("#logtype").select2('val', '');
+            $("#dateinfo").select2('val', '');
+            $("#logtype").select2({
+                allowClear: true,
+                placeholder: "请选择文件名",
+                data:[]
+            });
+
+            $("#dateinfo").select2({
+                allowClear: true,
+                placeholder: "请选择日期",
+                data:[]
+            });
         });
 
 
@@ -393,51 +434,20 @@
 
                 params.index = index;
                 params.type = "log";
-
-                /*params.bundleIdentifier = $.trim($("#bundleIdentifier").val());
-                params.clientToken = $.trim($("#clientToken").val());
-                params.contentData = $.trim($("#contentData").val());
-                params.uploadDate = $.trim($("#uploadDate").val());
-                params.brand = $.trim($("#brand").val());
-                params.resolution = $.trim($("#resolution").val());
-                params.channel = $.trim($("#channel").val());
-                params.deviceModel = $.trim($("#deviceModel").val());
-                params.imei = $.trim($("#imei").val());*/
+                params.host = $.trim($("#host").val());
+                if($.trim($("#startTime").val())) {
+                    params.startTime = $("#dateinfo").val() + " " + $.trim($("#startTime").val());
+                }
+                $.trim($("#endTime").val())
+                {
+                    params.endTime = $("#dateinfo").val() + " " + $.trim($("#endTime").val());
+                }
+                params.className = $.trim($("#className").val());
+                params.level = $.trim($("#level").val());
+                params.message = $.trim($("#message").val());
                 params.clusterName = clusterName;
-                /*params.clientAccount = $.trim($("#clientAccount").val());*/
                 return params;
-            },
-           /* onExpandRow: function (index, row, $detail) {
-
-
-                $detail.html('<pre>正在加载...</pre>');
-                var id = row.id;
-                var type_aj = new $ax("/applog/detail",function (data) {
-                    if (data.status){
-                        contentData = data.data.contentData;
-                        var displayData = "";
-                        var more = '';
-                        if (contentData!==null) {
-                            if (contentData.length > limit) {
-                                displayData = contentData.substr(0, limit);
-                                more = '<a data-start=' + limit + ' class="load-data">&nbsp;更多...</a>&nbsp;<a class="load-all">&nbsp;展开全部</a>';
-                            } else {
-                                displayData = contentData;
-                            }
-
-                            $detail.html('<pre>' + displayData + '</pre>' + more + '&nbsp;<a class="download" href="/applog/download?id=' + id + '&clusterName=' + clusterName + '" >&nbsp;下载</a>');
-                        }else {
-                            $detail.html('<pre></pre>');
-                        }
-                    }
-                });
-                type_aj.set("id",row.id);
-                type_aj.set("clusterName",clusterName);
-                type_aj.start();
-            },*/
-            onLoadSuccess:function () {
             }
-
         });
 
         $(document).on("click",".load-data",function () {
