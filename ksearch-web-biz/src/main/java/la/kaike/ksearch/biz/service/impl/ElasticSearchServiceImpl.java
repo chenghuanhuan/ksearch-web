@@ -125,6 +125,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         IndicesStatsResponse clusterStatsResponse = ElasticClientUtil.getStats(ElasticClient.getClient(clusterName));
         MetaData metadata = ElasticClientUtil.getMetadata(ElasticClient.getClient(clusterName));
         Map<String, IndexStats> indexStatsMap = clusterStatsResponse.getIndices();
+
         if (indexStatsMap!=null&&indexStatsMap.size()>0){
             for (Map.Entry<String,IndexStats> entry:indexStatsMap.entrySet()){
                 IndexStats indexStats = entry.getValue();

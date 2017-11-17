@@ -134,27 +134,33 @@
                             <div class="col-xs-12">
                                 <div class="form-group">
 
-                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">手机型号:</label>
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">level:</label>
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="deviceModel" name="deviceModel" placeholder="支持前缀模糊查询(deviceModel)" class="col-xs-12 col-sm-12" />
+                                            <select id="level" name="level" class="width-100 select2"  data-placeholder="Click to Choose...">
+                                                <option value="" selected> </option>
+                                                <option value="error">ERROR</option>
+                                                <option value="warn">INFO</option>
+                                                <option value="warn">WARN</option>
+                                                <option value="notice">DEBUG</option>
+                                            </select>
                                         </div>
                                     </div>
 
-                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">imei:</label>
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">host:</label>
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="text" id="imei" name="imei" placeholder="imei" class="col-xs-12 col-sm-12" />
+                                            <input type="text" id="host" name="host" placeholder="ip地址" class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
 
-                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">上报时间:</label>
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">时间:</label>
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input class="form-control" type="text" name="uploadDate" id="uploadDate" placeholder="uploadDate" />
+                                            <input class="form-control" type="text" name="datetime" id="datetime" placeholder="datetime" />
                                         </div>
                                     </div>
                                 </div>
@@ -290,6 +296,7 @@
                         placeholder: "请选择日期",
                         data:dateArr
                     });
+
                 });
             }
         });
@@ -342,68 +349,52 @@
             search:false,
             //toolbar:"#toolbar",
             sidePagination:'server',
-            url:"/applog/query",
+            url:"/tomcat/query",
             pageList:[5, 10],
             pagination:true,
-            detailView:true,
+            //detailView:true,
             //showRefresh:true,
             showColumns:true,
             //showPaginationSwitch:true,
             //showFooter:true,
             pageSize:5,
             columns: [{
-                field: 'clientAccount',
-                title: '<span class="text-primary">用户账号</span>'
-            },{
-                field: 'version',
-                title: '<span class="text-primary">app版本号</span>'
-            }, {
-                field: 'platform',
-                title: '<span class="text-primary">操作系统</span>',
+                field: 'datetime',
+                title: '<span class="text-primary">datetime</span>',
                 formatter: function (value, row, index) {
-                    if(row.platform===1){
-                        return "IOS";
-                    }else {
-                        return "Android";
-                    }
+                    return formatDateTime(row.datetime);
                 }
             }, {
-                field: 'osVersion',
-                title: '<span class="text-primary">操作系统版本</span>'
+                field: 'host',
+                title: '<span class="text-primary">host</span>'
             },  {
-                field: 'bundleIdentifier',
-                title: '<span class="text-primary">唯一标识符</span>'
+                field: 'level',
+                title: '<span class="text-primary">level</span>'
+            },{
+                field: 'className',
+                title: '<span class="text-primary">className</span>'
             }, {
-                field: 'clientToken',
-                title: '<span class="text-primary">用户令牌</span>'
+                field: 'message',
+                title: '<span class="text-primary">message</span>'
             }, {
-                field: 'brand',
-                title: '<span class="text-primary">手机品牌</span>'
+                field: 'remoteAddr',
+                title: '<span class="text-primary">remoteAddr</span>'
             }, {
-                field: 'resolution',
-                title: '<span class="text-primary">屏幕尺寸</span>'
+                field: 'requestURIWithQueryString',
+                title: '<span class="text-primary">requestURIWithQueryString</span>'
             }, {
-                field: 'channel',
-                title: '<span class="text-primary">安装来源</span>'
-            }, {
-                field: 'deviceModel',
-                title: '<span class="text-primary">手机型号</span>'
-            }, {
-                field: 'imei',
-                title: '<span class="text-primary">imei</span>'
-            }, {
-                field: 'uploadDate',
-                title: '<span class="text-primary">上报时间</span>',
-                formatter: function (value, row, index) {
-                    return formatDateTime(row.uploadDate);
-                }
+                field: 'userId',
+                title: '<span class="text-primary">userId</span>'
             }],
             silentSort:false,
             queryParams:function (params) {
-                params.version = $.trim($("#version").val());
-                params.osVersion = $.trim($("#osVersion").val());
-                params.platform = $.trim($("#platform").val());
-                params.bundleIdentifier = $.trim($("#bundleIdentifier").val());
+
+                var index = $("#appname").val()+"."+$("#logtype").val()+"."+$("#dateinfo").val();
+
+                params.index = index;
+                params.type = "log";
+
+                /*params.bundleIdentifier = $.trim($("#bundleIdentifier").val());
                 params.clientToken = $.trim($("#clientToken").val());
                 params.contentData = $.trim($("#contentData").val());
                 params.uploadDate = $.trim($("#uploadDate").val());
@@ -411,12 +402,12 @@
                 params.resolution = $.trim($("#resolution").val());
                 params.channel = $.trim($("#channel").val());
                 params.deviceModel = $.trim($("#deviceModel").val());
-                params.imei = $.trim($("#imei").val());
+                params.imei = $.trim($("#imei").val());*/
                 params.clusterName = clusterName;
-                params.clientAccount = $.trim($("#clientAccount").val());
+                /*params.clientAccount = $.trim($("#clientAccount").val());*/
                 return params;
             },
-            onExpandRow: function (index, row, $detail) {
+           /* onExpandRow: function (index, row, $detail) {
 
 
                 $detail.html('<pre>正在加载...</pre>');
@@ -443,7 +434,7 @@
                 type_aj.set("id",row.id);
                 type_aj.set("clusterName",clusterName);
                 type_aj.start();
-            },
+            },*/
             onLoadSuccess:function () {
             }
 
@@ -502,9 +493,10 @@
         h = h < 10 ? ('0' + h) : h;
         var minute = date.getMinutes();
         var second = date.getSeconds();
+        var sss = date.getMilliseconds();
         minute = minute < 10 ? ('0' + minute) : minute;
         second = second < 10 ? ('0' + second) : second;
-        return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;
+        return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second+","+sss;
     };
 </script>
 </body>
