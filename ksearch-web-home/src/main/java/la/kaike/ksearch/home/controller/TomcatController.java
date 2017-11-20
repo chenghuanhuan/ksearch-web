@@ -70,9 +70,9 @@ public class TomcatController extends BaseController {
                 Matcher matcher = indexPattern.matcher(indicesVO.getIndex());
 
                 if (matcher.find()){
-                    String appname = matcher.group(1);
-                    String logType = matcher.group(2);
-                    String date = matcher.group(3);
+                    String appname = matcher.group(2);
+                    String logType = matcher.group(3);
+                    String date = matcher.group(4);
                     if (mapMap.get(appname)!=null){
                         Map<String,Set<String>> logTypeMap = mapMap.get(appname);
                         if (logTypeMap.get(logType)!=null){
@@ -93,7 +93,7 @@ public class TomcatController extends BaseController {
     }
 
     public static void main(String[] args) {
-        Pattern pattern = Pattern.compile("^([a-zA-Z_0-9\\-]+).([a-zA-Z_0-9\\-]+).(\\d\\d\\d\\d-\\d\\d-\\d\\d)");
+        Pattern pattern = Pattern.compile("^([a-zA-Z_0-9\\-]+).([a-zA-Z_0-9\\-]+).([a-zA-Z_0-9\\-]+).(\\d\\d\\d\\d-\\d\\d-\\d\\d)");
         String index = "ksearch-api.ksearch-api-biz-service.2017-11-16";
         Matcher matcher = pattern.matcher(index);
         System.out.println(matcher.find());

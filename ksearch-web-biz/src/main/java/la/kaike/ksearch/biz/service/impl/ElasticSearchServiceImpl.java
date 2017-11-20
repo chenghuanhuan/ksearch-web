@@ -520,7 +520,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         /*********************删除系统日志**************************/
 
         //ksearch-api.ksearch-api-biz-service.2017-11-20
-        String reg = "^[a-zA-Z0-9-]+\\.[a-zA-Z0-9-]+\\.(\\d\\d\\d\\d-\\d\\d-\\d\\d)";
+        String reg = "^[a-zA-Z0-9-]+\\.[a-zA-Z0-9-]+\\.[a-zA-Z0-9-]+\\.(\\d\\d\\d\\d-\\d\\d-\\d\\d)";
         List<String> delSysLogIndexList = filterIndex(indicesVOList,reg);
 
         if (CollectionUtils.isNotEmpty(delSysLogIndexList)) {
@@ -617,8 +617,8 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
     public static void main(String[] args) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Pattern pattern = Pattern.compile("^[a-zA-Z0-9-]+\\.[a-zA-Z0-9-]+\\.(\\d\\d\\d\\d-\\d\\d-\\d\\d)");
-        Matcher matcher = pattern.matcher("ksearch-api.ksearch-api-biz-service.2017-11-20");
+        Pattern pattern = Pattern.compile("^[a-zA-Z0-9-]+\\.[a-zA-Z0-9-]+\\.[a-zA-Z0-9-]+\\.(\\d\\d\\d\\d-\\d\\d-\\d\\d)");
+        Matcher matcher = pattern.matcher("syslog.ksearch-api.ksearch-api-biz-service.2017-11-20");
         System.out.println(matcher.matches());
         System.out.println(matcher.group(1));
     }
