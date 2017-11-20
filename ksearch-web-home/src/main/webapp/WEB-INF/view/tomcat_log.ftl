@@ -141,10 +141,10 @@
                                         <div class="clearfix">
                                             <select id="level" name="level" class="width-100 select2"  data-placeholder="Click to Choose...">
                                                 <option value="" selected> </option>
-                                                <option value="error">ERROR</option>
-                                                <option value="warn">INFO</option>
-                                                <option value="warn">WARN</option>
-                                                <option value="notice">DEBUG</option>
+                                                <option value="ERROR">ERROR</option>
+                                                <option value="INFO">INFO</option>
+                                                <option value="WARN">WARN</option>
+                                                <option value="DEBUG">DEBUG</option>
                                             </select>
                                         </div>
                                     </div>

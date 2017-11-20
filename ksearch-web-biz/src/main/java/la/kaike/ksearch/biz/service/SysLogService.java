@@ -7,6 +7,8 @@ package la.kaike.ksearch.biz.service;
 import la.kaike.ksearch.model.PageResponse;
 import la.kaike.ksearch.model.vo.syslog.SysLogVO;
 
+import java.text.ParseException;
+
 /**
  * @author chenghuanhuan@kaike.la
  * @since $Revision:1.0.0, $Date: 2017年11月16日 下午5:39 $
@@ -18,5 +20,5 @@ public interface SysLogService {
      * @param sysLogVO
      * @return
      */
-    PageResponse query(SysLogVO sysLogVO);
+    PageResponse query(SysLogVO sysLogVO) throws ParseException;
 }
