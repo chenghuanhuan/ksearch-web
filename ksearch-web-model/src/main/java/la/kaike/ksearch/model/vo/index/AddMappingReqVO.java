@@ -7,6 +7,9 @@ package la.kaike.ksearch.model.vo.index;
 import la.kaike.ksearch.model.ClusterRequest;
 import la.kaike.ksearch.model.validate.Validate;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * @author chenghuanhuan@kaike.la
  * @since $Revision:1.0.0, $Date: 2017年07月24日 下午3:08 $
@@ -16,7 +19,7 @@ public class AddMappingReqVO extends ClusterRequest {
     /**
      * 索引：数字、字母下划线、不能以下划线开头
      */
-    @Validate(required = true,isNotBlank = true,maxLength = 128,regexp = "^(?!_)[a-zA-Z0-9_]+")
+    @Validate(required = true,isNotBlank = true,maxLength = 128,regexp = "^(?!_)[a-zA-Z0-9_.-]+")
     private String index;
 
     @Validate(required = true,isNotBlank = true)
@@ -74,5 +77,11 @@ public class AddMappingReqVO extends ClusterRequest {
 
     public void setIndex(String index) {
         this.index = index;
+    }
+
+    public static void main(String[] args) {
+        Pattern pattern = Pattern.compile("^(?!_)[a-zA-Z0-9_.-]+");
+        Matcher matcher = pattern.matcher("ksearch-api.ksearch-api-biz-service.2017-11-20");
+        System.out.println(matcher.matches());
     }
 }
