@@ -1,0 +1,87 @@
+/*PUT /_template/sys_log_template*/
+{
+  "template" : "syslog*",
+  "order" : 1,
+  "settings" : {
+    "number_of_shards" : 1,
+    "number_of_replicas": 1,
+    "analysis": {
+      "analyzer": {
+        "ik_en_max_word": {
+          "filter": [
+            "stemmer",
+            "stop"
+          ],
+          "char_filter": [
+            "html_strip"
+          ],
+          "type": "custom",
+          "tokenizer": "ik_max_word"
+        },
+        "ik_en_smart": {
+          "filter": [
+            "stemmer",
+            "stop"
+          ],
+          "char_filter": [
+            "html_strip"
+          ],
+          "type": "custom",
+          "tokenizer": "ik_smart"
+        },
+        "keyword_lowercase": {
+          "filter": [
+            "lowercase"
+          ],
+          "type": "custom",
+          "tokenizer": "keyword"
+        }
+      }
+    }
+  },
+  "mappings" : {
+    "log" : {
+      "_source" : { "enabled" : true },
+      "properties": {
+        "appName": {
+          "type": "keyword"
+        },
+        "className": {
+          "type": "text",
+          "analyzer": "pattern"
+        },
+        "datetime": {
+          "type": "long"
+        },
+        "fileName": {
+          "type": "keyword"
+        },
+        "host": {
+          "type": "text"
+        },
+        "keyword": {
+          "type": "text"
+        },
+        "level": {
+          "type": "keyword"
+        },
+        "message": {
+          "type": "text",
+          "analyzer": "ik_en_max_word"
+        },
+        "remoteAddr": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "userId": {
+          "type": "keyword"
+        }
+      }
+    }
+  }
+}
