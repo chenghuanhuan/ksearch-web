@@ -86,6 +86,7 @@
                                 <option value="ik_en_smart">ik_en_smart（中英文混合分词，粗粒度）</option>
                                 <option value="keyword_lowercase">keyword_lowercase</option>
                                 <option value="pattern">pattern</option>
+                                <option value="custom_pattern_point">custom_pattern_point</option>
                                 <option value="simple">simple</option>
                                 <option value="whitespace">whitespace</option>
                                 <option value="keyword">keyword</option>

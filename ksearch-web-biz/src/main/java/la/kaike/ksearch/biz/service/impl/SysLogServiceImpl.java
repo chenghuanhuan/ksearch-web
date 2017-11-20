@@ -8,6 +8,7 @@ import la.kaike.ksearch.biz.es.ElasticClient;
 import la.kaike.ksearch.biz.service.SysLogService;
 import la.kaike.ksearch.model.PageResponse;
 import la.kaike.ksearch.model.vo.syslog.SysLogVO;
+import la.kaike.ksearch.util.constant.WebConstant;
 import la.kaike.platform.common.lang.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -43,7 +44,7 @@ public class SysLogServiceImpl implements SysLogService{
 
         TransportClient client = ElasticClient.getClient(sysLogVO.getClusterName());
 
-        SearchRequestBuilder builder = client.prepareSearch(sysLogVO.getIndex());
+        SearchRequestBuilder builder = client.prepareSearch(WebConstant.SYSLOG_PREFIX+sysLogVO.getIndex());
         builder.setTypes(sysLogVO.getType());
 
         BoolQueryBuilder boolQueryBuilder = boolQuery();

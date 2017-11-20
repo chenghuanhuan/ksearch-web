@@ -7,6 +7,10 @@
     "number_of_replicas": 1,
     "analysis": {
       "analyzer": {
+        "custom_pattern_point": {
+          "type": "pattern",
+          "pattern":"([a-zA-Z0-9]+)\\."
+        },
         "ik_en_max_word": {
           "filter": [
             "stemmer",
@@ -48,7 +52,7 @@
         },
         "className": {
           "type": "text",
-          "analyzer": "pattern"
+          "analyzer": "custom_pattern_point"
         },
         "datetime": {
           "type": "long"

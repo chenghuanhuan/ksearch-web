@@ -14,4 +14,9 @@ public interface WebConstant {
      * session中存放的用户键
      */
     String SESSION_USER_KEY = "user";
+
+    /**
+     * 系统日志前缀
+     */
+    String SYSLOG_PREFIX = "syslog.";
 }

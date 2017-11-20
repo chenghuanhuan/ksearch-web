@@ -38,7 +38,7 @@ public class TomcatController extends BaseController {
     @Autowired
     private ElasticSearchService elasticSearchService;
 
-    private final Pattern indexPattern = Pattern.compile("^([a-zA-Z_0-9\\-]+).([a-zA-Z_0-9\\-]+).(\\d\\d\\d\\d-\\d\\d-\\d\\d)");
+    private final Pattern indexPattern = Pattern.compile("^([a-zA-Z_0-9\\-]+).([a-zA-Z_0-9\\-]+).([a-zA-Z_0-9\\-]+).(\\d\\d\\d\\d-\\d\\d-\\d\\d)");
 
     @RequestMapping
     public String index(){
@@ -69,7 +69,7 @@ public class TomcatController extends BaseController {
             for (IndicesVO indicesVO:indicesVOS){
                 Matcher matcher = indexPattern.matcher(indicesVO.getIndex());
 
-                if (matcher.find()){
+                if (matcher.matches()){
                     String appname = matcher.group(2);
                     String logType = matcher.group(3);
                     String date = matcher.group(4);
