@@ -26,8 +26,8 @@ public class IndexTask {
     @Resource
     private ElasticSearchService elasticSearchService;
 
-    //每天凌晨1:00执行
-    @Scheduled(cron = "0 00 1 * * ?")
+    //每天凌晨2:00执行
+    @Scheduled(cron = "0 00 2 * * ?")
     //@Scheduled(cron = "10 * * * * ?")
     public void TestTask() {
 
