@@ -206,8 +206,13 @@
                                         </button>
                                     </div>
                                     <div class="col-xs-13 col-sm-1" style="width: 6%;">
-                                        <button class="btn btn-success btn-reset">
+                                        <button class="btn btn-default btn-reset">
                                             重置
+                                        </button>
+                                    </div>
+                                    <div class="col-xs-13 col-sm-1" style="width: 6%;">
+                                        <button class="btn btn-primary btn-refresh">
+                                            自动刷新
                                         </button>
                                     </div>
                                 </div>
@@ -253,7 +258,7 @@
     var clusterName = Util.cookie.get("cluster-name");
     var indexInfo = null;
     var appNameArr = [];
-    //var loginfoArr =[];
+    var timmer1 = null;
     function getLogType(appname) {
         var loginfos = indexInfo[appname];
         var loginfoArrs =[];
@@ -360,6 +365,21 @@
         $(".btn-query").on("click",function () {
             $('#indices_table').bootstrapTable("removeAll");
             $('#indices_table').bootstrapTable("refresh");
+        });
+
+        $(".btn-refresh").on("click",function () {
+            var r = $(this).attr("refresh");
+            if(r=="ok"){
+                window.clearInterval(timmer1);
+                $(this).attr("refresh","");
+                $(this).text("自动刷新");
+            }else {
+                $(this).text("停止刷新");
+                $(this).attr("refresh","ok");
+                timmer1 = window.setInterval(function () {
+                    $('#indices_table').bootstrapTable("refresh");
+                },5000);
+            }
         });
 
         $(".btn-reset").on("click",function () {
