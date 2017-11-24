@@ -78,6 +78,10 @@ public class TomcatController extends BaseController {
                         if (logTypeMap.get(logType)!=null){
                             Set<String> dateset = logTypeMap.get(logType);
                             dateset.add(date);
+                        }else {
+                            Set<String> dateset = new HashSet<>();
+                            dateset.add(date);
+                            logTypeMap.put(logType,dateset);
                         }
                     }else {
                         Map<String,Set<String>> logTypeMap = new HashMap<>();
