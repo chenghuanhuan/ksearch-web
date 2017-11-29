@@ -262,6 +262,8 @@
 		<!-- inline scripts related to this page -->
 
 		<script type="text/javascript">
+
+			var globalClusterName = Util.cookie.get("cluster-name");
 			jQuery(function($) {
 
 				// 获取所有的集群名称
@@ -285,12 +287,13 @@
 					$("#cluster_info").find(".icon-ok").remove();
 					$(this).prepend('<i class="icon-ok"></i>');
 					var clusterName = $(this).text();
+					globalClusterName = clusterName;
 					Util.cookie.set("cluster-name",clusterName,30*24*60*60*1000);
                     // 初始化健康信息
                     //initClusterHealth($(this).text());
                     $('#cluster_health_table').bootstrapTable('refresh');
                     $('#indices_table').bootstrapTable('refresh');
-                    initClusterStatistics($(this).text());
+                    initClusterStatistics(clusterName);
                     
                     // 更新菜单栏上集群选中
                  /*   var clusterSelect = $("#sidebar-shortcuts-mini");
@@ -397,7 +400,11 @@
                     //cardView:true,
                     url:"/console/cluster/health",
                     queryParams:function (params) {
-                        params.clusterName = clusterName;
+                        if (globalClusterName){
+                            params.clusterName = globalClusterName;
+                        }else {
+                            params.clusterName = clusterName;
+                        }
                         return params;
                     },
                     columns: [{
@@ -416,7 +423,12 @@
                     //cardView:true,
                     url:"/console/cluster/indeices",
                     queryParams:function (params) {
-                        params.clusterName = clusterName;
+                        if (globalClusterName){
+                            params.clusterName = globalClusterName;
+						}else {
+                            params.clusterName = clusterName;
+						}
+
                         return params;
                     },
                     columns: [{
@@ -452,6 +464,9 @@
                             $("#" + v).html(value[v]);
                         }
 						var percent = Math.round(value.successfulShards/value.totalShards*100);
+						if (isNaN(percent)){
+						    percent=0;
+						}
                         var html = '<span class="percent">'+percent+'</span>%';
                         var successfulShardsPercent = $("#successfulShardsPercent").attr("data-percent",percent);
                         successfulShardsPercent.html(html);
