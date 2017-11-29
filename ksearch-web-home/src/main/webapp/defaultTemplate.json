@@ -1,0 +1,42 @@
+/*PUT _template/default_template*/
+{
+  "template": "*",
+  "order" : 1,
+  "settings": {
+    "analysis": {
+      "number_of_shards" : 2,
+      "number_of_replicas": 0,
+      "analyzer": {
+        "ik_en_max_word": {
+          "filter": [
+            "stemmer",
+            "stop"
+          ],
+          "char_filter": [
+            "html_strip"
+          ],
+          "type": "custom",
+          "tokenizer": "ik_max_word"
+        },
+        "ik_en_smart": {
+          "filter": [
+            "stemmer",
+            "stop"
+          ],
+          "char_filter": [
+            "html_strip"
+          ],
+          "type": "custom",
+          "tokenizer": "ik_smart"
+        },
+        "keyword_lowercase": {
+          "filter": [
+            "lowercase"
+          ],
+          "type": "custom",
+          "tokenizer": "keyword"
+        }
+      }
+    }
+  }
+}
