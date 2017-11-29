@@ -59,6 +59,12 @@
 			<groupId>com.baomidou</groupId>
 			<artifactId>mybatis-plus</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>com.baidu.disconf</groupId>
+			<artifactId>disconf-client</artifactId>
+			<version>2.6.38-SNAPSHOT</version>
+		</dependency>
     </dependencies>
     
      
