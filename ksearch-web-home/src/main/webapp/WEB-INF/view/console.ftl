@@ -271,12 +271,16 @@
                     if (data.status){
                         var clusterNames = data.data.split(",");
                         $.each(clusterNames,function (i,item) {
+                            if (!globalClusterName&&i===0){
+                                globalClusterName = item;
+                                Util.cookie.set("cluster-name",globalClusterName,30*24*60*60*1000);
+							}
                             initClusterNodeInfo(i,item);
                         });
 
                         // 初始化健康信息
-                        initClusterHealth(clusterNames[0]);
-                        initClusterStatistics(clusterNames[0]);
+                        initClusterHealth(globalClusterName);
+                        initClusterStatistics(globalClusterName);
 					}
 
 				});
@@ -500,7 +504,7 @@
             /**
 			 * 初始化集群节点信息
 			 */
-            function initClusterNodeInfo(i,clusterName) {
+            function initClusterNodeInfo(index,clusterName) {
                 /*
                  * 集群信息
                  */
@@ -520,9 +524,8 @@
                                         '<span style=\'width: 45px;\' class=\'label label-sm label-yellow arrowed\'>yellow</span>:基本的分片可用，但是备份不可用（或者是没有备份）</br>'+
                                         '<span style=\'width: 45px;\'  class=\'label label-sm label-danger arrowed\'>red</span>:部分的分片可用，表明分片有一部分损坏。此时执行查询部分数据仍然可以查到，遇到这种情况，还是赶快解决比较好</br>';
                                 html +='集群：'+'<button id="cluster_name_'+clusterName+'" data-trigger="hover" data-rel="popover" class="cluster-name btn btn-'+cls+' tooltip-"'+cls+' data-content="'+content+'">';
-										if(i==0){
+										if(globalClusterName===clusterName){
 										    html+='<i class="icon-ok"></i>';
-                                            Util.cookie.set("cluster-name",clusterName,30*24*60*60*1000);
 										}
 										html += t.name+'</button>&nbsp;';
                                 html +='&nbsp;节点：';
