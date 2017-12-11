@@ -452,7 +452,7 @@
             silentSort:false,
             queryParams:function (params) {
 
-                var index = $("#appname").val()+"."+$("#logtype").val()+"."+$("#dateinfo").val();
+                var index = getIndex();
 
                 params.index = index;
                 params.type = "log";
@@ -529,7 +529,32 @@
         minute = minute < 10 ? ('0' + minute) : minute;
         second = second < 10 ? ('0' + second) : second;
         return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second+","+sss;
-    };
+    }
+    function getIndex() {
+        var appname = $("#appname").val();
+        var logtype = $("#logtype").val();
+        var dateinfo = $("#dateinfo").val();
+        var index = "";
+        if (!appname){
+            index = "*";
+            return index;
+        }
+        index+=appname+".";
+        if (!logtype){
+            index+="*";
+            return index;
+        }
+        index+=logtype+".";
+        if (!dateinfo){
+            index+="*"
+            return index;
+        }
+
+        index +=dateinfo;
+
+        return index;
+
+    }
 </script>
 </body>
 </html>
