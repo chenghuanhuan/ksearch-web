@@ -192,6 +192,13 @@
                                             <input type="text" id="message" name="message" placeholder="" class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="message">contextId:</label>
+
+                                    <div class="col-xs-12 col-sm-3">
+                                        <div class="clearfix">
+                                            <input type="text" id="contextId" name="contextId" placeholder="" class="col-xs-12 col-sm-12" />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -440,6 +447,9 @@
                 field: 'message',
                 title: '<span class="text-primary">message</span>'
             }, {
+                field: 'contextId',
+                title: '<span class="text-primary">contextId</span>'
+            }, {
                 field: 'remoteAddr',
                 title: '<span class="text-primary">remoteAddr</span>'
             }, {
@@ -468,6 +478,7 @@
                 params.level = $.trim($("#level").val());
                 params.message = $.trim($("#message").val());
                 params.clusterName = clusterName;
+                params.contextId = $.trim($("#contextId").val());
                 return params;
             }
         });

@@ -66,6 +66,10 @@ public class SysLogServiceImpl implements SysLogService{
             boolQueryBuilder.filter(termQuery("host",sysLogVO.getHost()));
         }
 
+        if (StringUtils.isNotEmpty(sysLogVO.getContextId())){
+            boolQueryBuilder.filter(termQuery("contextId",sysLogVO.getContextId()));
+        }
+
         if (StringUtils.isNotEmpty(sysLogVO.getEndTime())&&StringUtils.isNotEmpty(sysLogVO.getStartTime())){
             boolQueryBuilder.filter(rangeQuery("datetime").gte(DateUtils.parseDate(sysLogVO.getStartTime(),"yyyy-MM-dd HH:mm:ss").getTime())
                     .lte(DateUtils.parseDate(sysLogVO.getEndTime(),"yyyy-MM-dd HH:mm:ss").getTime()));

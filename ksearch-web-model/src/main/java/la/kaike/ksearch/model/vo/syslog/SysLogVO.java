@@ -30,12 +30,22 @@ public class SysLogVO extends PageVO {
     private String requestURIWithQueryString;
     private String userId;
 
+    private String contextId;
+
     @Validate(maxLength = 32)
     private String startTime;
 
     @Validate(maxLength = 32)
     private String endTime;
 
+
+    public String getContextId() {
+        return contextId;
+    }
+
+    public void setContextId(String contextId) {
+        this.contextId = contextId;
+    }
 
     public String getStartTime() {
         return startTime;

@@ -69,6 +69,9 @@
         "level": {
           "type": "keyword"
         },
+        "contextId": {
+          "type": "keyword"
+        },
         "message": {
           "type": "text",
           "analyzer": "ik_en_max_word"
