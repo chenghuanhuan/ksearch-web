@@ -67,7 +67,8 @@ public class SysLogServiceImpl implements SysLogService{
         }
 
         if (StringUtils.isNotEmpty(sysLogVO.getContextId())){
-            boolQueryBuilder.filter(termQuery("contextId",sysLogVO.getContextId()));
+            ///boolQueryBuilder.filter(termQuery("contextId",sysLogVO.getContextId()));
+            boolQueryBuilder.filter(matchPhraseQuery("message",sysLogVO.getContextId()));
         }
 
         if (StringUtils.isNotEmpty(sysLogVO.getEndTime())&&StringUtils.isNotEmpty(sysLogVO.getStartTime())){
