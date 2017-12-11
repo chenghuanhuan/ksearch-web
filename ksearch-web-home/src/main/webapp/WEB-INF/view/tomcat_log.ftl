@@ -363,18 +363,7 @@
          * 查询
          */
         $(".btn-query").on("click",function () {
-            if(!$("#appname").val()){
-                $myNotify.danger("请选择应用名称");
-                return;
-            }
-            if(!$("#logtype").val()){
-                $myNotify.danger("请选择文件名称");
-                return;
-            }
-            if(!$("#dateinfo").val()){
-                $myNotify.danger("请选择日期");
-                return;
-            }
+
 
             $('#indices_table').bootstrapTable("removeAll");
             $('#indices_table').bootstrapTable("refresh");
