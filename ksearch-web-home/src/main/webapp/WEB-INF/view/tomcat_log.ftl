@@ -447,8 +447,11 @@
                 field: 'message',
                 title: '<span class="text-primary">message</span>'
             }, {
-                field: 'contextId',
-                title: '<span class="text-primary">contextId</span>'
+                field: 'appName',
+                title: '<span class="text-primary">appName</span>'
+            }, {
+                field: 'fileName',
+                title: '<span class="text-primary">fileName</span>'
             }, {
                 field: 'remoteAddr',
                 title: '<span class="text-primary">remoteAddr</span>'
