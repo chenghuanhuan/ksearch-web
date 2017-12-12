@@ -358,7 +358,7 @@
             //toolbar:"#toolbar",
             sidePagination:'server',
             url:"/tomcat/query",
-            pageList:[5, 10],
+            pageList:[5, 10,20],
             pagination:true,
             //detailView:true,
             //showRefresh:true,
