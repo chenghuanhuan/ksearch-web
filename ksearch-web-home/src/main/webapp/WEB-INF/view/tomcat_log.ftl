@@ -191,7 +191,7 @@
                                             <input type="text" id="message" name="message" placeholder="" class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
-                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="message">contextId/TimeKey:</label>
+                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="message">TimeKey:</label>
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
