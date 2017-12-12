@@ -403,10 +403,8 @@
             silentSort:false,
             queryParams:function (params) {
 
-                var index = getIndex();
-
-                params.index = index;
-
+                var appname = $("#appname").val();
+                params.appName = appname;
                 params.fileName = $.trim($("#logtype").val());
                 params.type = "log";
                 params.host = $.trim($("#host").val());
@@ -422,6 +420,7 @@
                 params.message = $.trim($("#message").val());
                 params.clusterName = clusterName;
                 params.contextId = $.trim($("#contextId").val());
+                params.date =$("#dateinfo").val();
                 return params;
             }
         });
@@ -484,26 +483,7 @@
         second = second < 10 ? ('0' + second) : second;
         return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second+","+sss;
     }
-    function getIndex() {
-        var appname = $("#appname").val();
-        var dateinfo = $("#dateinfo").val();
-        var index = "";
-        if (!appname){
-            index = "*";
-            return index;
-        }
-        index+=appname+".";
 
-        if (!dateinfo){
-            index+="*"
-            return index;
-        }
-
-        index +=dateinfo;
-
-        return index;
-
-    }
 </script>
 </body>
 </html>

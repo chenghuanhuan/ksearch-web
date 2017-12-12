@@ -15,7 +15,7 @@ public class SysLogVO extends PageVO {
     @Validate(required = true,isNotBlank = true,desc = "集群名称")
     private String clusterName;
 
-    private String index;
+    private String appName;
 
     private String type;
 
@@ -32,6 +32,9 @@ public class SysLogVO extends PageVO {
 
     private String contextId;
 
+    private String date;
+
+
     @Validate(maxLength = 32)
     private String startTime;
 
@@ -39,6 +42,14 @@ public class SysLogVO extends PageVO {
     private String endTime;
 
     private String fileName;
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public String getFileName() {
         return fileName;
@@ -72,12 +83,12 @@ public class SysLogVO extends PageVO {
         this.endTime = endTime;
     }
 
-    public String getIndex() {
-        return index;
+    public String getAppName() {
+        return appName;
     }
 
-    public void setIndex(String index) {
-        this.index = index;
+    public void setAppName(String appName) {
+        this.appName = appName;
     }
 
     public String getType() {

@@ -44,7 +44,20 @@ public class SysLogServiceImpl implements SysLogService{
 
         TransportClient client = ElasticClient.getClient(sysLogVO.getClusterName());
 
-        SearchRequestBuilder builder = client.prepareSearch(WebConstant.SYSLOG_PREFIX+sysLogVO.getIndex());
+        StringBuffer index = new StringBuffer(WebConstant.SYSLOG_PREFIX);
+        if (StringUtils.isNotEmpty(sysLogVO.getAppName())){
+            index.append(sysLogVO.getAppName()).append(".");
+        }else {
+            index.append("*.");
+        }
+
+        if (StringUtils.isNotEmpty(sysLogVO.getDate())){
+            index.append(sysLogVO.getDate());
+        }else {
+            index.append(DateUtils.getWebTodayString());
+        }
+
+        SearchRequestBuilder builder = client.prepareSearch(index.toString());
         builder.setTypes(sysLogVO.getType());
 
         BoolQueryBuilder boolQueryBuilder = boolQuery();
