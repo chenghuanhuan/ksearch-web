@@ -498,7 +498,8 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
         // 过滤出需要删除的index
         if (indicesVOList!=null&& indicesVOList.size()>0){
-            for (IndicesVO indicesVO:indicesVOList){
+            for (int i=indicesVOList.size()-1;i>=0;i--){
+                IndicesVO indicesVO = indicesVOList.get(i);
                 String index = indicesVO.getIndex();
                 if (index.startsWith("nginx_access_log_")||index.startsWith("nginx_error_log_")){
                     String [] strs = index.split("log_");
@@ -520,7 +521,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         /*********************删除系统日志**************************/
 
         //ksearch-api.ksearch-api-biz-service.2017-11-20
-        String reg = "^[a-zA-Z0-9-]+\\.[a-zA-Z0-9-]+\\.[a-zA-Z0-9-]+\\.(\\d\\d\\d\\d-\\d\\d-\\d\\d)";
+        String reg = "^[a-zA-Z0-9-]+\\.[a-zA-Z0-9-]+\\.(\\d\\d\\d\\d-\\d\\d-\\d\\d)";
         List<String> delSysLogIndexList = filterIndex(indicesVOList,reg);
 
         if (CollectionUtils.isNotEmpty(delSysLogIndexList)) {

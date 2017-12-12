@@ -336,7 +336,7 @@
                 $(this).text("停止刷新");
                 $(this).attr("refresh","ok");
                 timmer1 = window.setInterval(function () {
-                    $('#indices_table').bootstrapTable("refresh");
+                    $('#indices_table').bootstrapTable("selectPage",1);
                 },5000);
             }
         });
