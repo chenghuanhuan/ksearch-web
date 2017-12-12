@@ -28,4 +28,19 @@ public class SelectVO {
     public void setText(String text) {
         this.text = text;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SelectVO selectVO = (SelectVO) o;
+
+        return id != null ? id.equals(selectVO.id) : selectVO.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }

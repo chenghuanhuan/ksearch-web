@@ -38,6 +38,15 @@ public class SysLogVO extends PageVO {
     @Validate(maxLength = 32)
     private String endTime;
 
+    private String fileName;
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
     public String getContextId() {
         return contextId;

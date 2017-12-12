@@ -38,7 +38,7 @@ public class TomcatController extends BaseController {
     @Autowired
     private ElasticSearchService elasticSearchService;
 
-    private final Pattern indexPattern = Pattern.compile("^([a-zA-Z_0-9\\-]+).([a-zA-Z_0-9\\-]+).([a-zA-Z_0-9\\-]+).(\\d\\d\\d\\d-\\d\\d-\\d\\d)");
+    private final Pattern indexPattern = Pattern.compile("^([a-zA-Z_0-9\\-]+).([a-zA-Z_0-9\\-]+).(\\d\\d\\d\\d-\\d\\d-\\d\\d)");
 
     @RequestMapping
     public String index(){
@@ -62,36 +62,32 @@ public class TomcatController extends BaseController {
     @ResponseBody
     public Response indexSelect(SimpleQueryReqVO simpleQueryReqVO){
         List<IndicesVO> indicesVOS =  elasticSearchService.getIndicesVO(simpleQueryReqVO.getClusterName());
-        List<SelectVO> selectVOList = new ArrayList<>();
-
-        Map<String,Map<String,Set<String>>> mapMap = new HashMap<>();
+        List<SelectVO> appList = new ArrayList<>();
+        List<SelectVO> dateList = new ArrayList<>();
+        Map<String,List<SelectVO>> mapMap = new HashMap<>();
         if(CollectionUtils.isNotEmpty(indicesVOS)){
             for (IndicesVO indicesVO:indicesVOS){
                 Matcher matcher = indexPattern.matcher(indicesVO.getIndex());
 
                 if (matcher.matches()){
                     String appname = matcher.group(2);
-                    String logType = matcher.group(3);
-                    String date = matcher.group(4);
-                    if (mapMap.get(appname)!=null){
-                        Map<String,Set<String>> logTypeMap = mapMap.get(appname);
-                        if (logTypeMap.get(logType)!=null){
-                            Set<String> dateset = logTypeMap.get(logType);
-                            dateset.add(date);
-                        }else {
-                            Set<String> dateset = new HashSet<>();
-                            dateset.add(date);
-                            logTypeMap.put(logType,dateset);
-                        }
-                    }else {
-                        Map<String,Set<String>> logTypeMap = new HashMap<>();
-                        Set<String> dateset = new HashSet<>();
-                        dateset.add(date);
-                        logTypeMap.put(logType,dateset);
-                        mapMap.put(appname,logTypeMap);
+                    String date = matcher.group(3);
+                    SelectVO selectVO = new SelectVO();
+                    selectVO.setId(appname);
+                    selectVO.setText(appname);
+                    if (!appList.contains(selectVO)){
+                        appList.add(selectVO);
+                    }
+                    SelectVO selectVO2 = new SelectVO();
+                    selectVO2.setId(date);
+                    selectVO2.setText(date);
+                    if (!dateList.contains(selectVO2)){
+                        dateList.add(selectVO2);
                     }
                 }
             }
+            mapMap.put("appList",appList);
+            mapMap.put("dateList",dateList);
         }
         return succeed(mapMap);
     }

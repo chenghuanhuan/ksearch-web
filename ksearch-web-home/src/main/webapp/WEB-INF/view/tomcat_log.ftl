@@ -115,8 +115,7 @@
 
                                     <div class="col-xs-12 col-sm-3">
                                         <div class="clearfix">
-                                            <input type="hidden" id="logtype" name="logtype" class="width-100 select2">
-                                            </input>
+                                            <input type="text" id="logtype" name="logtype" placeholder="" class="col-xs-12 col-sm-12" />
                                         </div>
                                     </div>
 
@@ -314,12 +313,7 @@
 
                 indexInfo = data.data;
 
-                if (indexInfo){
-                    for(var key in indexInfo){
-                        appNameArr.push({id:key,text:key});
-                    }
-
-                }
+                appNameArr =indexInfo.appList;
 
 
                 $("#appname").select2({
@@ -328,39 +322,12 @@
                     data:appNameArr
                 });
 
-                $("#logtype").select2({
-                    allowClear: true,
-                    placeholder: "请选择文件名",
-                    data:[]
-                });
-
                 $("#dateinfo").select2({
                     allowClear: true,
                     placeholder: "请选择日期",
-                    data:[]
+                    data:indexInfo.dateList
                 });
 
-                /*  应用名变更**/
-                $("#appname").on("change", function (e) {
-                   var logtypeArrs = getLogType($(this).val());
-                    $("#logtype").select2({
-                        allowClear: true,
-                        placeholder: "请选择文件名",
-                        data:logtypeArrs
-                    });
-                });
-
-                /*  文件名变更**/
-                $("#logtype").on("change", function (e) {
-                    var appname = $("#appname").val();
-                    var logtype = $("#logtype").val();
-                    var dateArr = getLogDate(appname,logtype);
-                    $("#dateinfo").select2({
-                        allowClear: true,
-                        placeholder: "请选择日期",
-                        data:dateArr
-                    });
-                });
             }
         });
         ajIndex.set("clusterName",clusterName);
@@ -394,19 +361,7 @@
         $(".btn-reset").on("click",function () {
             $('#query-form')[0].reset();
             $("#appname").select2('val', '');
-            $("#logtype").select2('val', '');
             $("#dateinfo").select2('val', '');
-            $("#logtype").select2({
-                allowClear: true,
-                placeholder: "请选择文件名",
-                data:[]
-            });
-
-            $("#dateinfo").select2({
-                allowClear: true,
-                placeholder: "请选择日期",
-                data:[]
-            });
         });
 
 
@@ -468,12 +423,14 @@
                 var index = getIndex();
 
                 params.index = index;
+
+                params.fileName = $.trim($("#logtype").val());
                 params.type = "log";
                 params.host = $.trim($("#host").val());
                 if($.trim($("#startTime").val())) {
                     params.startTime = $("#dateinfo").val() + " " + $.trim($("#startTime").val());
                 }
-                $.trim($("#endTime").val())
+                if($.trim($("#endTime").val()))
                 {
                     params.endTime = $("#dateinfo").val() + " " + $.trim($("#endTime").val());
                 }
@@ -546,7 +503,6 @@
     }
     function getIndex() {
         var appname = $("#appname").val();
-        var logtype = $("#logtype").val();
         var dateinfo = $("#dateinfo").val();
         var index = "";
         if (!appname){
@@ -554,11 +510,7 @@
             return index;
         }
         index+=appname+".";
-        if (!logtype){
-            index+="*";
-            return index;
-        }
-        index+=logtype+".";
+
         if (!dateinfo){
             index+="*"
             return index;

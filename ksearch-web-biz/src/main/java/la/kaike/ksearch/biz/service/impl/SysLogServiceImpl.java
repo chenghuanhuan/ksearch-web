@@ -66,6 +66,10 @@ public class SysLogServiceImpl implements SysLogService{
             boolQueryBuilder.filter(termQuery("host",sysLogVO.getHost()));
         }
 
+        if (StringUtils.isNotEmpty(sysLogVO.getFileName())){
+            boolQueryBuilder.filter(termQuery("fileName",sysLogVO.getFileName()));
+        }
+
         if (StringUtils.isNotEmpty(sysLogVO.getContextId())){
             ///boolQueryBuilder.filter(termQuery("contextId",sysLogVO.getContextId()));
             boolQueryBuilder.filter(matchPhraseQuery("message",sysLogVO.getContextId()));
