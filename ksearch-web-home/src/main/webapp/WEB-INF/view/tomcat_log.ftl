@@ -265,25 +265,7 @@
     var indexInfo = null;
     var appNameArr = [];
     var timmer1 = null;
-    function getLogType(appname) {
-        var loginfos = indexInfo[appname];
-        var loginfoArrs =[];
-        for(var key in loginfos){
-            loginfoArrs.push({id:key,text:key});
-        }
 
-        return loginfoArrs;
-    }
-
-    function getLogDate(appname,loginfo) {
-        var loginfos = indexInfo[appname];
-        var dateinfos = loginfos[loginfo];
-        var dateinfoArr =[];
-        for(var v in dateinfos){
-            dateinfoArr.push({id:dateinfos[v],text:dateinfos[v]})
-        }
-        return dateinfoArr;
-    }
 
     $('#startTime').timepicker({
         minuteStep: 1,
