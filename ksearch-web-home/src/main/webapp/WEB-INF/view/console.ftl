@@ -298,16 +298,7 @@
                     $('#cluster_health_table').bootstrapTable('refresh');
                     $('#indices_table').bootstrapTable('refresh');
                     initClusterStatistics(clusterName);
-                    
-                    // 更新菜单栏上集群选中
-                 /*   var clusterSelect = $("#sidebar-shortcuts-mini");
-                    clusterSelect.find("span").each(function (i,item) {
-						if($(item).data("clustername") == clusterName){
-                            $(item).addClass("btn-border");
-						}else {
-                            $(item).removeClass("btn-border");
-						}
-                    });*/
+                    $("#nodeSize").html($(this).parent().children("button").length-1);
                 });
 
 
