@@ -340,7 +340,8 @@
 
 
             $('#indices_table').bootstrapTable("removeAll");
-            $('#indices_table').bootstrapTable("refresh");
+            $('#indices_table').bootstrapTable("selectPage",1);
+            //$('#indices_table').bootstrapTable("refresh");
         });
 
         $(".btn-refresh").on("click",function () {
