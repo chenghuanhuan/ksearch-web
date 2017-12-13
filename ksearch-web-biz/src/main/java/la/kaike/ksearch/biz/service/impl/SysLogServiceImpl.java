@@ -53,8 +53,10 @@ public class SysLogServiceImpl implements SysLogService{
 
         if (StringUtils.isNotEmpty(sysLogVO.getDate())){
             index.append(sysLogVO.getDate());
-        }else {
+        }else if (StringUtils.isNotEmpty(sysLogVO.getDate())&&StringUtils.isNotEmpty(sysLogVO.getAppName())){
             index.append(DateUtils.getWebTodayString());
+        }else {
+            index.append("*");
         }
 
         SearchRequestBuilder builder = client.prepareSearch(index.toString());
