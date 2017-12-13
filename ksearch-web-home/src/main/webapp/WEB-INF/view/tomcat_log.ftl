@@ -368,10 +368,7 @@
             pageSize:5,
             columns: [{
                 field: 'datetime',
-                title: '<span class="text-primary">datetime</span>',
-                formatter: function (value, row, index) {
-                    return formatDateTime(row.datetime);
-                }
+                title: '<span class="text-primary">datetime</span>'
             }, {
                 field: 'host',
                 title: '<span class="text-primary">host</span>'
