@@ -55,7 +55,8 @@
           "analyzer": "custom_pattern_point"
         },
         "datetime": {
-          "type": "long"
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss.SSS"
         },
         "fileName": {
           "type": "keyword"
