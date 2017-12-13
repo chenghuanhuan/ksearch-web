@@ -91,8 +91,8 @@ public class SysLogServiceImpl implements SysLogService{
         }
 
         if (StringUtils.isNotEmpty(sysLogVO.getEndTime())&&StringUtils.isNotEmpty(sysLogVO.getStartTime())){
-            boolQueryBuilder.filter(rangeQuery("datetime").gte(DateUtils.parseDate(sysLogVO.getStartTime(),"yyyy-MM-dd HH:mm:ss").getTime())
-                    .lte(DateUtils.parseDate(sysLogVO.getEndTime(),"yyyy-MM-dd HH:mm:ss").getTime()));
+            boolQueryBuilder.filter(rangeQuery("datetime").gte(sysLogVO.getStartTime())
+                    .lte(sysLogVO.getEndTime()).format("yyyy-MM-dd HH:mm:ss.SSS"));
         }
         /******************************/
 

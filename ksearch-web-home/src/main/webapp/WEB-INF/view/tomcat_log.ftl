@@ -409,11 +409,11 @@
                 params.type = "log";
                 params.host = $.trim($("#host").val());
                 if($.trim($("#startTime").val())) {
-                    params.startTime = $("#dateinfo").val() + " " + $.trim($("#startTime").val());
+                    params.startTime = $("#dateinfo").val() + " " + $.trim($("#startTime").val())+".000";
                 }
                 if($.trim($("#endTime").val()))
                 {
-                    params.endTime = $("#dateinfo").val() + " " + $.trim($("#endTime").val());
+                    params.endTime = $("#dateinfo").val() + " " + $.trim($("#endTime").val())+".000";
                 }
                 params.className = $.trim($("#className").val());
                 params.level = $.trim($("#level").val());
