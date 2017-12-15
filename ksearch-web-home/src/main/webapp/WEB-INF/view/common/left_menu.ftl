@@ -60,6 +60,13 @@
     </li>
 
     <li>
+        <a href="/phplog" class="left-menu">
+            <i class="icon-list-alt"></i>
+            <span class="menu-text"> php 日志 </span>
+        </a>
+    </li>
+
+    <li>
         <a href="/user" class="left-menu">
             <i class="icon-calendar"></i>
 
