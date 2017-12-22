@@ -44,6 +44,8 @@
                 /index/**=authc
                 /dataview/**=authc
                 /applog/**=authc
+                /tomcat/**=authc
+                /phplog/**=authc
                 /query/**=authc
                 /user/**=authc
                 /edit=authc,roles["edit"],perms["delete1"]
