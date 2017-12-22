@@ -4,6 +4,7 @@
  */
 package la.kaike.ksearch.home.controller;
 
+import com.baidu.disconf.client.usertools.IKuKoConfDataGetter;
 import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.biz.service.RoleService;
 import la.kaike.ksearch.home.base.BaseController;
@@ -17,11 +18,14 @@ import la.kaike.ksearch.model.vo.index.MappingVO;
 import la.kaike.ksearch.model.vo.index.PropertiesVO;
 import la.kaike.ksearch.model.vo.query.SimpleQueryReqVO;
 import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +37,7 @@ import java.util.List;
 @RequestMapping("/common")
 public class CommonController extends BaseController {
 
+    private static final Logger logger = LoggerFactory.getLogger(CommonController.class);
     @Resource
     private ElasticSearchService elasticSearchService;
 
@@ -108,6 +113,22 @@ public class CommonController extends BaseController {
             }
         }
         return succeed(fields);
+    }
+
+    @RequestMapping("/cleanIndex")
+    @ResponseBody
+    public Response cleanIndex(GetMappingReqVO reqVO){
+
+        String clusterNames = IKuKoConfDataGetter.getStringValue("ksearch.cluster.name");
+        String [] clusterNameArr = clusterNames.split(",");
+        for (int i=0;i<clusterNameArr.length;i++) {
+            try {
+                elasticSearchService.clearOldIndex(clusterNameArr[i]);
+            } catch (ParseException e) {
+                logger.error("删除索引任务失败,clusterName={}",clusterNameArr[i],e);
+            }
+        }
+        return succeed();
     }
 
     private List<FieldsVO> converFieldList(List<PropertiesVO> propertiesVOList){

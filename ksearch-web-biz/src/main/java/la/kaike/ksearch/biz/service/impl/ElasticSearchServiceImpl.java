@@ -493,11 +493,11 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         List<IndicesVO> indicesVOList = getIndicesVO(clusterName);
 
         /*******************删除nginx日志******************/
-        // 删除小于此月份的所有索引
-        List<String> deleteIndexList = new ArrayList<>();
 
         // 过滤出需要删除的index
         if (indicesVOList!=null&& indicesVOList.size()>0){
+            // 删除小于此月份的所有索引
+            List<String> deleteIndexList = new ArrayList<>();
             for (int i=indicesVOList.size()-1;i>=0;i--){
                 IndicesVO indicesVO = indicesVOList.get(i);
                 String index = indicesVO.getIndex();
@@ -524,9 +524,11 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         String reg = "^[a-zA-Z0-9-]+\\.[a-zA-Z0-9-]+\\.(\\d\\d\\d\\d-\\d\\d-\\d\\d)";
         List<String> delSysLogIndexList = filterIndex(indicesVOList,reg);
 
+        logger.info("删除索引："+delSysLogIndexList);
         if (CollectionUtils.isNotEmpty(delSysLogIndexList)) {
             TransportClient client = ElasticClient.getClient(clusterName);
-            client.admin().indices().prepareDelete(deleteIndexList.toArray(new String[]{})).get();
+            String [] indexes = delSysLogIndexList.toArray(new String[]{});
+            client.admin().indices().prepareDelete(indexes).get();
         }
 
     }
@@ -543,7 +545,8 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
         Pattern pattern = Pattern.compile(regix);
         if (indicesVOList!=null&& indicesVOList.size()>0) {
-            for (IndicesVO indicesVO : indicesVOList) {
+            for (int i=indicesVOList.size()-1;i>=0;i--) {
+                IndicesVO indicesVO = indicesVOList.get(i);
                 String index = indicesVO.getIndex();
                 Matcher matcher = pattern.matcher(index);
                 if (matcher.matches()&&matcher.groupCount()>0) {
@@ -616,11 +619,4 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         return propertiesVOList;
     }
 
-    public static void main(String[] args) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Pattern pattern = Pattern.compile("^[a-zA-Z0-9-]+\\.[a-zA-Z0-9-]+\\.[a-zA-Z0-9-]+\\.(\\d\\d\\d\\d-\\d\\d-\\d\\d)");
-        Matcher matcher = pattern.matcher("syslog.ksearch-api.ksearch-api-biz-service.2017-11-20");
-        System.out.println(matcher.matches());
-        System.out.println(matcher.group(1));
-    }
 }
