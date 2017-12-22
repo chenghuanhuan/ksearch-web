@@ -117,7 +117,7 @@ public class CommonController extends BaseController {
 
     @RequestMapping("/cleanIndex")
     @ResponseBody
-    public Response cleanIndex(GetMappingReqVO reqVO){
+    public Response cleanIndex(){
 
         String clusterNames = IKuKoConfDataGetter.getStringValue("ksearch.cluster.name");
         String [] clusterNameArr = clusterNames.split(",");
