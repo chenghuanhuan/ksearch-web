@@ -271,7 +271,7 @@
                 field: 'source',
                 title: '<span class="text-primary">source</span>'
             }, {
-                field: 'timestamp',
+                field: 'error_timestamp',
                 title: '<span class="text-primary">timestamp</span>'
             }, {
                 field: 'type',
