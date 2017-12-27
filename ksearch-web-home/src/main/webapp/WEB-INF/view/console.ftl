@@ -417,6 +417,9 @@
                     //showHeader:false,
                     //cardView:true,
                     url:"/console/cluster/indeices",
+                    pagination:true,
+                    pageSize:12,
+                    pageList:[12,20,40],
                     queryParams:function (params) {
                         if (globalClusterName){
                             params.clusterName = globalClusterName;

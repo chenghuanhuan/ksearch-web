@@ -169,6 +169,9 @@
                     search:true,
                     toolbar:"#toolbar",
                     url:"/console/cluster/indeices",
+                    pagination:true,
+                    pageSize:15,
+                    pageList:[15,20,40,"All"],
                     queryParams:function (params) {
                         params.clusterName = clusterName;
                         return params;
