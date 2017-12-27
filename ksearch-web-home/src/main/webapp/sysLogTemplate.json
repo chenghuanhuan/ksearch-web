@@ -51,8 +51,7 @@
           "type": "keyword"
         },
         "className": {
-          "type": "text",
-          "analyzer": "custom_pattern_point"
+          "type": "keyword"
         },
         "datetime": {
           "type": "date",
