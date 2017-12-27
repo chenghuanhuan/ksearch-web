@@ -61,7 +61,7 @@
           "type": "keyword"
         },
         "host": {
-          "type": "text"
+          "type": "keyword"
         },
         "keyword": {
           "type": "text"
