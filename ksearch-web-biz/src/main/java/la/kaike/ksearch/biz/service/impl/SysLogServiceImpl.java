@@ -43,23 +43,42 @@ public class SysLogServiceImpl implements SysLogService{
         PageResponse pageResponse = new PageResponse();
 
         TransportClient client = ElasticClient.getClient(sysLogVO.getClusterName());
-
-        StringBuffer index = new StringBuffer(WebConstant.SYSLOG_PREFIX);
-        if (StringUtils.isNotEmpty(sysLogVO.getAppName())){
-            index.append(sysLogVO.getAppName()).append(".");
+        SearchRequestBuilder builder;
+        List<String> indexList = new ArrayList<>();
+        String appName = sysLogVO.getAppName();
+        if (StringUtils.isNotEmpty(appName)&&appName.indexOf(",")>-1) {
+            String[] appNameArr = appName.split(",");
+            for (String appNamea:appNameArr){
+                StringBuilder sbIndex = new StringBuilder(WebConstant.SYSLOG_PREFIX);
+                sbIndex.append(appNamea).append(".");
+                if (StringUtils.isNotEmpty(sysLogVO.getDate())) {
+                    sbIndex.append(sysLogVO.getDate());
+                } else {
+                    sbIndex.append("*");
+                }
+                indexList.add(sbIndex.toString());
+            }
+            builder = client.prepareSearch(indexList.toArray(new String[]{}));
         }else {
-            index.append("*.");
+            StringBuffer index = new StringBuffer(WebConstant.SYSLOG_PREFIX);
+            if (StringUtils.isNotEmpty(sysLogVO.getAppName())) {
+                index.append(sysLogVO.getAppName()).append(".");
+            } else {
+                index.append("*.");
+            }
+
+            if (StringUtils.isNotEmpty(sysLogVO.getDate())) {
+                index.append(sysLogVO.getDate());
+            } else if (StringUtils.isNotEmpty(sysLogVO.getDate()) && StringUtils.isNotEmpty(sysLogVO.getAppName())) {
+                index.append(DateUtils.getWebTodayString());
+            } else {
+                index.append("*");
+            }
+
+            builder = client.prepareSearch(index.toString());
         }
 
-        if (StringUtils.isNotEmpty(sysLogVO.getDate())){
-            index.append(sysLogVO.getDate());
-        }else if (StringUtils.isNotEmpty(sysLogVO.getDate())&&StringUtils.isNotEmpty(sysLogVO.getAppName())){
-            index.append(DateUtils.getWebTodayString());
-        }else {
-            index.append("*");
-        }
 
-        SearchRequestBuilder builder = client.prepareSearch(index.toString());
         builder.setTypes(sysLogVO.getType());
 
         BoolQueryBuilder boolQueryBuilder = boolQuery();

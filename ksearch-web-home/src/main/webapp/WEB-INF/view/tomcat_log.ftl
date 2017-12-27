@@ -301,7 +301,8 @@
                 $("#appname").select2({
                     allowClear: true,
                     placeholder: "请选择应用名称",
-                    data:appNameArr
+                    data:appNameArr,
+                    multiple: true
                 });
 
                 $("#dateinfo").select2({
