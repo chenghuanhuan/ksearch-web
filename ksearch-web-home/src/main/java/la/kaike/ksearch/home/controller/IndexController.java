@@ -8,12 +8,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.home.base.BaseController;
+import la.kaike.ksearch.home.warpper.CacheManager;
 import la.kaike.ksearch.model.Response;
 import la.kaike.ksearch.model.bo.index.PropertiesBO;
 import la.kaike.ksearch.model.vo.index.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.common.xcontent.XContentFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -54,6 +53,8 @@ public class IndexController extends BaseController{
     @ResponseBody
     public Response add(AddIndexReqVO addIndexVO){
         elasticSearchService.addIndex(addIndexVO);
+        String key = addIndexVO.getClusterName()+"_indeices";
+        CacheManager.refresh(key);
         return succeed("添加索引成功");
     }
 
@@ -67,6 +68,8 @@ public class IndexController extends BaseController{
     @ResponseBody
     public Response del(DelIndexReqVO delIndexVO){
         elasticSearchService.delIndex(delIndexVO);
+        String key = delIndexVO.getClusterName()+"_indeices";
+        CacheManager.refresh(key);
         return succeed("删除索引成功！");
     }
 
@@ -81,6 +84,8 @@ public class IndexController extends BaseController{
     @ResponseBody
     public Response refresh(RefreshIndexReqVO refreshIndexVO){
         elasticSearchService.refreshIndex(refreshIndexVO);
+        String key = refreshIndexVO.getClusterName()+"_indeices";
+        CacheManager.refresh(key);
         return succeed("刷新索引成功！");
     }
 
@@ -94,6 +99,8 @@ public class IndexController extends BaseController{
     @ResponseBody
     public Response refresh(CloseIndexReqVO closeIndexVO){
         elasticSearchService.closeIndex(closeIndexVO);
+        String key = closeIndexVO.getClusterName()+"_indeices";
+        CacheManager.refresh(key);
         return succeed("关闭索引成功！");
     }
 
@@ -107,6 +114,8 @@ public class IndexController extends BaseController{
     @ResponseBody
     public Response refresh(OpenIndexReqVO openIndexReqVO){
         elasticSearchService.openIndex(openIndexReqVO);
+        String key = openIndexReqVO.getClusterName()+"_indeices";
+        CacheManager.refresh(key);
         return succeed("打开索引成功！可能不会马上显示，过一会儿尝试刷新页面！");
     }
 
@@ -120,6 +129,8 @@ public class IndexController extends BaseController{
     @ResponseBody
     public Response flush(FlushIndexReqVO flushIndexVO){
         elasticSearchService.flushIndex(flushIndexVO);
+        String key = flushIndexVO.getClusterName()+"_indeices";
+        CacheManager.refresh(key);
         return succeed("flush成功！");
     }
 
@@ -133,6 +144,8 @@ public class IndexController extends BaseController{
     @ResponseBody
     public Response optimize(OptimizeIndexReqVO optimizeIndexVO){
         elasticSearchService.optimizeIndex(optimizeIndexVO);
+        String key = optimizeIndexVO.getClusterName()+"_indeices";
+        CacheManager.refresh(key);
         return succeed("优化成功！");
     }
 
@@ -142,7 +155,9 @@ public class IndexController extends BaseController{
     @ResponseBody
     public Response clearData(ClearDataReqVO clearDataReqVO) throws IOException {
         elasticSearchService.clearData(clearDataReqVO);
-        return succeed("优化成功！");
+        String key = clearDataReqVO.getClusterName()+"_indeices";
+        CacheManager.refresh(key);
+        return succeed("清空成功！");
     }
 
     /**
@@ -155,6 +170,8 @@ public class IndexController extends BaseController{
     @ResponseBody
     public Response addAlias(CreateAliasReqVO createAliasVO){
         elasticSearchService.createAlias(createAliasVO);
+        String key = createAliasVO.getClusterName()+"_indeices";
+        CacheManager.refresh(key);
         return succeed("添加别名成功！");
     }
 
@@ -168,6 +185,8 @@ public class IndexController extends BaseController{
     @ResponseBody
     public Response delAlias(DelAliasReqVO delAliasVO){
         elasticSearchService.delAlias(delAliasVO);
+        String key = delAliasVO.getClusterName()+"_indeices";
+        CacheManager.refresh(key);
         return succeed("删除别名成功！");
     }
 
@@ -193,6 +212,8 @@ public class IndexController extends BaseController{
         logger.info(jsonObject.toJSONString());
         addMappingVO.setMappingsJson(jsonObject.toJSONString());
         elasticSearchService.addMapping(addMappingVO);
+        String key = addMappingVO.getClusterName()+"_indeices";
+        CacheManager.refresh(key);
         return succeed("保存成功！");
     }
 
@@ -259,6 +280,8 @@ public class IndexController extends BaseController{
     @ResponseBody
     public Response addDoc(AddDocReqVO addDocReqVO){
         elasticSearchService.addDoc(addDocReqVO);
+        String key = addDocReqVO.getClusterName()+"_indeices";
+        CacheManager.refresh(key);
         return succeed("保存成功");
     }
 
@@ -279,19 +302,4 @@ public class IndexController extends BaseController{
         return "addTypeForm";
     }
 
-    public static void main(String[] args) throws IOException {
-        XContentBuilder builder =  XContentFactory.jsonBuilder()
-                .startObject()
-                .startObject("news")
-                .startObject("properties")
-                .startObject("title")
-                .field("analyzer", "whitespace")
-                .field("type", "string")
-                .endObject()
-                .endObject()
-                .endObject()
-                .endObject();
-        System.out.println(builder.string());
-
-    }
 }

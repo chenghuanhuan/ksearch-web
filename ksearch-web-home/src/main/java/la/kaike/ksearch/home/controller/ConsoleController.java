@@ -7,9 +7,9 @@ package la.kaike.ksearch.home.controller;
 import com.baidu.disconf.client.usertools.IKuKoConfDataGetter;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.home.base.BaseController;
+import la.kaike.ksearch.home.warpper.CacheManager;
 import la.kaike.ksearch.model.ClusterRequest;
 import la.kaike.ksearch.model.Response;
 import la.kaike.ksearch.model.bo.ClusterHealthBO;
@@ -46,7 +46,7 @@ public class ConsoleController extends BaseController{
     @Resource
     private ElasticSearchService elasticSearchService;
 
-    private static LoadingCache<String, List<IndicesVO>> cache = null;
+
 
     //@RequiresPermissions(value = {"delete"})
     @RequestMapping
@@ -146,27 +146,29 @@ public class ConsoleController extends BaseController{
     @ResponseBody
     public Response indicesList(ClusterRequest request) throws ExecutionException {
 
-        String key = "indeices";
+        String key = request.getClusterName()+"_indeices";
         // 添加缓存
-        if (cache==null){
+        if (CacheManager.cache==null) {
             //indicesVOList = elasticSearchService.getIndicesVO(request.getClusterName());
-            cache = CacheBuilder.newBuilder()
-                    //设置cache的初始大小为10，要合理设置该值
-                    .initialCapacity(10)
-                    //设置并发数为5，即同一时间最多只能有5个线程往cache执行写入操作
-                    .concurrencyLevel(10)
-                    //设置cache中的数据在写入之后的存活时间为3秒
-                    .expireAfterWrite(1, TimeUnit.HOURS)
-                    //构建cache实例
-                    .build(new CacheLoader<String, List<IndicesVO> >() {
-                        @Override
-                        public List<IndicesVO>  load(String key) throws Exception {
-                            List<IndicesVO> indicesVOList = elasticSearchService.getIndicesVO(request.getClusterName());
-                            return indicesVOList;
-                        }
-                    });
+            synchronized (CacheManager.class) {
+                CacheManager.cache = CacheBuilder.newBuilder()
+                        //设置cache的初始大小为10，要合理设置该值
+                        .initialCapacity(10)
+                        //设置并发数为5，即同一时间最多只能有5个线程往cache执行写入操作
+                        .concurrencyLevel(10)
+                        //设置cache中的数据在写入之后的存活时间为3秒
+                        .expireAfterWrite(1, TimeUnit.HOURS)
+                        //构建cache实例
+                        .build(new CacheLoader<String, List<IndicesVO>>() {
+                            @Override
+                            public List<IndicesVO> load(String key) throws Exception {
+                                List<IndicesVO> indicesVOList = elasticSearchService.getIndicesVO(request.getClusterName());
+                                return indicesVOList;
+                            }
+                        });
+            }
         }
-        List<IndicesVO> indices = cache.get(key);
+        List<IndicesVO> indices = CacheManager.cache.get(key);
         return succeed(indices);
     }
 
@@ -176,10 +178,11 @@ public class ConsoleController extends BaseController{
      */
     @RequestMapping("/refresh/cache")
     @ResponseBody
-    public Response refreshCache(){
+    public Response refreshCache(ClusterRequest request){
+        String key = request.getClusterName()+"_indeices";
         // 添加缓存
-        if (cache!=null){
-            cache.refresh("indeices");
+        if (CacheManager.cache!=null){
+            CacheManager.cache.refresh(key);
         }
         return succeed();
     }

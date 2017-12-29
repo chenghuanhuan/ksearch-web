@@ -122,6 +122,10 @@
                                                                  <i class="icon-ok bigger-110"></i>
                                                                  添加索引
                                                              </button>
+                                                             <button id="refreshCache" class="btn btn-sm btn-refresh">
+                                                                 <i class="icon-refresh bigger-110"></i>
+                                                                 刷新索引缓存
+                                                             </button>
                                                          </div>
                                                             <table id="indices_table"></table>
 														</div>
@@ -269,6 +273,23 @@
 
                 // 添加索引
 
+                $("#refreshCache").on(ace.click_event, function() {
+                    var ajax = new $ax("/console/refresh/cache", function (data) {
+                        // 成功
+                        if (data.status === true) {
+                            $myNotify.success(data.msg)
+                            // 刷新表格
+                            $('#indices_table').bootstrapTable('refresh');
+
+                        } else {
+                            $myNotify.danger(data.msg);
+                        }
+                    }, function (data) {
+
+                    });
+                    ajax.set("clusterName", clusterName);
+                    ajax.start();
+                });
                 $("#addIndex").on(ace.click_event, function() {
 
                     BootstrapDialog.show({
