@@ -7,6 +7,7 @@ package la.kaike.ksearch.home.controller;
 import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.biz.service.SysLogService;
 import la.kaike.ksearch.home.base.BaseController;
+import la.kaike.ksearch.home.warpper.CacheManager;
 import la.kaike.ksearch.model.PageResponse;
 import la.kaike.ksearch.model.Response;
 import la.kaike.ksearch.model.vo.SelectVO;
@@ -61,7 +62,13 @@ public class TomcatController extends BaseController {
     @RequestMapping("/appname")
     @ResponseBody
     public Response indexSelect(SimpleQueryReqVO simpleQueryReqVO){
-        List<IndicesVO> indicesVOS =  elasticSearchService.getIndicesVO(simpleQueryReqVO.getClusterName());
+        String key = simpleQueryReqVO.getClusterName()+"_indeices";
+        if (CacheManager.cache==null){
+            CacheManager.init(elasticSearchService,simpleQueryReqVO.getClusterName());
+        }
+        List<IndicesVO> indicesVOS = CacheManager.get(key);
+
+
         List<SelectVO> appList = new ArrayList<>();
         List<SelectVO> dateList = new ArrayList<>();
         Map<String,List<SelectVO>> mapMap = new HashMap<>();

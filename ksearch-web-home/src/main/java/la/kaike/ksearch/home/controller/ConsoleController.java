@@ -5,8 +5,6 @@
 package la.kaike.ksearch.home.controller;
 
 import com.baidu.disconf.client.usertools.IKuKoConfDataGetter;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
 import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.home.base.BaseController;
 import la.kaike.ksearch.home.warpper.CacheManager;
@@ -31,8 +29,6 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -144,31 +140,14 @@ public class ConsoleController extends BaseController{
      */
     @RequestMapping("/cluster/indeices")
     @ResponseBody
-    public Response indicesList(ClusterRequest request) throws ExecutionException {
+    public Response indicesList(ClusterRequest request) {
 
         String key = request.getClusterName()+"_indeices";
         // 添加缓存
         if (CacheManager.cache==null) {
-            //indicesVOList = elasticSearchService.getIndicesVO(request.getClusterName());
-            synchronized (CacheManager.class) {
-                CacheManager.cache = CacheBuilder.newBuilder()
-                        //设置cache的初始大小为10，要合理设置该值
-                        .initialCapacity(10)
-                        //设置并发数为5，即同一时间最多只能有5个线程往cache执行写入操作
-                        .concurrencyLevel(10)
-                        //设置cache中的数据在写入之后的存活时间为3秒
-                        .expireAfterWrite(1, TimeUnit.HOURS)
-                        //构建cache实例
-                        .build(new CacheLoader<String, List<IndicesVO>>() {
-                            @Override
-                            public List<IndicesVO> load(String key) throws Exception {
-                                List<IndicesVO> indicesVOList = elasticSearchService.getIndicesVO(request.getClusterName());
-                                return indicesVOList;
-                            }
-                        });
-            }
+            CacheManager.init(elasticSearchService,request.getClusterName());
         }
-        List<IndicesVO> indices = CacheManager.cache.get(key);
+        List<IndicesVO> indices = CacheManager.get(key);
         return succeed(indices);
     }
 

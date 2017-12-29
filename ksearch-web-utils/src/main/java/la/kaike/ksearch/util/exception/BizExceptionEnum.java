@@ -27,12 +27,12 @@ public enum BizExceptionEnum {
 	 */
 	DB_RESOURCE_NULL(400,"数据库中没有该资源"),
 	NO_PERMITION(405, "权限异常"),
-	REQUEST_INVALIDATE(400,"请求数据格式不正确"),
-	INVALID_KAPTCHA(400,"验证码不正确"),
-	CANT_DELETE_ADMIN(600,"不能删除超级管理员"),
-	CANT_FREEZE_ADMIN(600,"不能冻结超级管理员"),
-	CANT_CHANGE_ADMIN(600,"不能修改超级管理员角色"),
-
+	REQUEST_INVALIDATE(406,"请求数据格式不正确"),
+	INVALID_KAPTCHA(407,"验证码不正确"),
+	CANT_DELETE_ADMIN(601,"不能删除超级管理员"),
+	CANT_FREEZE_ADMIN(602,"不能冻结超级管理员"),
+	CANT_CHANGE_ADMIN(603,"不能修改超级管理员角色"),
+	CACHE_EXCEPTION(604,"不能修改超级管理员角色"),
 	/**
 	 * 账户问题
 	 */
