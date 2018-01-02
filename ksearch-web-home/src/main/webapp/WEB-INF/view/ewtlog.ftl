@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>php日志查询</title>
+    <title>ewt 日志查询</title>
     <meta name="keywords" content="" />
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -101,11 +101,11 @@
                                             </div>
                                         </div>
 
-                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">pid:</label>
+                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">remoteIp:</label>
 
                                         <div class="col-xs-12 col-sm-3">
                                             <div class="clearfix">
-                                                <input type="text" id="pid" name="pid" placeholder="" class="col-xs-12 col-sm-12" />
+                                                <input type="text" id="remoteIp" name="remoteIp" placeholder="" class="col-xs-12 col-sm-12" />
                                             </div>
                                         </div>
 
@@ -124,19 +124,19 @@
                                 <div class="col-xs-12">
                                     <div class="form-group">
 
-                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="message">msg:</label>
+                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="message">userId:</label>
 
                                         <div class="col-xs-12 col-sm-3">
                                             <div class="clearfix">
-                                                <input type="text" id="msg" name="msg" placeholder="" class="col-xs-12 col-sm-12" />
+                                                <input type="text" id="userId" name="userId" placeholder="" class="col-xs-12 col-sm-12" />
                                             </div>
                                         </div>
 
-                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="message">msg:</label>
+                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="message">method:</label>
 
                                         <div class="col-xs-12 col-sm-3">
                                             <div class="clearfix">
-                                                <input type="text" id="msgp" name="msgp" placeholder="不分词" class="col-xs-12 col-sm-12" />
+                                                <input type="text" id="method" name="method" placeholder="" class="col-xs-12 col-sm-12" />
                                             </div>
                                         </div>
 
@@ -149,6 +149,37 @@
                                     </div>
                                 </div>
 
+                                <div class="space"></div>
+
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+
+                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="message">url:</label>
+
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="clearfix">
+                                                <input type="text" id="url" name="url" placeholder="" class="col-xs-12 col-sm-12" />
+                                            </div>
+                                        </div>
+
+                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="message">appname:</label>
+
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="clearfix">
+                                                <input type="text" id="appname" name="appname" placeholder="" class="col-xs-12 col-sm-12" />
+                                            </div>
+                                        </div>
+
+                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="message">params:</label>
+
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="clearfix">
+                                                <input type="text" id="params" name="params" placeholder="" class="col-xs-12 col-sm-12" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
                             </form>
                             <div class="col-xs-12" id="query-btn" style="padding-top: 10px;">
                                 <div class="form-group">
@@ -230,7 +261,7 @@
             search:false,
             //toolbar:"#toolbar",
             sidePagination:'server',
-            url:"/phplog/query",
+            url:"/ewtlog/query",
             pageList:[5, 10,20],
             pagination:true,
             //detailView:true,
@@ -243,29 +274,29 @@
                 field: 'datetime',
                 title: '<span class="text-primary">datetime</span>'
             }, {
-                field: 'beat.hostname',
-                title: '<span class="text-primary">hostname</span>'
+                field: 'userId',
+                title: '<span class="text-primary">userId</span>'
             },  {
-                field: 'level',
-                title: '<span class="text-primary">level</span>'
+                field: 'remoteIp',
+                title: '<span class="text-primary">remoteIp</span>'
             },{
-                field: 'msg',
-                title: '<span class="text-primary">msg</span>',
-                formatter: function (value, row, index) {
-                    return '<pre>'+HTMLEnCode(value)+'</pre>';
-                }
+                field: 'method',
+                title: '<span class="text-primary">method</span>'
             }, {
-                field: 'pid',
-                title: '<span class="text-primary">pid</span>'
+                field: 'url',
+                title: '<span class="text-primary">url</span>'
+            }, {
+                field: 'params',
+                title: '<span class="text-primary">params</span>'
             }, {
                 field: 'source',
                 title: '<span class="text-primary">source</span>'
             }, {
-                field: 'error_timestamp',
-                title: '<span class="text-primary">timestamp</span>'
+                field: 'fields.appname',
+                title: '<span class="text-primary">appname</span>'
             }, {
-                field: 'type',
-                title: '<span class="text-primary">type</span>'
+                field: 'beat.hostname',
+                title: '<span class="text-primary">hostname</span>'
             }],
             silentSort:false,
             queryParams:function (params) {
@@ -273,13 +304,15 @@
                 params.type = "log";
                 params.hostname = $.trim($("#hostname").val());
 
-                params.pid = $.trim($("#pid").val());
-                params.level = $.trim($("#level").val());
-                params.msg = $.trim($("#msg").val());
-                params.msgp = $.trim($("#msgp").val());
-                params.clusterName = clusterName;
+                params.remoteIp = $.trim($("#remoteIp").val());
                 params.source = $.trim($("#source").val());
+                params.userId = $.trim($("#userId").val());
+                params.method = $.trim($("#method").val());
+                params.clusterName = clusterName;
+                params.url = $.trim($("#url").val());
                 params.datetime = $.trim($("#datetime").val());
+                params.appname = $.trim($("#appname").val());
+                params.params = $.trim($("#params").val());
                 return params;
             }
         });
@@ -288,6 +321,8 @@
         $('input[name=datetime]').daterangepicker({
             timePicker : true,
             format : 'YYYY/MM/DD HH:mm:ss',
+            timePickerIncrement : 1, //时间的增量，单位为分钟
+            timePicker12Hour : false,
             dateLimit : {
                 days : 7
             }, //起止时间的最大间隔

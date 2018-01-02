@@ -51,6 +51,8 @@ public class CommonController extends BaseController {
     @RequestMapping("/index/select")
     @ResponseBody
     public Response indexSelect(SimpleQueryReqVO simpleQueryReqVO){
+        // TODO 添加缓存
+
         List<IndicesVO> indicesVOS =  elasticSearchService.getIndicesVO(simpleQueryReqVO.getClusterName());
         List<SelectVO> selectVOList = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(indicesVOS)){

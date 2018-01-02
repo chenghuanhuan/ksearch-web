@@ -67,6 +67,13 @@
     </li>
 
     <li>
+        <a href="/ewtlog" class="left-menu">
+            <i class="icon-list-alt"></i>
+            <span class="menu-text"> ewt 日志 </span>
+        </a>
+    </li>
+
+    <li>
         <a href="/user" class="left-menu">
             <i class="icon-calendar"></i>
 
