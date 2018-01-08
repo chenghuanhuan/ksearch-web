@@ -43,7 +43,7 @@
     <li>
         <a href="/applog" class="left-menu">
             <i class="icon-list-alt"></i>
-            <span class="menu-text"> app日志 </span>
+            <span class="menu-text"> 手机app日志 </span>
         </a>
     </li>
     <li>
