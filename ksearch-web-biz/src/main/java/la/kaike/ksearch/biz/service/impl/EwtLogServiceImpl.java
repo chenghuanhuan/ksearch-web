@@ -13,6 +13,8 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
@@ -23,13 +25,17 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
  */
 @Service
 public class EwtLogServiceImpl extends BaseService implements EwtLogService {
+
+    private static final Logger logger = LoggerFactory.getLogger(EwtLogServiceImpl.class);
     @Override
     public PageResponse query(EwtLogVO ewtLogVO) {
 
+        logger.info("====================一网通日志查询 start============================");
         TransportClient client = ElasticClient.getClient(ewtLogVO.getClusterName());
 
         SearchRequestBuilder builder = client.prepareSearch("ewt.access.*");
         builder.setTypes("log");
+
 
         BoolQueryBuilder boolQueryBuilder = boolQuery();
 
@@ -77,6 +83,8 @@ public class EwtLogServiceImpl extends BaseService implements EwtLogService {
         builder.setQuery(boolQueryBuilder);
         // 查询总条数
         PageResponse pageResponse = get(builder,ewtLogVO.getOffset(),ewtLogVO.getLimit());
+
+        logger.info("====================一网通日志查询 end============================");
         return pageResponse;
     }
 }

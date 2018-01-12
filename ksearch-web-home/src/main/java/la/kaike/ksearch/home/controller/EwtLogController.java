@@ -16,8 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.text.ParseException;
-
 /**
  * @author chenghuanhuan@kaike.la
  * @since $Revision:1.0.0, $Date: 2018年01月02日 上午10:14 $
@@ -39,7 +37,9 @@ public class EwtLogController {
 
     @RequestMapping("query")
     @ResponseBody
-    public Response query(EwtLogVO ewtLogVO) throws ParseException {
+    public Response query(EwtLogVO ewtLogVO){
+
+        logger.info("一网通日志查询 params={}",ewtLogVO);
         if (StringUtils.isNotEmpty(ewtLogVO.getDatetime())) {
             String uploadDate = ewtLogVO.getDatetime();
             String[] arr = uploadDate.split(" - ");
