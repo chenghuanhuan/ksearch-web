@@ -1,0 +1,91 @@
+/*PUT /_template/hot_fix_log_template*/
+{
+  "template" : "host_fix.log.*",
+  "order" : 1,
+  "settings" : {
+    "number_of_shards" : 1,
+    "number_of_replicas": 1,
+    "analysis": {
+      "analyzer": {
+        "ik_en_max_word": {
+          "filter": [
+            "stemmer",
+            "stop"
+          ],
+          "char_filter": [
+            "html_strip"
+          ],
+          "type": "custom",
+          "tokenizer": "ik_max_word"
+        },
+        "ik_en_smart": {
+          "filter": [
+            "stemmer",
+            "stop"
+          ],
+          "char_filter": [
+            "html_strip"
+          ],
+          "type": "custom",
+          "tokenizer": "ik_smart"
+        },
+        "keyword_lowercase": {
+          "filter": [
+            "lowercase"
+          ],
+          "type": "custom",
+          "tokenizer": "keyword"
+        }
+      }
+    }
+  },
+  "mappings" : {
+    "log" : {
+      "_source" : { "enabled" : true },
+      "properties": {
+        "userId": {
+          "type": "keyword"
+        },
+        "deviceId": {
+          "type": "keyword"
+        },
+        "appVersion": {
+          "type": "keyword"
+        },
+        "patchId": {
+          "type": "keyword"
+        },
+        "systemVersion": {
+          "type": "keyword"
+        },
+        "brand": {
+          "type": "keyword"
+        },
+        "model": {
+          "type": "keyword"
+        },
+        "event": {
+          "type": "keyword"
+        },
+        "timestamp": {
+          "type": "long"
+        },
+        "extra1": {
+          "type": "keyword"
+        },
+        "extra2": {
+          "type": "keyword"
+        },
+        "extra3": {
+          "type": "keyword"
+        },
+        "extra4": {
+          "type": "keyword"
+        },
+        "extra5": {
+          "type": "keyword"
+        }
+      }
+    }
+  }
+}
