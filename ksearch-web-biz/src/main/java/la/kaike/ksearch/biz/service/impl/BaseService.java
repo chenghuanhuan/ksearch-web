@@ -10,6 +10,8 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.SortOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -21,34 +23,40 @@ import java.util.Map;
  * @since $Revision:1.0.0, $Date: 2017年12月15日 下午12:04 $
  */
 public class BaseService {
-
+    private static final Logger logger = LoggerFactory.getLogger(BaseService.class);
 
     protected PageResponse get(SearchRequestBuilder builder,int offset,int limit){
         PageResponse pageResponse = new PageResponse();
-        // 查询总条数
-        SearchResponse countRes = builder.setSize(0).get();
+        try {
 
-        builder.addSort("datetime", SortOrder.DESC);
+            // 查询总条数
+            SearchResponse countRes = builder.setSize(0).get();
 
-        pageResponse.setTotal(countRes.getHits().getTotalHits());
-        if (countRes.getHits().getTotalHits()>0) {
+            builder.addSort("datetime", SortOrder.DESC);
 
-            // 查询真实数据
-            builder.setFrom(offset)
-                    .setSize(limit);
+            pageResponse.setTotal(countRes.getHits().getTotalHits());
+            if (countRes.getHits().getTotalHits()>0) {
 
-            SearchResponse searchResponse = builder.get();
-            SearchHits searchHits = searchResponse.getHits();
+                // 查询真实数据
+                builder.setFrom(offset)
+                        .setSize(limit);
 
-            Iterator<SearchHit> searchHitIterator = searchHits.iterator();
-            List<Map<String, Object>> hashMapList = new ArrayList<>();
-            while (searchHitIterator.hasNext()) {
-                SearchHit hit = searchHitIterator.next();
-                Map<String, Object> map = hit.getSource();
-                hashMapList.add(map);
+                SearchResponse searchResponse = builder.get();
+                SearchHits searchHits = searchResponse.getHits();
+
+                Iterator<SearchHit> searchHitIterator = searchHits.iterator();
+                List<Map<String, Object>> hashMapList = new ArrayList<>();
+                while (searchHitIterator.hasNext()) {
+                    SearchHit hit = searchHitIterator.next();
+                    Map<String, Object> map = hit.getSource();
+                    hashMapList.add(map);
+                }
+                pageResponse.setRows(hashMapList);
             }
-            pageResponse.setRows(hashMapList);
+        }catch (Exception e){
+            logger.error("get error!",e);
         }
+
 
         return pageResponse;
     }

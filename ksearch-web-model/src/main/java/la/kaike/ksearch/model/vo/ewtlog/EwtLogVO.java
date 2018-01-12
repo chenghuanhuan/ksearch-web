@@ -162,6 +162,8 @@ public class EwtLogVO extends PageVO {
                 ", url='" + url + '\'' +
                 ", userId=" + userId +
                 ", params='" + params + '\'' +
+                ", offset='" + this.getOffset() + '\'' +
+                ", limit='" + this.getLimit() + '\'' +
                 '}';
     }
 }
