@@ -67,7 +67,7 @@
         "event": {
           "type": "keyword"
         },
-        "timestamp": {
+        "datetime": {
           "type": "date",
           "format": "yyyy-MM-dd HH:mm:ss.SSS"
         },
