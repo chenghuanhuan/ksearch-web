@@ -4,7 +4,8 @@
   "order" : 1,
   "settings" : {
     "number_of_shards" : 1,
-    "number_of_replicas": 1,
+    "number_of_replicas": 0,
+    "index.refresh_interval": "10s",
     "analysis": {
       "analyzer": {
         "ik_en_max_word": {
@@ -50,13 +51,13 @@
           "type": "keyword"
         },
         "appVersion": {
-          "type": "keyword"
+          "type": "integer"
         },
         "patchId": {
           "type": "keyword"
         },
         "systemVersion": {
-          "type": "keyword"
+          "type": "integer"
         },
         "brand": {
           "type": "keyword"
