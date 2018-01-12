@@ -145,4 +145,23 @@ public class EwtLogVO extends PageVO {
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
+
+    @Override
+    public String toString() {
+        return "EwtLogVO{" +
+                "clusterName='" + clusterName + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", datetime='" + datetime + '\'' +
+                ", hostname='" + hostname + '\'' +
+                ", appname='" + appname + '\'' +
+                ", method='" + method + '\'' +
+                ", remoteIp='" + remoteIp + '\'' +
+                ", source='" + source + '\'' +
+                ", type='" + type + '\'' +
+                ", url='" + url + '\'' +
+                ", userId=" + userId +
+                ", params='" + params + '\'' +
+                '}';
+    }
 }

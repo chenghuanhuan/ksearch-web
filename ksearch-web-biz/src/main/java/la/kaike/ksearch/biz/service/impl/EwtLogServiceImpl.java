@@ -40,7 +40,7 @@ public class EwtLogServiceImpl extends BaseService implements EwtLogService {
         BoolQueryBuilder boolQueryBuilder = boolQuery();
 
         /***********查询条件************/
-
+        logger.info("====================一网通日志查询 组装条件开始============================");
         if (StringUtils.isNotEmpty(ewtLogVO.getAppname())){
             boolQueryBuilder.filter(termQuery("fields.appname",ewtLogVO.getAppname()));
         }
@@ -77,6 +77,7 @@ public class EwtLogServiceImpl extends BaseService implements EwtLogService {
             boolQueryBuilder.filter(rangeQuery("datetime").gte(ewtLogVO.getStartTime())
                     .lte(ewtLogVO.getEndTime()).format("yyyy/MM/dd HH:mm:ss"));
         }
+        logger.info("====================一网通日志查询 组装条件结束============================");
         /******************************/
 
 
