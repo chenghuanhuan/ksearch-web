@@ -25,6 +25,8 @@ public class PageVO extends BaseRequest {
 
     private String order;
 
+
+
     public String getSort() {
         return sort;
     }

@@ -65,6 +65,11 @@
 			<artifactId>disconf-client</artifactId>
 			<version>2.6.41-SNAPSHOT</version>
 		</dependency>
+
+		<dependency>
+			<groupId>la.kaike</groupId>
+			<artifactId>ksearch-client</artifactId>
+		</dependency>
     </dependencies>
     
      

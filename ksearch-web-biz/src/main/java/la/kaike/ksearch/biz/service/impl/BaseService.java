@@ -4,19 +4,26 @@
  */
 package la.kaike.ksearch.biz.service.impl;
 
+import la.kaike.ksearch.BaseRequest;
 import la.kaike.ksearch.model.PageResponse;
+import la.kaike.ksearch.util.annotations.ESQuery;
+import la.kaike.ksearch.util.util.ClassUtils;
+import la.kaike.ksearch.util.util.StringUtils;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.util.*;
+
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -59,5 +66,58 @@ public class BaseService {
 
 
         return pageResponse;
+    }
+
+    protected BoolQueryBuilder query(BaseRequest request,Class<?> clazz){
+        BoolQueryBuilder boolQueryBuilder = boolQuery();
+
+        Set<Field> fieldSet =  ClassUtils.getAllFiled(clazz);
+        for (Field field:fieldSet){
+            ESQuery query = field.getAnnotation(ESQuery.class);
+            Object value = null;
+            String fieldName = query.field();
+            if (fieldName==null){
+                fieldName = field.getName();
+            }
+            if (query!=null){
+                switch (query.type()){
+                    case keyword:
+                        // 获取值
+                        value = ClassUtils.getFieldValue(request,field.getName());
+                        if (!StringUtils.isBlank((String)value)){
+                            boolQueryBuilder.filter(termQuery(fieldName,value));
+                        }
+                        break;
+
+                    case text:
+                        value = ClassUtils.getFieldValue(request,field.getName());
+                        if (!StringUtils.isBlank((String)value)) {
+                            boolQueryBuilder.must(QueryBuilders.matchQuery(fieldName, value));
+                        }
+                        break;
+
+                    case Long:
+                        value = ClassUtils.getFieldValue(request,field.getName());
+                        if (value!=null){
+                            boolQueryBuilder.filter(termQuery(fieldName,value));
+                        }
+                        break;
+
+                    case Integer:
+                        value = ClassUtils.getFieldValue(request,field.getName());
+                        if (value!=null){
+                            boolQueryBuilder.filter(termQuery(fieldName,value));
+                        }
+                        break;
+
+                }
+            }
+        }
+
+        return boolQueryBuilder;
+    }
+
+    public static void main(String[] args) {
+        System.out.println((String)null);
     }
 }

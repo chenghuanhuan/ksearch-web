@@ -19,4 +19,6 @@ public interface WebConstant {
      * 系统日志前缀
      */
     String SYSLOG_PREFIX = "syslog.";
+
+    String  COMMA_SEPARATOR                    = ",";
 }
