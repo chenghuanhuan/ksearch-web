@@ -68,7 +68,8 @@
           "type": "keyword"
         },
         "timestamp": {
-          "type": "long"
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss.SSS"
         },
         "extra1": {
           "type": "keyword"
