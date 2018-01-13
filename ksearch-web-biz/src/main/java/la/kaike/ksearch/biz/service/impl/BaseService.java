@@ -116,7 +116,7 @@ public class BaseService {
                         break;
                     case Date:
                         value =  ClassUtils.getFieldValue(request,field.getName());
-                        if (value!=null){
+                        if (!StringUtils.isBlank((String)value)){
                             try {
                                 String datetime = (String) value;
                                 String[] arr = datetime.split(" - ");
