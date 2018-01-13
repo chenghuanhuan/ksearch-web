@@ -37,4 +37,5 @@ public class HotFixLogController {
         PageResponse pageResponse = hotFixService.query(hotFixVO);
         return pageResponse;
     }
+
 }

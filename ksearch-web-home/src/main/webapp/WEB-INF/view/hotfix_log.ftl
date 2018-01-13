@@ -90,7 +90,7 @@
 
                         <div class="row">
                             <form id="query-form">
-                                <div class="col-xs-12">
+                               <#-- <div class="col-xs-12">
                                     <div class="form-group">
                                         <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="select_index">userId:</label>
 
@@ -179,7 +179,7 @@
                                         </div>
 
                                     </div>
-                                </div>
+                                </div>-->
                             </form>
                             <div class="col-xs-12" id="query-btn" style="padding-top: 10px;">
                                 <div class="form-group">
@@ -239,6 +239,44 @@
 
 
     jQuery(function($) {
+
+        // 获取查询条件
+        var ajax = new $ax({url:"/common/getQueryCondition",async:true}, function (data) {
+            if (data.status){
+                var data = data.data;
+                var html = "";
+                var line = "";
+                $.each(data,function (i,item) {
+                        if((i%3)==0){
+                             line =  '<div class="col-xs-12">'+
+                                            '<div class="form-group">';
+                        }
+                        line +='<label class="control-label col-xs-12 col-sm-1 no-padding-right" for="'+item.field+'">'+item.field+':</label>';
+                                line+='<div class="col-xs-12 col-sm-3">';
+                                    line+='<div class="clearfix">';
+                                        line+='<input type="text" id="'+item.field+'" name="'+item.field+'" placeholder="" class="col-xs-12 col-sm-12" />';
+                                    line+='</div>';
+                                line+='</div>';
+                        if (((i+1)%3)==0||i==data.length-1){
+                                line+='</div>';
+                            line+='</div>';
+                            if (i!=data.length-1){
+                             line +='<div class="space"></div>';
+                            }
+                            html+=line;
+                        }
+
+                });
+
+                $("#query-form").append(html);
+                initDateInput();
+            }
+
+        });
+        ajax.set("conditionKey","la.kaike.ksearch.model.vo.hotfix.HotFixVO")
+        ajax.start();
+
+
 
         /**
          * 查询
@@ -320,13 +358,23 @@
                 params.clusterName = clusterName;
                 var t = $('form').serializeArray();
                 $.each(t, function() {
-                    params[this.name] = this.value;
+                    params[this.name] = this.value.trim();
                 });
                 return params;
             }
         });
 
 
+        $(".btn-reset").on("click",function () {
+            $('#query-form')[0].reset();
+            $("#appname").select2('val', '');
+            $("#dateinfo").select2('val', '');
+        });
+
+    });
+
+
+    function initDateInput() {
         $('input[name=datetime]').daterangepicker({
             timePicker : true,
             format : 'YYYY/MM/DD HH:mm:ss',
@@ -356,15 +404,8 @@
         }).prev().on(ace.click_event, function(){
             $(this).next().focus();
         });
+    }
 
-    });
-
-
-    $(".btn-reset").on("click",function () {
-        $('#query-form')[0].reset();
-        $("#appname").select2('val', '');
-        $("#dateinfo").select2('val', '');
-    });
 
 </script>
 </body>

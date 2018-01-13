@@ -9,14 +9,18 @@ import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.biz.service.RoleService;
 import la.kaike.ksearch.home.base.BaseController;
 import la.kaike.ksearch.model.Response;
+import la.kaike.ksearch.model.bo.common.QueryConditionBO;
 import la.kaike.ksearch.model.dbo.user.Role;
 import la.kaike.ksearch.model.vo.SelectVO;
 import la.kaike.ksearch.model.vo.common.FieldsVO;
+import la.kaike.ksearch.model.vo.common.QueryConditionVO;
 import la.kaike.ksearch.model.vo.elastic.IndicesVO;
 import la.kaike.ksearch.model.vo.index.GetMappingReqVO;
 import la.kaike.ksearch.model.vo.index.MappingVO;
 import la.kaike.ksearch.model.vo.index.PropertiesVO;
 import la.kaike.ksearch.model.vo.query.SimpleQueryReqVO;
+import la.kaike.ksearch.util.annotations.ESQuery;
+import la.kaike.ksearch.util.util.ClassUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +29,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -131,6 +137,33 @@ public class CommonController extends BaseController {
             }
         }
         return succeed();
+    }
+
+
+    /**
+     * 获取查询条件
+     * @return
+     */
+    @RequestMapping("/getQueryCondition")
+    @ResponseBody
+    public Response getQueryCondition(QueryConditionVO query) throws ClassNotFoundException {
+
+        Class<?> clazz = Class.forName(query.getConditionKey());
+        Set<Field> fieldList = ClassUtils.getAllFiled(clazz);
+        List<QueryConditionBO> conditionBOList = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(fieldList)){
+            for (Field field:fieldList){
+                ESQuery esQuery = field.getAnnotation(ESQuery.class);
+                if (esQuery!=null){
+                    QueryConditionBO queryConditionBO = new QueryConditionBO();
+                    queryConditionBO.setField(field.getName());
+                    queryConditionBO.setFormat(esQuery.format());
+                    queryConditionBO.setType(esQuery.type());
+                    conditionBOList.add(queryConditionBO);
+                }
+            }
+        }
+        return succeed(conditionBOList);
     }
 
     private List<FieldsVO> converFieldList(List<PropertiesVO> propertiesVOList){

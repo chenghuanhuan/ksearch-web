@@ -51,7 +51,7 @@ public class ClassUtils {
             fs.add(f);
         }
         for (Field f : entityClass.getDeclaredFields()) {
-            System.out.println(f);
+            //System.out.println(f);
             fs.add(f);
         }
 

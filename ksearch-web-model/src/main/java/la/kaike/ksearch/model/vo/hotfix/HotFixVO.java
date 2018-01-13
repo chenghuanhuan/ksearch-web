@@ -88,10 +88,7 @@ public class HotFixVO extends PageVO {
     @ESQuery(type = FieldType.keyword)
     private String extra5;
 
-    private String startTime;
-
-    private String endTime;
-
+    @ESQuery(type = FieldType.Date)
     private String datetime;
 
     public String getUserId() {
@@ -196,22 +193,6 @@ public class HotFixVO extends PageVO {
 
     public void setExtra5(String extra5) {
         this.extra5 = extra5;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
     }
 
     public String getDatetime() {
