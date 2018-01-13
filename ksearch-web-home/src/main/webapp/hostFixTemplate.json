@@ -72,6 +72,10 @@
           "type": "date",
           "format": "yyyy-MM-dd HH:mm:ss.SSS"
         },
+        "uploadTime": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss.SSS"
+        },
         "extra1": {
           "type": "keyword"
         },
