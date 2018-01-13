@@ -6,6 +6,8 @@ package la.kaike.ksearch.model.vo.hotfix;
 
 import la.kaike.ksearch.model.validate.Validate;
 import la.kaike.ksearch.model.vo.PageVO;
+import la.kaike.ksearch.util.annotations.ESQuery;
+import la.kaike.ksearchclient.annotations.FieldType;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -19,58 +21,71 @@ public class HotFixVO extends PageVO {
     /**
      * 用户ID
      */
+    @ESQuery(type = FieldType.keyword)
     private String userId;
 
     /**
      * 设备ID
      */
+    @ESQuery(type = FieldType.keyword)
     private String deviceId;
     /**
      * app版本
      */
+    @ESQuery(type = FieldType.Integer)
     private Integer appVersion;
     /**
      * 热修复版本
      */
+    @ESQuery(type = FieldType.keyword)
     private String patchId;
     /**
      * 系统版本
      */
+    @ESQuery(type = FieldType.Integer)
     private Integer systemVersion;
     /**
      * 品牌
      */
+    @ESQuery(type = FieldType.keyword)
     private String brand;
 
     /**
      * 型号
      */
+    @ESQuery(type = FieldType.keyword)
     private String model;
     /**
      * 事件代码
      */
+    @ESQuery(type = FieldType.keyword)
     private String event;
 
     /**
      * 额外字段
      */
+    @ESQuery(type = FieldType.keyword)
     private String extra1;
 
     /**
      * 额外字段
      */
+    @ESQuery(type = FieldType.keyword)
     private String extra2;
     /**
      * 额外字段
      */
+    @ESQuery(type = FieldType.keyword)
     private String extra3;
     /**
      * 额外字段
      */
+    @ESQuery(type = FieldType.keyword)
     private String extra4;
     /**
      * 额外字段
      */
+    @ESQuery(type = FieldType.keyword)
     private String extra5;
 
     private String startTime;

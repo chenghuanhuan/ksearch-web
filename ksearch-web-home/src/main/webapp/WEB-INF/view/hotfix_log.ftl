@@ -92,27 +92,27 @@
                             <form id="query-form">
                                 <div class="col-xs-12">
                                     <div class="form-group">
-                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="select_index">hostname:</label>
+                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="select_index">userId:</label>
 
                                         <div class="col-xs-12 col-sm-3">
                                             <div class="clearfix">
-                                                <input type="text" id="hostname" name="hostname" placeholder="" class="col-xs-12 col-sm-12" />
+                                                <input type="text" id="userId" name="userId" placeholder="" class="col-xs-12 col-sm-12" />
                                                 </input>
                                             </div>
                                         </div>
 
-                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">remoteIp:</label>
+                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">deviceId:</label>
 
                                         <div class="col-xs-12 col-sm-3">
                                             <div class="clearfix">
-                                                <input type="text" id="remoteIp" name="remoteIp" placeholder="" class="col-xs-12 col-sm-12" />
+                                                <input type="text" id="deviceId" name="deviceId" placeholder="" class="col-xs-12 col-sm-12" />
                                             </div>
                                         </div>
 
-                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">source:</label>
+                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">appVersion:</label>
                                         <div class="col-xs-12 col-sm-3">
                                             <div class="clearfix">
-                                                <input type="text" id="source" name="source" placeholder="" class="col-xs-12 col-sm-12" />
+                                                <input type="text" id="appVersion" name="appVersion" placeholder="" class="col-xs-12 col-sm-12" />
                                             </div>
                                         </div>
                                     </div>
@@ -124,23 +124,23 @@
                                 <div class="col-xs-12">
                                     <div class="form-group">
 
-                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="message">userId:</label>
+                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="message">patchId:</label>
 
                                         <div class="col-xs-12 col-sm-3">
                                             <div class="clearfix">
-                                                <input type="text" id="userId" name="userId" placeholder="" class="col-xs-12 col-sm-12" />
+                                                <input type="text" id="patchId" name="patchId" placeholder="" class="col-xs-12 col-sm-12" />
                                             </div>
                                         </div>
 
-                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="message">method:</label>
+                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="message">systemVersion:</label>
 
                                         <div class="col-xs-12 col-sm-3">
                                             <div class="clearfix">
-                                                <input type="text" id="method" name="method" placeholder="" class="col-xs-12 col-sm-12" />
+                                                <input type="text" id="systemVersion" name="systemVersion" placeholder="" class="col-xs-12 col-sm-12" />
                                             </div>
                                         </div>
 
-                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">datetime:</label>
+                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="brand">datetime:</label>
                                         <div class="col-xs-12 col-sm-3">
                                             <div class="clearfix">
                                                 <input class="form-control" type="text" name="datetime" id="datetime" placeholder="datetime" />
@@ -154,27 +154,27 @@
                                 <div class="col-xs-12">
                                     <div class="form-group">
 
-                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="message">url:</label>
+                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="model">model:</label>
 
                                         <div class="col-xs-12 col-sm-3">
                                             <div class="clearfix">
-                                                <input type="text" id="url" name="url" placeholder="" class="col-xs-12 col-sm-12" />
+                                                <input type="text" id="model" name="model" placeholder="" class="col-xs-12 col-sm-12" />
                                             </div>
                                         </div>
 
-                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="message">appname:</label>
+                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="brand">brand:</label>
 
                                         <div class="col-xs-12 col-sm-3">
                                             <div class="clearfix">
-                                                <input type="text" id="appname" name="appname" placeholder="" class="col-xs-12 col-sm-12" />
+                                                <input type="text" id="brand" name="brand" placeholder="" class="col-xs-12 col-sm-12" />
                                             </div>
                                         </div>
 
-                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="message">params:</label>
+                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="event">event:</label>
 
                                         <div class="col-xs-12 col-sm-3">
                                             <div class="clearfix">
-                                                <input type="text" id="params" name="params" placeholder="" class="col-xs-12 col-sm-12" />
+                                                <input type="text" id="event" name="event" placeholder="" class="col-xs-12 col-sm-12" />
                                             </div>
                                         </div>
 
@@ -261,7 +261,7 @@
             search:false,
             //toolbar:"#toolbar",
             sidePagination:'server',
-            url:"/ewtlog/query",
+            url:"/hotfix/query",
             pageList:[10,20,30],
             pagination:true,
             //detailView:true,
@@ -271,48 +271,57 @@
             //showFooter:true,
             pageSize:10,
             columns: [{
+                field: 'userId',
+                title: '<span class="text-primary">userId</span>'
+            }, {
                 field: 'datetime',
                 title: '<span class="text-primary">datetime</span>'
             }, {
-                field: 'userId',
-                title: '<span class="text-primary">userId</span>'
+                field: 'deviceId',
+                title: '<span class="text-primary">deviceId</span>'
             },  {
-                field: 'remoteIp',
-                title: '<span class="text-primary">remoteIp</span>'
+                field: 'appVersion',
+                title: '<span class="text-primary">appVersion</span>'
             },{
-                field: 'method',
-                title: '<span class="text-primary">method</span>'
+                field: 'patchId',
+                title: '<span class="text-primary">patchId</span>'
             }, {
-                field: 'url',
-                title: '<span class="text-primary">url</span>'
+                field: 'systemVersion',
+                title: '<span class="text-primary">systemVersion</span>'
             }, {
-                field: 'params',
-                title: '<span class="text-primary">params</span>'
+                field: 'brand',
+                title: '<span class="text-primary">brand</span>'
             }, {
-                field: 'source',
-                title: '<span class="text-primary">source</span>'
+                field: 'model',
+                title: '<span class="text-primary">model</span>'
             }, {
-                field: 'fields.appname',
-                title: '<span class="text-primary">appname</span>'
+                field: 'event',
+                title: '<span class="text-primary">event</span>'
             }, {
-                field: 'beat.hostname',
-                title: '<span class="text-primary">hostname</span>'
+                field: 'extra1',
+                title: '<span class="text-primary">extra1</span>'
+            }, {
+                field: 'extra2',
+                title: '<span class="text-primary">extra2</span>'
+            }, {
+                field: 'extra3',
+                title: '<span class="text-primary">extra3</span>'
+            }, {
+                field: 'extra4',
+                title: '<span class="text-primary">extra4</span>'
+            }, {
+                field: 'extra5',
+                title: '<span class="text-primary">extra5</span>'
             }],
             silentSort:false,
             queryParams:function (params) {
 
                 params.type = "log";
-                params.hostname = $.trim($("#hostname").val());
-
-                params.remoteIp = $.trim($("#remoteIp").val());
-                params.source = $.trim($("#source").val());
-                params.userId = $.trim($("#userId").val());
-                params.method = $.trim($("#method").val());
                 params.clusterName = clusterName;
-                params.url = $.trim($("#url").val());
-                params.datetime = $.trim($("#datetime").val());
-                params.appname = $.trim($("#appname").val());
-                params.params = $.trim($("#params").val());
+                var t = $('form').serializeArray();
+                $.each(t, function() {
+                    params[this.name] = this.value;
+                });
                 return params;
             }
         });

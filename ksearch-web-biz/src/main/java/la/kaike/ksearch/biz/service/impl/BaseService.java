@@ -74,12 +74,14 @@ public class BaseService {
         Set<Field> fieldSet =  ClassUtils.getAllFiled(clazz);
         for (Field field:fieldSet){
             ESQuery query = field.getAnnotation(ESQuery.class);
-            Object value = null;
-            String fieldName = query.field();
-            if (fieldName==null){
-                fieldName = field.getName();
-            }
             if (query!=null){
+
+                Object value;
+                String fieldName = query.field();
+                if (StringUtils.isEmpty(fieldName)){
+                    fieldName = field.getName();
+                }
+
                 switch (query.type()){
                     case keyword:
                         // 获取值
@@ -115,9 +117,5 @@ public class BaseService {
         }
 
         return boolQueryBuilder;
-    }
-
-    public static void main(String[] args) {
-        System.out.println((String)null);
     }
 }
