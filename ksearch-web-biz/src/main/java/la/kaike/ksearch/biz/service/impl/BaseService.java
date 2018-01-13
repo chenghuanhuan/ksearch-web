@@ -23,6 +23,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
 /**
@@ -111,7 +112,21 @@ public class BaseService {
                             boolQueryBuilder.filter(termQuery(fieldName,value));
                         }
                         break;
-
+                    case Date:
+                        value =  ClassUtils.getFieldValue(request,field.getName());
+                        if (value!=null){
+                            try {
+                                String datetime = (String) value;
+                                String[] arr = datetime.split(" - ");
+                                String startTime = arr[0];
+                                String endTime = arr[1];
+                                String format = query.format();
+                                boolQueryBuilder.filter(rangeQuery(fieldName).gte(startTime)
+                                        .lte(endTime).format(format));
+                            }catch (Exception e){
+                                logger.error("时间查询字段解析错误：value={}",value,e);
+                            }
+                        }
                 }
             }
         }
