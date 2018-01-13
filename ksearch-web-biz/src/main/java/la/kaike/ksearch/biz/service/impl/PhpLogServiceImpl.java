@@ -78,7 +78,7 @@ public class PhpLogServiceImpl extends BaseService implements PhpLogService{
         //builder.setFetchSource(new String[]{},new String[]{"contentData"});
         //builder.setSource(SearchSourceBuilder)
         // 查询总条数
-        PageResponse pageResponse = get(builder,phpLogVO.getOffset(),phpLogVO.getLimit());
+        PageResponse pageResponse = get(builder,phpLogVO);
         return pageResponse;
     }
 }

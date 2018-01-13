@@ -223,7 +223,8 @@
                 title: '<span class="text-primary">userId</span>'
             }, {
                 field: 'datetime',
-                title: '<span class="text-primary">datetime</span>'
+                title: '<span class="text-primary">datetime</span>',
+                sortable:true
             }, {
                 field: 'deviceId',
                 title: '<span class="text-primary">deviceId</span>'

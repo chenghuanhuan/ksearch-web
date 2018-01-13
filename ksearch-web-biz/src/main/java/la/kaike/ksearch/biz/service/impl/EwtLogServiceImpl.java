@@ -83,7 +83,7 @@ public class EwtLogServiceImpl extends BaseService implements EwtLogService {
 
         builder.setQuery(boolQueryBuilder);
         // 查询总条数
-        PageResponse pageResponse = get(builder,ewtLogVO.getOffset(),ewtLogVO.getLimit());
+        PageResponse pageResponse = get(builder,ewtLogVO);
 
         logger.info("====================一网通日志查询 end============================");
         return pageResponse;

@@ -30,7 +30,7 @@ public class HotFixServiceImpl extends BaseService implements HotFixService{
         BoolQueryBuilder boolQueryBuilder = super.query(hotFixVO,hotFixVO.getClass());
         builder.setQuery(boolQueryBuilder);
         // 查询总条数
-        PageResponse pageResponse = get(builder,hotFixVO.getOffset(),hotFixVO.getLimit());
+        PageResponse pageResponse = get(builder,hotFixVO);
 
         return pageResponse;
     }

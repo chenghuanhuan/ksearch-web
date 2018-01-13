@@ -6,6 +6,7 @@ package la.kaike.ksearch.biz.service.impl;
 
 import la.kaike.ksearch.BaseRequest;
 import la.kaike.ksearch.model.PageResponse;
+import la.kaike.ksearch.model.vo.PageVO;
 import la.kaike.ksearch.util.annotations.ESQuery;
 import la.kaike.ksearch.util.util.ClassUtils;
 import la.kaike.ksearch.util.util.StringUtils;
@@ -33,21 +34,22 @@ import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 public class BaseService {
     private static final Logger logger = LoggerFactory.getLogger(BaseService.class);
 
-    protected PageResponse get(SearchRequestBuilder builder,int offset,int limit){
+    protected PageResponse get(SearchRequestBuilder builder, PageVO pageVO){
         PageResponse pageResponse = new PageResponse();
         try {
 
             // 查询总条数
             SearchResponse countRes = builder.setSize(0).get();
-
-            builder.addSort("datetime", SortOrder.DESC);
+            if (StringUtils.isNotEmpty(pageVO.getSort())) {
+                builder.addSort(pageVO.getSort(), SortOrder.valueOf(pageVO.getOrder().toUpperCase()));
+            }
 
             pageResponse.setTotal(countRes.getHits().getTotalHits());
             if (countRes.getHits().getTotalHits()>0) {
 
                 // 查询真实数据
-                builder.setFrom(offset)
-                        .setSize(limit);
+                builder.setFrom(pageVO.getOffset())
+                        .setSize(pageVO.getLimit());
 
                 SearchResponse searchResponse = builder.get();
                 SearchHits searchHits = searchResponse.getHits();
