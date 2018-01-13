@@ -27,68 +27,68 @@ public class HotFixVO extends PageVO {
     /**
      * 设备ID
      */
-    @ESQuery(type = FieldType.keyword)
+    @ESQuery(type = FieldType.keyword,order = 1)
     private String deviceId;
     /**
      * app版本
      */
-    @ESQuery(type = FieldType.Integer)
+    @ESQuery(type = FieldType.Integer,order = 2)
     private Integer appVersion;
     /**
      * 热修复版本
      */
-    @ESQuery(type = FieldType.keyword)
+    @ESQuery(type = FieldType.keyword,order = 3)
     private String patchId;
     /**
      * 系统版本
      */
-    @ESQuery(type = FieldType.Integer)
+    @ESQuery(type = FieldType.Integer,order = 4)
     private Integer systemVersion;
     /**
      * 品牌
      */
-    @ESQuery(type = FieldType.keyword)
+    @ESQuery(type = FieldType.keyword,order = 5)
     private String brand;
 
     /**
      * 型号
      */
-    @ESQuery(type = FieldType.keyword)
+    @ESQuery(type = FieldType.keyword,order = 6)
     private String model;
     /**
      * 事件代码
      */
-    @ESQuery(type = FieldType.keyword)
+    @ESQuery(type = FieldType.keyword,order = 7)
     private String event;
 
     /**
      * 额外字段
      */
-    @ESQuery(type = FieldType.keyword)
+    @ESQuery(type = FieldType.keyword,order = 8)
     private String extra1;
 
     /**
      * 额外字段
      */
-    @ESQuery(type = FieldType.keyword)
+    @ESQuery(type = FieldType.keyword,order = 9)
     private String extra2;
     /**
      * 额外字段
      */
-    @ESQuery(type = FieldType.keyword)
+    @ESQuery(type = FieldType.keyword,order = 10)
     private String extra3;
     /**
      * 额外字段
      */
-    @ESQuery(type = FieldType.keyword)
+    @ESQuery(type = FieldType.keyword,order = 11)
     private String extra4;
     /**
      * 额外字段
      */
-    @ESQuery(type = FieldType.keyword)
+    @ESQuery(type = FieldType.keyword,order = 12)
     private String extra5;
 
-    @ESQuery(type = FieldType.Date)
+    @ESQuery(type = FieldType.Date,order = -1)
     private String datetime;
 
     public String getUserId() {

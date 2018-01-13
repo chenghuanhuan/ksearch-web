@@ -10,7 +10,7 @@ import la.kaike.ksearchclient.annotations.FieldType;
  * @author chenghuanhuan@kaike.la
  * @since $Revision:1.0.0, $Date: 2018年01月13日 下午1:35 $
  */
-public class QueryConditionBO {
+public class QueryConditionBO{
 
     private FieldType type;
 
@@ -18,6 +18,25 @@ public class QueryConditionBO {
 
     private String field;
 
+    private int order;
+
+    private boolean show;
+
+    public boolean isShow() {
+        return show;
+    }
+
+    public void setShow(boolean show) {
+        this.show = show;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
 
     public FieldType getType() {
         return type;
@@ -42,4 +61,5 @@ public class QueryConditionBO {
     public void setField(String field) {
         this.field = field;
     }
+
 }
