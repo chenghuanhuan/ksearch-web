@@ -77,8 +77,7 @@ public class BaseService {
         Set<Field> fieldSet =  ClassUtils.getAllFiled(clazz);
         for (Field field:fieldSet){
             ESQuery query = field.getAnnotation(ESQuery.class);
-            if (query!=null){
-
+            if (query!=null&&query.ignore()){
                 Object value;
                 String fieldName = query.field();
                 if (StringUtils.isEmpty(fieldName)){

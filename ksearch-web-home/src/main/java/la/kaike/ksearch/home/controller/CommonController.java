@@ -31,9 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import java.lang.reflect.Field;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -159,10 +157,14 @@ public class CommonController extends BaseController {
                     queryConditionBO.setField(field.getName());
                     queryConditionBO.setFormat(esQuery.format());
                     queryConditionBO.setType(esQuery.type());
+                    queryConditionBO.setOrder(esQuery.order());
+                    queryConditionBO.setShow(esQuery.show());
                     conditionBOList.add(queryConditionBO);
                 }
             }
         }
+
+        Collections.sort(conditionBOList, Comparator.comparingInt(QueryConditionBO::getOrder));
         return succeed(conditionBOList);
     }
 

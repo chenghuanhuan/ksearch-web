@@ -150,6 +150,7 @@
 
     jQuery(function($) {
 
+        var columns=[];
         // 获取查询条件
         var ajax = new $ax({url:"/common/getQueryCondition",async:true}, function (data) {
             if (data.status){
@@ -175,11 +176,20 @@
                             }
                             html+=line;
                         }
+                    // 初始化表头
+                    if(item.show){
+                        var column = {field: item.field, title: item.field};
+                        if (item.sort) {
+                            column.sortable = true;
+                        }
+                        columns.push(column);
+                    }
 
                 });
 
                 $("#query-form").append(html);
                 initDateInput();
+                initTable(columns);
             }
 
         });
@@ -200,80 +210,7 @@
         });
 
 
-        $('#indices_table').bootstrapTable({
-            striped:true,
-            //classes:"table table-no-bordered",
-            //showHeader:false,
-            //cardView:true,
-            //checkboxEnable:true,
-            search:false,
-            //toolbar:"#toolbar",
-            sidePagination:'server',
-            url:"/hotfix/query",
-            pageList:[10,20,30],
-            pagination:true,
-            //detailView:true,
-            //showRefresh:true,
-            showColumns:true,
-            //showPaginationSwitch:true,
-            //showFooter:true,
-            pageSize:10,
-            columns: [{
-                field: 'userId',
-                title: '<span class="text-primary">userId</span>'
-            }, {
-                field: 'datetime',
-                title: '<span class="text-primary">datetime</span>',
-                sortable:true
-            }, {
-                field: 'deviceId',
-                title: '<span class="text-primary">deviceId</span>'
-            },  {
-                field: 'appVersion',
-                title: '<span class="text-primary">appVersion</span>'
-            },{
-                field: 'patchId',
-                title: '<span class="text-primary">patchId</span>'
-            }, {
-                field: 'systemVersion',
-                title: '<span class="text-primary">systemVersion</span>'
-            }, {
-                field: 'brand',
-                title: '<span class="text-primary">brand</span>'
-            }, {
-                field: 'model',
-                title: '<span class="text-primary">model</span>'
-            }, {
-                field: 'event',
-                title: '<span class="text-primary">event</span>'
-            }, {
-                field: 'extra1',
-                title: '<span class="text-primary">extra1</span>'
-            }, {
-                field: 'extra2',
-                title: '<span class="text-primary">extra2</span>'
-            }, {
-                field: 'extra3',
-                title: '<span class="text-primary">extra3</span>'
-            }, {
-                field: 'extra4',
-                title: '<span class="text-primary">extra4</span>'
-            }, {
-                field: 'extra5',
-                title: '<span class="text-primary">extra5</span>'
-            }],
-            silentSort:false,
-            queryParams:function (params) {
 
-                params.type = "log";
-                params.clusterName = clusterName;
-                var t = $('form').serializeArray();
-                $.each(t, function() {
-                    params[this.name] = this.value.trim();
-                });
-                return params;
-            }
-        });
 
 
         $(".btn-reset").on("click",function () {
@@ -317,6 +254,39 @@
         });
     }
 
+    function initTable(columns) {
+        $('#indices_table').bootstrapTable({
+            striped:true,
+            //classes:"table table-no-bordered",
+            //showHeader:false,
+            //cardView:true,
+            //checkboxEnable:true,
+            search:false,
+            //toolbar:"#toolbar",
+            sidePagination:'server',
+            url:"/hotfix/query",
+            pageList:[10,20,30],
+            pagination:true,
+            //detailView:true,
+            //showRefresh:true,
+            showColumns:true,
+            //showPaginationSwitch:true,
+            //showFooter:true,
+            pageSize:10,
+            columns: columns,
+            silentSort:false,
+            queryParams:function (params) {
+
+                params.type = "log";
+                params.clusterName = clusterName;
+                var t = $('form').serializeArray();
+                $.each(t, function() {
+                    params[this.name] = this.value.trim();
+                });
+                return params;
+            }
+        });
+    }
 
 </script>
 </body>
