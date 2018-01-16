@@ -22,6 +22,16 @@ public class QueryConditionBO{
 
     private boolean show;
 
+    private boolean sortable;
+
+    public boolean isSortable() {
+        return sortable;
+    }
+
+    public void setSortable(boolean sortable) {
+        this.sortable = sortable;
+    }
+
     public boolean isShow() {
         return show;
     }

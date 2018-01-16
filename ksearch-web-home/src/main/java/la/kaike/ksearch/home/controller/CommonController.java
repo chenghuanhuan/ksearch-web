@@ -159,6 +159,7 @@ public class CommonController extends BaseController {
                     queryConditionBO.setType(esQuery.type());
                     queryConditionBO.setOrder(esQuery.order());
                     queryConditionBO.setShow(esQuery.show());
+                    queryConditionBO.setSortable(esQuery.sortable());
                     conditionBOList.add(queryConditionBO);
                 }
             }

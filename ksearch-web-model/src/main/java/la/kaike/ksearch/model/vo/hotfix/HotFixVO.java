@@ -88,7 +88,7 @@ public class HotFixVO extends PageVO {
     @ESQuery(type = FieldType.keyword,order = 12)
     private String extra5;
 
-    @ESQuery(type = FieldType.Date,order = -1)
+    @ESQuery(type = FieldType.Date,order = -1,sortable = true)
     private String datetime;
 
     public String getUserId() {

@@ -52,4 +52,10 @@ public @interface ESQuery {
      */
     int order() default 0;
 
+    /**
+     * 是否支持排序
+     * @return
+     */
+    boolean sortable() default false;
+
 }

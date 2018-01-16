@@ -178,7 +178,7 @@
                         }
                     // 初始化表头
                     if(item.show){
-                        var column = {field: item.field, title: item.field};
+                        var column = {field: item.field, title: item.field,sortable:item.sortable};
                         if (item.sort) {
                             column.sortable = true;
                         }
