@@ -5,7 +5,6 @@
 package la.kaike.ksearch.util.util;
 
 import la.kaike.ksearch.util.io.UnsafeStringWriter;
-import la.kaike.platform.sands.common.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,12 +105,6 @@ public class StringUtils {
         return true;
     }
 
-    public static boolean isContains(String values, String value) {
-        if (values == null || values.length() == 0) {
-            return false;
-        }
-        return isContains(Constants.COMMA_SPLIT_PATTERN.split(values), value);
-    }
 
     /**
      *
@@ -352,19 +345,6 @@ public class StringUtils {
         return parseKeyValuePair(qs, "\\&");
     }
 
-    public static String getServiceKey(Map<String, String> ps) {
-        StringBuilder buf = new StringBuilder();
-        String group = ps.get(Constants.GROUP_KEY);
-        if (group != null && group.length()>0){
-            buf.append(group).append("/");
-        }
-        buf.append(ps.get(Constants.INTERFACE_KEY));
-        String version = ps.get(Constants.VERSION_KEY);
-        if (version!= null && version.length()>0){
-            buf.append(":").append(version);
-        }
-        return buf.toString();
-    }
 
     public static String toQueryString(Map<String, String> ps) {
         StringBuilder buf = new StringBuilder();

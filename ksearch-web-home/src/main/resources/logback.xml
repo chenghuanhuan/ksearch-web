@@ -6,8 +6,8 @@
 
 	<!-- [公共Appender] 默认 -->
 	<appender name="DEFAULT-APPENDER"
-		class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">
-		<file>/home/logs/ksearch-web/common-default.log</file>
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/data/logs/ksearch-web/common-default.log</file>
 		<param name="append" value="true" />
 		<encoder>
 			<charset>${sys_logging_encoding}</charset>
@@ -17,8 +17,8 @@
 
 	<!-- [公共Appender] 仅记录异常日志 -->
 	<appender name="SYS-ERROR-APPENDER"
-		class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">
-		<file>/home/logs/ksearch-web/common-error.log</file>
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/data/logs/ksearch-web/common-error.log</file>
 		<param name="append" value="true" />
 		<filter class="ch.qos.logback.classic.filter.LevelFilter">  
             <level>ERROR</level>  
@@ -31,21 +31,10 @@
 		</encoder>
 	</appender>
 
-	<!-- web层统一日志 -->
-	<!--<appender name="SYS-WEB-APPENDER"-->
-		<!--class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">-->
-		<!--<file>/home/logs/ksearch-web/${app_name}-web.log</file>-->
-		<!--<param name="append" value="true" />-->
-		<!--<encoder>-->
-			<!--<charset>${sys_logging_encoding}</charset>-->
-			<!--<pattern>%d [%X{userId}/%X{remoteAddr} - %X{requestURIWithQueryString}] %-5p %c{2} - %m %X{TimeKey}%n</pattern>-->
-		<!--</encoder>-->
-	<!--</appender>-->
-	
 	<!-- 服务层日志 -->
 	<appender name="SYS-BIZ-SERVICE-APPENDER"
-		class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">
-		<file>/home/logs/ksearch-web/${app_name}-biz-service.log</file>
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/data/logs/ksearch-web/${app_name}-biz-service.log</file>
 		<param name="append" value="true" />
 		<encoder>
 			<charset>${sys_logging_encoding}</charset>
@@ -55,30 +44,30 @@
 
 	<!-- 组件层日志 -->
 	<appender name="SYS-CORE-SERVICE-APPENDER"
-		class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">
-		<file>/home/logs/ksearch-web/${app_name}-core-service.log</file>
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/data/logs/ksearch-web/${app_name}-core-service.log</file>
 		<param name="append" value="true" />
 		<encoder>
 			<charset>${sys_logging_encoding}</charset>
 			<pattern>%d [%X{userId}/%X{remoteAddr}] %-5p %c{2} - %m %X{TimeKey}%n</pattern>
 		</encoder>
 	</appender>
-	
+
 	<!-- DAL统一日志 -->
 	<appender name="DAL-APPENDER"
-		class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">
-		<file>/home/logs/ksearch-web/common-dal.log</file>
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/data/logs/ksearch-web/common-dal.log</file>
 		<param name="append" value="true" />
 		<encoder>
 			<charset>${sys_logging_encoding}</charset>
 			<pattern>%d %-5p %c{2} - %m %X{TimeKey}%n</pattern>
 		</encoder>
 	</appender>
-	
+
 	<!-- web层摘要日志 -->
 	<appender name="SYS-WEB-PAGE-DIGEST-APPENDER"
-		class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">
-		<file>/home/logs/ksearch-web/${app_name}-page-digest.log</file>
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/data/logs/ksearch-web/${app_name}-page-digest.log</file>
 		<param name="append" value="true" />
 		<encoder>
 			<charset>${sys_logging_encoding}</charset>
@@ -88,34 +77,34 @@
 
 	<!-- 外部系统调用本系统接口摘要 -->
 	<appender name="SYS-BIZ-SERVICE-DIGEST-APPENDER"
-		class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">
-		<file>/home/logs/ksearch-web/${app_name}-biz-service-digest.log</file>
+			  class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/data/logs/ksearch-web/${app_name}-biz-service-digest.log</file>
 		<param name="append" value="true" />
 		<encoder>
 			<charset>${sys_logging_encoding}</charset>
-			<pattern>%d - %m %X{TimeKey}%n</pattern>
+			<pattern>%d - %m %X{TimeKey}%n - %X{contextId}%n</pattern>
 		</encoder>
 	</appender>
 
 	<!-- 调用外部接口摘要 -->
 	<appender name="SYS-INTEGRATION-DIGEST-APPENDER"
-		class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">
-		<file>/home/logs/ksearch-web/${app_name}-integration-digest.log</file>
+			  class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/data/logs/ksearch-web/${app_name}-integration-digest.log</file>
 		<param name="append" value="true" />
 		<encoder>
 			<charset>${sys_logging_encoding}</charset>
-			<pattern>%d - %m %X{TimeKey}%n</pattern>
+			<pattern>%d - %m %X{TimeKey}%n - %X{contextId}%n</pattern>
 		</encoder>
 	</appender>
-	
+
 	<!-- DAL接口摘要日志 -->
 	<appender name="SYS-DAL-DIGEST-APPENDER"
-		class="la.kaike.platform.common.log.appender.DailyRollingFileAppender">
-		<file>/home/logs/ksearch-web/${app_name}-dal-digest.log</file>
+			  class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/data/logs/ksearch-web/${app_name}-dal-digest.log</file>
 		<param name="append" value="true" />
 		<encoder>
 			<charset>${sys_logging_encoding}</charset>
-			<pattern>%d - %m %X{TimeKey}%n</pattern>
+			<pattern>%d - %m %X{TimeKey}%n - %X{contextId}%n</pattern>
 		</encoder>
 	</appender>
 
@@ -141,11 +130,6 @@
 		<appender-ref ref="SYS-ERROR-APPENDER" />
 	</logger>
 
-	<!-- 平台服务层日志 -->
-	<logger name="com.kkl.platform.common.service" level="${sys_loggingLevel}" additivity="false">
-		<appender-ref ref="SYS-BIZ-SERVICE-APPENDER" />
-		<appender-ref ref="SYS-ERROR-APPENDER" />
-	</logger>
 	
 	<!-- BIZ-SERVICE 摘要日志 -->
 	<logger name="SYS-BIZ-SERVICE-DIGEST" level="${sys_loggingLevel}" additivity="false">
@@ -178,11 +162,6 @@
 	    <appender-ref ref="SYS-ERROR-APPENDER" />
 	</logger>
 
-	<!-- 平台服务层日志 -->
-	<logger name="la.kaike.platform.common.service" level="${sys_loggingLevel}" additivity="false">
-		<appender-ref ref="SYS-BIZ-SERVICE-APPENDER" />
-		<appender-ref ref="SYS-ERROR-APPENDER" />
-	</logger>
 	<!-- 控制台输出 -->
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<layout class="ch.qos.logback.classic.PatternLayout">
@@ -198,6 +177,6 @@
 		<level value="${sys_loggingLevel}" />
 		<appender-ref ref="DEFAULT-APPENDER" />
 		<appender-ref ref="SYS-ERROR-APPENDER" />
-		<!--<appender-ref ref="STDOUT" />-->
+		<appender-ref ref="STDOUT" />
 	</root>
 </configuration>

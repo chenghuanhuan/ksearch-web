@@ -13,7 +13,7 @@
         
 		<dependency>
             <groupId>la.kaike</groupId>
-            <artifactId>ksearch-web-integration</artifactId>
+            <artifactId>ksearch-web-utils</artifactId>
             <version>${parent.version}</version>
         </dependency>
         

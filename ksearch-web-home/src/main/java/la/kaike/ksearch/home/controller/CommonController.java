@@ -5,6 +5,7 @@
 package la.kaike.ksearch.home.controller;
 
 import com.baidu.disconf.client.usertools.IKuKoConfDataGetter;
+import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.biz.service.RoleService;
 import la.kaike.ksearch.home.base.BaseController;
@@ -21,7 +22,6 @@ import la.kaike.ksearch.model.vo.index.PropertiesVO;
 import la.kaike.ksearch.model.vo.query.SimpleQueryReqVO;
 import la.kaike.ksearch.util.annotations.ESQuery;
 import la.kaike.ksearch.util.util.ClassUtils;
-import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;

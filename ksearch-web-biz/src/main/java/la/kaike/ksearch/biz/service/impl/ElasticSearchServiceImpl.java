@@ -5,6 +5,7 @@
 package la.kaike.ksearch.biz.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
@@ -23,9 +24,7 @@ import la.kaike.ksearch.model.vo.query.SortFieldVO;
 import la.kaike.ksearch.util.constant.IndexSettingConstant;
 import la.kaike.ksearch.util.constant.MethodNameEnum;
 import la.kaike.ksearch.util.exception.BussinessException;
-import la.kaike.platform.common.lang.DateUtils;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
@@ -550,13 +549,13 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
                 String index = indicesVO.getIndex();
                 Matcher matcher = pattern.matcher(index);
                 if (matcher.matches()&&matcher.groupCount()>0) {
-                    Date date;
-                    try {
-                        date = DateUtils.parseWebFormat(matcher.group(1));
+                    Date date =null;
+                    /*try {
+                        // TODO date = DateUtils.parseWebFormat(matcher.group(1));
                     } catch (ParseException e) {
                         logger.error("filterIndex error 日志格式错误",e);
                         continue;
-                    }
+                    }*/
                     if (date.getTime() <= nowC.getTimeInMillis()) {
                         deleteIndexList.add(index);
                         indicesVOList.remove(indicesVO);

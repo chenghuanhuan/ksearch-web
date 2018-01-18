@@ -15,7 +15,8 @@
  */
 package la.kaike.ksearch.util.util;
 
-import la.kaike.platform.common.lang.DateUtils;
+
+import org.apache.commons.lang3.time.DateUtils;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
