@@ -241,6 +241,7 @@
             pageSize:5,
             columns: [{
                 field: 'datetime',
+                sortable: true,
                 title: '<span class="text-primary">datetime</span>'
             }, {
                 field: 'beat.hostname',
