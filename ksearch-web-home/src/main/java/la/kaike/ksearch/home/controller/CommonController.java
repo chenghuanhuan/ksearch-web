@@ -8,6 +8,7 @@ import com.baidu.disconf.client.usertools.IKuKoConfDataGetter;
 import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.biz.service.RoleService;
 import la.kaike.ksearch.home.base.BaseController;
+import la.kaike.ksearch.home.support.ESQueryVOStore;
 import la.kaike.ksearch.model.Response;
 import la.kaike.ksearch.model.bo.common.QueryConditionBO;
 import la.kaike.ksearch.model.dbo.user.Role;
@@ -21,6 +22,7 @@ import la.kaike.ksearch.model.vo.index.PropertiesVO;
 import la.kaike.ksearch.model.vo.query.SimpleQueryReqVO;
 import la.kaike.ksearch.util.annotations.ESQuery;
 import la.kaike.ksearch.util.util.ClassUtils;
+import la.kaike.ksearch.util.util.StringUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -146,7 +148,11 @@ public class CommonController extends BaseController {
     @ResponseBody
     public Response getQueryCondition(QueryConditionVO query) throws ClassNotFoundException {
 
-        Class<?> clazz = Class.forName(query.getConditionKey());
+        String className = query.getConditionKey();
+        if (StringUtils.isEmpty(className)){
+            className = ESQueryVOStore.getClassName(query.getIndex(),query.getType());
+        }
+        Class<?> clazz = Class.forName(className);
         Set<Field> fieldList = ClassUtils.getAllFiled(clazz);
         List<QueryConditionBO> conditionBOList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(fieldList)){
@@ -168,6 +174,9 @@ public class CommonController extends BaseController {
         Collections.sort(conditionBOList, Comparator.comparingInt(QueryConditionBO::getOrder));
         return succeed(conditionBOList);
     }
+
+
+
 
     private List<FieldsVO> converFieldList(List<PropertiesVO> propertiesVOList){
         List<FieldsVO> fieldsVOList = new ArrayList<>();

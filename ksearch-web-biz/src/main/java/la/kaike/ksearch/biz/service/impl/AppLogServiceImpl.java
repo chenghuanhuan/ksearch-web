@@ -15,18 +15,11 @@ import la.kaike.platform.common.lang.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
-import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
@@ -36,7 +29,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
  * @since $Revision:1.0.0, $Date: 2017年09月28日 下午3:59 $
  */
 @Service
-public class AppLogServiceImpl implements AppLogService {
+public class AppLogServiceImpl extends BaseService implements AppLogService {
 
     private static final String INDEX = "applog";
 
@@ -118,30 +111,8 @@ public class AppLogServiceImpl implements AppLogService {
         builder.setQuery(boolQueryBuilder);
         builder.setFetchSource(new String[]{},new String[]{"contentData"});
         //builder.setSource(SearchSourceBuilder)
-        // 查询总条数
-        SearchResponse countRes = builder.setSize(0).get();
 
-        builder.addSort("uploadDate", SortOrder.DESC);
-
-        pageResponse.setTotal(countRes.getHits().getTotalHits());
-        if (countRes.getHits().getTotalHits()>0) {
-
-            // 查询真实数据
-            builder.setFrom(appLogVO.getOffset())
-                    .setSize(appLogVO.getLimit());
-
-            SearchResponse searchResponse = builder.get();
-            SearchHits searchHits = searchResponse.getHits();
-
-            Iterator<SearchHit> searchHitIterator = searchHits.iterator();
-            List<Map<String, Object>> hashMapList = new ArrayList<>();
-            while (searchHitIterator.hasNext()) {
-                SearchHit hit = searchHitIterator.next();
-                Map<String, Object> map = hit.getSource();
-                hashMapList.add(map);
-            }
-            pageResponse.setRows(hashMapList);
-        }
+        pageResponse = get(builder,appLogVO);
         return pageResponse;
     }
 

@@ -7,12 +7,14 @@ package la.kaike.ksearch.model.vo.hotfix;
 import la.kaike.ksearch.model.validate.Validate;
 import la.kaike.ksearch.model.vo.PageVO;
 import la.kaike.ksearch.util.annotations.ESQuery;
+import la.kaike.ksearch.util.annotations.ESQueryVO;
 import la.kaike.ksearchclient.annotations.FieldType;
 
 /**
  * @author chenghuanhuan@kaike.la
  * @since $Revision:1.0.0, $Date: 2018年01月12日 下午5:37 $
  */
+@ESQueryVO(index = "hotfix",type = "log")
 public class HotFixVO extends PageVO {
 
     @Validate(required = true,isNotBlank = true,desc = "集群名称")

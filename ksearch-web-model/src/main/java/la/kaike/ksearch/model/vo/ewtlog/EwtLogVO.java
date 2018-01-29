@@ -6,11 +6,13 @@ package la.kaike.ksearch.model.vo.ewtlog;
 
 import la.kaike.ksearch.model.validate.Validate;
 import la.kaike.ksearch.model.vo.PageVO;
+import la.kaike.ksearch.util.annotations.ESQueryVO;
 
 /**
  * @author chenghuanhuan@kaike.la
  * @since $Revision:1.0.0, $Date: 2018年01月02日 下午2:00 $
  */
+@ESQueryVO(index = "ewtlog",type = "log")
 public class EwtLogVO extends PageVO {
 
     @Validate(required = true,isNotBlank = true,desc = "集群名称")

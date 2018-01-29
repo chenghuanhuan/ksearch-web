@@ -5,7 +5,6 @@
 package la.kaike.ksearch.model.vo.common;
 
 import la.kaike.ksearch.BaseRequest;
-import la.kaike.ksearch.model.validate.Validate;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -13,8 +12,36 @@ import la.kaike.ksearch.model.validate.Validate;
  */
 public class QueryConditionVO extends BaseRequest {
 
-    @Validate(required = true,isNotBlank = true)
+    /**
+     * class名
+     */
     private String conditionKey;
+
+    /**
+     * 索引名称
+     */
+    private String index;
+
+    /**
+     * 类型名称
+     */
+    private String type;
+
+    public String getIndex() {
+        return index;
+    }
+
+    public void setIndex(String index) {
+        this.index = index;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getConditionKey() {
         return conditionKey;
