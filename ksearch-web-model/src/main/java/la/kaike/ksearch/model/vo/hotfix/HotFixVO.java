@@ -14,7 +14,7 @@ import la.kaike.ksearchclient.annotations.FieldType;
  * @author chenghuanhuan@kaike.la
  * @since $Revision:1.0.0, $Date: 2018年01月12日 下午5:37 $
  */
-@ESQueryVO(index = "hotfix",type = "log")
+@ESQueryVO(indexRegular = "^hotfix.log.\\d\\d\\d\\d-\\d\\d",type = "log")
 public class HotFixVO extends PageVO {
 
     @Validate(required = true,isNotBlank = true,desc = "集群名称")

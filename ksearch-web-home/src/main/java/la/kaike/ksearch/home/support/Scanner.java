@@ -4,6 +4,7 @@
  */
 package la.kaike.ksearch.home.support;
 
+import la.kaike.ksearch.biz.support.ESQueryVOStore;
 import la.kaike.ksearch.util.annotations.ESQueryVO;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;

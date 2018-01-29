@@ -8,11 +8,13 @@ import com.alibaba.fastjson.JSON;
 import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
+import la.kaike.ksearch.BaseRequest;
 import la.kaike.ksearch.biz.es.ElasticClient;
 import la.kaike.ksearch.biz.es.ElasticClientUtil;
 import la.kaike.ksearch.biz.es.IndexExt;
 import la.kaike.ksearch.biz.es.SearchExt;
 import la.kaike.ksearch.biz.service.ElasticSearchService;
+import la.kaike.ksearch.biz.support.ESQueryVOStore;
 import la.kaike.ksearch.model.PageResponse;
 import la.kaike.ksearch.model.bo.ClusterHealthBO;
 import la.kaike.ksearch.model.vo.elastic.ClusterStatisticsVO;
@@ -49,6 +51,7 @@ import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.unit.ByteSizeValue;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -69,7 +72,7 @@ import java.util.regex.Pattern;
  * @since $Revision:1.0.0, $Date: 2017年07月14日 下午7:21 $
  */
 @Service
-public class ElasticSearchServiceImpl implements ElasticSearchService {
+public class ElasticSearchServiceImpl extends BaseService implements ElasticSearchService {
     private static final Logger logger = LoggerFactory.getLogger(ElasticSearchServiceImpl.class);
 
     @Override
@@ -367,19 +370,30 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     }
 
     @Override
-    public PageResponse simpleQuery(SimpleQueryReqVO simpleQueryReqVO) {
+    public PageResponse simpleQuery(SimpleQueryReqVO simpleQueryReqVO) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+
+        Object pageVO = null;
+        Class<?> clazz = null;
+        // 参数转换
+        if (StringUtils.isNotEmpty(simpleQueryReqVO.getSource())){
+            String className = ESQueryVOStore.getClassName(simpleQueryReqVO.getIndices().get(0),simpleQueryReqVO.getTypes().get(0));
+            clazz = Class.forName(className);
+            pageVO = JSON.parseObject(simpleQueryReqVO.getSource(),clazz);
+        }
+
+
+
+
         PageResponse pageResponse = new PageResponse();
 
         TransportClient client = ElasticClient.getClient(simpleQueryReqVO.getClusterName());
 
         SearchRequestBuilder builder = builder(client,simpleQueryReqVO);
 
-        // TODO 查询指定字段
-/*
-        QueryBuilder queryBuilder = QueryBuilders.disMaxQuery();
-        builder.setQuery(queryBuilder);*/
-        //SearchSourceBuilder sourceBuilder = SearchSourceBuilder.searchSource();
-        //builder.setSource(sourceBuilder);
+        if (StringUtils.isNotEmpty(simpleQueryReqVO.getSource())) {
+            BoolQueryBuilder boolQueryBuilder = super.query((BaseRequest) pageVO, clazz);
+            builder.setQuery(boolQueryBuilder);
+        }
 
         SearchResponse countRes = builder.setSize(0).get();
         pageResponse.setTotal(countRes.getHits().getTotalHits());

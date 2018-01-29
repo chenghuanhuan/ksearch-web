@@ -16,10 +16,10 @@ import java.lang.annotation.*;
 @Inherited
 public @interface ESQueryVO {
     /**
-     * 索引
+     * 索引正则表达式
      * @return
      */
-    String index();
+    String indexRegular();
 
     /**
      * 类型

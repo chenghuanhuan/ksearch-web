@@ -8,7 +8,7 @@ import com.baidu.disconf.client.usertools.IKuKoConfDataGetter;
 import la.kaike.ksearch.biz.service.ElasticSearchService;
 import la.kaike.ksearch.biz.service.RoleService;
 import la.kaike.ksearch.home.base.BaseController;
-import la.kaike.ksearch.home.support.ESQueryVOStore;
+import la.kaike.ksearch.biz.support.ESQueryVOStore;
 import la.kaike.ksearch.model.Response;
 import la.kaike.ksearch.model.bo.common.QueryConditionBO;
 import la.kaike.ksearch.model.dbo.user.Role;

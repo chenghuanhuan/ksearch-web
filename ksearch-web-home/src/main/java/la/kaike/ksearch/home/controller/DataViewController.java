@@ -38,7 +38,7 @@ public class DataViewController extends BaseController{
      */
     @RequestMapping("/query")
     @ResponseBody
-    public Response query(SimpleQueryReqVO simpleQueryReqVO){
+    public Response query(SimpleQueryReqVO simpleQueryReqVO) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
         PageResponse pageResponse = elasticSearchService.simpleQuery(simpleQueryReqVO);
         return succeed(pageResponse);
     }

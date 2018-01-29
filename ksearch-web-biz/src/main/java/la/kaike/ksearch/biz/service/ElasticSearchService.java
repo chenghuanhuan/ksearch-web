@@ -119,7 +119,7 @@ public interface ElasticSearchService {
      * @param simpleQueryReqVO
      * @return
      */
-    PageResponse simpleQuery(SimpleQueryReqVO simpleQueryReqVO);
+    PageResponse simpleQuery(SimpleQueryReqVO simpleQueryReqVO) throws ClassNotFoundException, IllegalAccessException, InstantiationException;
 
     /**
      * 添加文档
