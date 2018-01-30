@@ -273,7 +273,7 @@
                         $.each(clusterNames,function (i,item) {
                             if (!globalClusterName&&i===0){
                                 globalClusterName = item;
-                                Util.cookie.set("cluster-name",globalClusterName,30*24*60*60*1000);
+                                Util.cookie.set("cluster-name",globalClusterName,604800000);
 							}
                             initClusterNodeInfo(i,item);
                         });
@@ -292,7 +292,7 @@
 					$(this).prepend('<i class="icon-ok"></i>');
 					var clusterName = $(this).text();
 					globalClusterName = clusterName;
-					Util.cookie.set("cluster-name",clusterName,30*24*60*60*1000);
+					Util.cookie.set("cluster-name",clusterName,604800000);
                     // 初始化健康信息
                     //initClusterHealth($(this).text());
                     $('#cluster_health_table').bootstrapTable('refresh');
