@@ -2,8 +2,6 @@
 <!DOCTYPE logback:configuration>
 <!-- - Logback 配置文件。 -->
 <configuration scan="true" scanPeriod="60 seconds" debug="false" xmlns:logback="http://logback.qos.ch/">
-	<!--<contextListener class="com.baidu.disconf.client.support.LogBackStartupListener" />-->
-	<!--<property resource="system.properties" />-->
 
 	<!-- [公共Appender] 默认 -->
 	<appender name="DEFAULT-APPENDER"
