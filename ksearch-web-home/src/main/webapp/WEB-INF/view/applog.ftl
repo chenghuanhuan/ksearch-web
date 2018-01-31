@@ -387,6 +387,7 @@
                 title: '<span class="text-primary">imei</span>'
             }, {
                 field: 'uploadDate',
+                sortable:true,
                 title: '<span class="text-primary">上报时间</span>',
                 formatter: function (value, row, index) {
                     return formatDateTime(row.uploadDate);
