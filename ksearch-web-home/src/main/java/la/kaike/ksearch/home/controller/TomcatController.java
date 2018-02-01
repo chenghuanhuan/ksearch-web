@@ -64,7 +64,7 @@ public class TomcatController extends BaseController {
     public Response indexSelect(SimpleQueryReqVO simpleQueryReqVO){
         String key = simpleQueryReqVO.getClusterName()+"_indeices";
         if (CacheManager.cache==null){
-            CacheManager.init(elasticSearchService,simpleQueryReqVO.getClusterName());
+            CacheManager.init(elasticSearchService);
         }
         List<IndicesVO> indicesVOS = CacheManager.get(key);
 
