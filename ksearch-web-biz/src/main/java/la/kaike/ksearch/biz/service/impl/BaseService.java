@@ -73,7 +73,7 @@ public class BaseService {
         return pageResponse;
     }
 
-    protected BoolQueryBuilder query(BaseRequest request,Class<?> clazz) throws UnsupportedEncodingException {
+    protected BoolQueryBuilder query(BaseRequest request,Class<?> clazz){
         BoolQueryBuilder boolQueryBuilder = boolQuery();
 
         Set<Field> fieldSet =  ClassUtils.getAllFiled(clazz);
@@ -99,7 +99,11 @@ public class BaseService {
                         value = ClassUtils.getFieldValue(request,field.getName());
                         if (!StringUtils.isBlank((String)value)) {
                             String val = (String)value;
-                            boolQueryBuilder.must(QueryBuilders.matchQuery(fieldName, new String(val.getBytes(),"UTF-8")));
+                            try {
+                                boolQueryBuilder.must(QueryBuilders.matchQuery(fieldName, new String(val.getBytes("UTF-8"),"UTF-8")));
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
                         }
                         break;
 
