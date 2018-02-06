@@ -535,7 +535,7 @@ public class ElasticSearchServiceImpl extends BaseService implements ElasticSear
         /*********************删除系统日志**************************/
 
         //ksearch-api.ksearch-api-biz-service.2017-11-20
-        String reg = "^[a-zA-Z0-9-]+\\.[a-zA-Z0-9-]+\\.(\\d\\d\\d\\d-\\d\\d-\\d\\d)";
+        String reg = "(\\d\\d\\d\\d-\\d\\d-\\d\\d)";
         List<String> delSysLogIndexList = filterIndex(indicesVOList,reg);
 
         logger.info("删除索引："+delSysLogIndexList);
@@ -545,6 +545,15 @@ public class ElasticSearchServiceImpl extends BaseService implements ElasticSear
             client.admin().indices().prepareDelete(indexes).get();
         }
 
+        String reg2 = "(\\d\\d\\d\\d.\\d\\d.\\d\\d)";
+        List<String> delSysLogIndexList2 = filterIndex(indicesVOList,reg2);
+
+        logger.info("删除索引："+delSysLogIndexList2);
+        if (CollectionUtils.isNotEmpty(delSysLogIndexList2)) {
+            TransportClient client = ElasticClient.getClient(clusterName);
+            String [] indexes = delSysLogIndexList2.toArray(new String[]{});
+            client.admin().indices().prepareDelete(indexes).get();
+        }
     }
 
     // 过滤出需要删除的索引
@@ -563,7 +572,7 @@ public class ElasticSearchServiceImpl extends BaseService implements ElasticSear
                 IndicesVO indicesVO = indicesVOList.get(i);
                 String index = indicesVO.getIndex();
                 Matcher matcher = pattern.matcher(index);
-                if (matcher.matches()&&matcher.groupCount()>0) {
+                if (matcher.find()&&matcher.groupCount()>0) {
                     Date date;
                     try {
                         date = DateUtils.parseWebFormat(matcher.group(1));
@@ -633,4 +642,11 @@ public class ElasticSearchServiceImpl extends BaseService implements ElasticSear
         return propertiesVOList;
     }
 
+    public static void main(String[] args) {
+        String index = "php-error-2018.01.31";
+        Pattern pattern = Pattern.compile("(\\d\\d\\d\\d.\\d\\d.\\d\\d)");
+        Matcher matcher = pattern.matcher(index);
+        System.out.println(matcher.find());
+        System.out.println(matcher.group(1));
+    }
 }
