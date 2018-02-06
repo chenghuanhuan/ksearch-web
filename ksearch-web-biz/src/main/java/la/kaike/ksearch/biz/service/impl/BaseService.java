@@ -20,13 +20,10 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.util.*;
 
-import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
-import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
-import static org.elasticsearch.index.query.QueryBuilders.termQuery;
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -39,9 +36,10 @@ public class BaseService {
         PageResponse pageResponse = new PageResponse();
         try {
 
-            logger.info("查询语句：{}",builder.toString());
+
             // 查询总条数
             SearchResponse countRes = builder.setSize(0).get();
+            logger.info("查询语句：{}",builder.toString());
             if (StringUtils.isNotEmpty(pageVO.getSort())) {
                 builder.addSort(pageVO.getSort(), SortOrder.valueOf(pageVO.getOrder().toUpperCase()));
             }
@@ -99,11 +97,7 @@ public class BaseService {
                         value = ClassUtils.getFieldValue(request,field.getName());
                         if (!StringUtils.isBlank((String)value)) {
                             String val = (String)value;
-                            try {
-                                boolQueryBuilder.must(QueryBuilders.matchQuery(fieldName, new String(val.getBytes("UTF-8"),"UTF-8")));
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
+                            boolQueryBuilder.must(QueryBuilders.matchQuery(fieldName, new String(val)));
                         }
                         break;
 
