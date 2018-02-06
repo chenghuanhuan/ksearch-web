@@ -576,7 +576,7 @@ public class ElasticSearchServiceImpl extends BaseService implements ElasticSear
                     Date date;
                     try {
                         if (format==null) {
-                            date = DateUtils.parseWebFormat(matcher.group(1));
+                            date = DateUtils.parseDate(matcher.group(1),"yyyy-MM-dd");
                         }else {
                             date = DateUtils.parseDate(matcher.group(1),format);
                         }
