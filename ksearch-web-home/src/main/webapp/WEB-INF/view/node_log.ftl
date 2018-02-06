@@ -169,7 +169,7 @@
                                     line+='</div>';
                             line+='<div class="col-xs-12 col-sm-2" style="width: 23%;">';
                             line+='<div class="clearfix">';
-                            line+='<input type="text" id="'+item.field+'" name="'+item.field+'" placeholder="" class="col-xs-12 col-sm-12" />';
+                            line+='<input type="text" id="'+item.field+'" name="'+item.field+'" placeholder="勾选前面选项将不分词" class="col-xs-12 col-sm-12" />';
                             line+='</div>';
                             line+='</div>';
                         }else {
