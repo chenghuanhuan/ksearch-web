@@ -110,8 +110,11 @@
                                     </div>
 
                                     <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">来源:</label>
-
-                                    <div class="col-xs-12 col-sm-5">
+                                    <div class="col-xs-12 col-sm-1">
+                                        <span>不分词</span>
+                                        <input type="checkbox" value="true" name="analyzer">
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4">
                                         <div class="clearfix">
                                             <input class="form-control" type="text" name="source" id="source" />
                                         </div>

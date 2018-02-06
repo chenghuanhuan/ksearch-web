@@ -96,7 +96,11 @@ public class BaseService {
                     case text:
                         value = ClassUtils.getFieldValue(request,field.getName());
                         if (!StringUtils.isBlank((String)value)) {
-                            boolQueryBuilder.must(QueryBuilders.matchQuery(fieldName, value));
+                            if (request.isAnalyzer()) {
+                                boolQueryBuilder.must(QueryBuilders.matchQuery(fieldName, value));
+                            }else {
+                                boolQueryBuilder.must(QueryBuilders.matchPhraseQuery(fieldName, value));
+                            }
                         }
                         break;
 

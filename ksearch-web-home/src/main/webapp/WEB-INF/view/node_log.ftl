@@ -163,11 +163,26 @@
                                             '<div class="form-group">';
                         }
                         line +='<label class="control-label col-xs-12 col-sm-1 no-padding-right" for="'+item.field+'">'+item.field+':</label>';
-                                line+='<div class="col-xs-12 col-sm-3">';
-                                    line+='<div class="clearfix">';
-                                        line+='<input type="text" id="'+item.field+'" name="'+item.field+'" placeholder="" class="col-xs-12 col-sm-12" />';
+                        if(item.type=="text"){
+                            line+='<div class="col-xs-12 col-sm-1" style="width: 10px;">';
+                                        line+='<input type="checkbox" value="false" name="analyzer" style="margin-top:10px;" title="是否分词，勾选后不分词">';
                                     line+='</div>';
-                                line+='</div>';
+                            line+='<div class="col-xs-12 col-sm-2" style="width: 23%;">';
+                            line+='<div class="clearfix">';
+                            line+='<input type="text" id="'+item.field+'" name="'+item.field+'" placeholder="" class="col-xs-12 col-sm-12" />';
+                            line+='</div>';
+                            line+='</div>';
+                        }else {
+                            line+='<div class="col-xs-12 col-sm-3">';
+                            line+='<div class="clearfix">';
+                            line+='<input type="text" id="'+item.field+'" name="'+item.field+'" placeholder="" class="col-xs-12 col-sm-12" />';
+                            line+='</div>';
+                            line+='</div>';
+                        }
+
+
+
+
                         if (((i+1)%3)==0||i==data.length-1){
                                 line+='</div>';
                             line+='</div>';
