@@ -261,6 +261,8 @@
             search:false,
             //toolbar:"#toolbar",
             sidePagination:'server',
+            method:"post",
+            contentType:"application/x-www-form-urlencoded; charset=UTF-8",
             url:"/ewtlog/query",
             pageList:[5, 10,20],
             pagination:true,

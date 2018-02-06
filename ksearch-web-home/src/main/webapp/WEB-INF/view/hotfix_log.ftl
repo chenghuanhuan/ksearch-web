@@ -264,6 +264,8 @@
             search:false,
             //toolbar:"#toolbar",
             sidePagination:'server',
+            method:"post",
+            contentType:"application/x-www-form-urlencoded; charset=UTF-8",
             url:"/hotfix/query",
             pageList:[10,20,30],
             pagination:true,

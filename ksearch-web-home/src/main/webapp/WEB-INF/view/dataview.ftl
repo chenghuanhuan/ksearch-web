@@ -298,6 +298,8 @@
                         sidePagination:'server',
                         //method: 'post',
                         //dataType: "json",
+                        method:"post",
+                        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
                         url:"/dataview/query",
                         pageList:[10, 20, 40, 60],
                         pagination:true,
