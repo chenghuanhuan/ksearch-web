@@ -97,7 +97,9 @@ public class BaseService {
                         value = ClassUtils.getFieldValue(request,field.getName());
                         if (!StringUtils.isBlank((String)value)) {
                             String val = (String)value;
-                            boolQueryBuilder.must(QueryBuilders.matchQuery(fieldName, new String(val)));
+                            System.out.println("sout :"+val);
+                            logger.info("logger info :"+val);
+                            boolQueryBuilder.must(QueryBuilders.matchQuery(fieldName, val));
                         }
                         break;
 
