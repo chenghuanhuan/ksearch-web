@@ -61,6 +61,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -370,7 +371,7 @@ public class ElasticSearchServiceImpl extends BaseService implements ElasticSear
     }
 
     @Override
-    public PageResponse simpleQuery(SimpleQueryReqVO simpleQueryReqVO) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public PageResponse simpleQuery(SimpleQueryReqVO simpleQueryReqVO) throws ClassNotFoundException, IllegalAccessException, InstantiationException, UnsupportedEncodingException {
 
         Object pageVO = null;
         Class<?> clazz = null;

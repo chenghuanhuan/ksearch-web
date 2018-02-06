@@ -13,6 +13,7 @@ import la.kaike.ksearch.model.vo.query.SimpleQueryReqVO;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -119,7 +120,7 @@ public interface ElasticSearchService {
      * @param simpleQueryReqVO
      * @return
      */
-    PageResponse simpleQuery(SimpleQueryReqVO simpleQueryReqVO) throws ClassNotFoundException, IllegalAccessException, InstantiationException;
+    PageResponse simpleQuery(SimpleQueryReqVO simpleQueryReqVO) throws ClassNotFoundException, IllegalAccessException, InstantiationException, UnsupportedEncodingException;
 
     /**
      * 添加文档
