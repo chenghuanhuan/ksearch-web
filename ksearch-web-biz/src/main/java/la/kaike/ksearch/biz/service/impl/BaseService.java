@@ -38,6 +38,7 @@ public class BaseService {
         PageResponse pageResponse = new PageResponse();
         try {
 
+            logger.info("查询语句：{}",builder.toString());
             // 查询总条数
             SearchResponse countRes = builder.setSize(0).get();
             if (StringUtils.isNotEmpty(pageVO.getSort())) {
@@ -50,7 +51,7 @@ public class BaseService {
                 // 查询真实数据
                 builder.setFrom(pageVO.getOffset())
                         .setSize(pageVO.getLimit());
-                logger.info("查询语句：{}",builder.toString());
+                logger.info("完整查询语句：{}",builder.toString());
                 SearchResponse searchResponse = builder.get();
                 SearchHits searchHits = searchResponse.getHits();
 
