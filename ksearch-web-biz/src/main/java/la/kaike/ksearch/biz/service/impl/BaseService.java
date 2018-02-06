@@ -50,7 +50,7 @@ public class BaseService {
                 // 查询真实数据
                 builder.setFrom(pageVO.getOffset())
                         .setSize(pageVO.getLimit());
-
+                logger.info("查询语句：{}",builder.toString());
                 SearchResponse searchResponse = builder.get();
                 SearchHits searchHits = searchResponse.getHits();
 
