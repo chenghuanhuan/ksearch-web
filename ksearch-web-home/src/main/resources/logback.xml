@@ -139,12 +139,6 @@
 		<appender-ref ref="SYS-DAL-DIGEST-APPENDER" />
 		<appender-ref ref="SYS-ERROR-APPENDER" />
 	</logger>
-
-	<!-- 平台服务层日志 -->
-	<logger name="com.kkl.platform.common.service" level="${sys_loggingLevel}" additivity="false">
-		<appender-ref ref="SYS-BIZ-SERVICE-APPENDER" />
-		<appender-ref ref="SYS-ERROR-APPENDER" />
-	</logger>
 	
 	<!-- BIZ-SERVICE 摘要日志 -->
 	<logger name="SYS-BIZ-SERVICE-DIGEST" level="${sys_loggingLevel}" additivity="false">
@@ -165,17 +159,11 @@
 	<!--</logger>-->
 
 	<!-- 业务服务层日志 -->
-	<logger name="la.kaike.service.biz" level="${sys_loggingLevel}" additivity="false">
+	<logger name="la.kaike.ksearch.biz" level="${sys_loggingLevel}" additivity="false">
 		<appender-ref ref="SYS-BIZ-SERVICE-APPENDER" />
 		<appender-ref ref="SYS-ERROR-APPENDER" />
 	</logger>
 
-	
-	<!-- 组件层日志 -->
-	<logger name="la.kaike.service.iface.impl" level="${sys_loggingLevel}" additivity="false">
-		<appender-ref ref="SYS-CORE-SERVICE-APPENDER" />
-	    <appender-ref ref="SYS-ERROR-APPENDER" />
-	</logger>
 
 	<!-- 平台服务层日志 -->
 	<logger name="la.kaike.platform.common.service" level="${sys_loggingLevel}" additivity="false">
@@ -189,7 +177,7 @@
 		</layout>
 	</appender>
 
-	 <logger name="dao" level="${sys_loggingLevel}" additivity="false">
+	 <logger name="la.kaike" level="${sys_loggingLevel}" additivity="false">
         <appender-ref ref="STDOUT" />
     </logger>
 
@@ -197,6 +185,6 @@
 		<level value="${sys_loggingLevel}" />
 		<appender-ref ref="DEFAULT-APPENDER" />
 		<appender-ref ref="SYS-ERROR-APPENDER" />
-		<appender-ref ref="STDOUT" />
+		<!--<appender-ref ref="STDOUT" />-->
 	</root>
 </configuration>
