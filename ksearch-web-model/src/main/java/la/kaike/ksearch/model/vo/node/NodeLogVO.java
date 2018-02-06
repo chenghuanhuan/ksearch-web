@@ -33,6 +33,17 @@ public class NodeLogVO extends PageVO {
 
     @ESQuery(type = FieldType.Date,order = -1,sortable = true,format = "yyyy-MM-dd HH:mm:ss.SSS")
     private String datetime;
+    @ESQuery(type = FieldType.keyword,order = 3,field = "beat.hostname")
+    private String hostname;
+
+
+    public String getHostname() {
+        return hostname;
+    }
+
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
+    }
 
     public String getClusterName() {
         return clusterName;

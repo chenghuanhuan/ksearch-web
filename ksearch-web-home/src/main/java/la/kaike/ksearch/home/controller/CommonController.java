@@ -161,6 +161,7 @@ public class CommonController extends BaseController {
                 if (esQuery!=null){
                     QueryConditionBO queryConditionBO = new QueryConditionBO();
                     queryConditionBO.setField(field.getName());
+                    queryConditionBO.setDbField(esQuery.field());
                     queryConditionBO.setFormat(esQuery.format());
                     queryConditionBO.setType(esQuery.type());
                     queryConditionBO.setOrder(esQuery.order());
