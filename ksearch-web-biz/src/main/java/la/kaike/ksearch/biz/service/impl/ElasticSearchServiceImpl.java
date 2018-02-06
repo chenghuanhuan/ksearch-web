@@ -536,7 +536,7 @@ public class ElasticSearchServiceImpl extends BaseService implements ElasticSear
 
         //ksearch-api.ksearch-api-biz-service.2017-11-20
         String reg = "(\\d\\d\\d\\d-\\d\\d-\\d\\d)";
-        List<String> delSysLogIndexList = filterIndex(indicesVOList,reg);
+        List<String> delSysLogIndexList = filterIndex(indicesVOList,reg,null);
 
         logger.info("删除索引："+delSysLogIndexList);
         if (CollectionUtils.isNotEmpty(delSysLogIndexList)) {
@@ -546,7 +546,7 @@ public class ElasticSearchServiceImpl extends BaseService implements ElasticSear
         }
 
         String reg2 = "(\\d\\d\\d\\d.\\d\\d.\\d\\d)";
-        List<String> delSysLogIndexList2 = filterIndex(indicesVOList,reg2);
+        List<String> delSysLogIndexList2 = filterIndex(indicesVOList,reg2,"yyyy.MM.dd");
 
         logger.info("删除索引："+delSysLogIndexList2);
         if (CollectionUtils.isNotEmpty(delSysLogIndexList2)) {
@@ -557,7 +557,7 @@ public class ElasticSearchServiceImpl extends BaseService implements ElasticSear
     }
 
     // 过滤出需要删除的索引
-    private List<String> filterIndex(List<IndicesVO> indicesVOList,String regix){
+    private List<String> filterIndex(List<IndicesVO> indicesVOList,String regix,String format){
         List<String> deleteIndexList = new ArrayList<>();
 
 
@@ -575,7 +575,11 @@ public class ElasticSearchServiceImpl extends BaseService implements ElasticSear
                 if (matcher.find()&&matcher.groupCount()>0) {
                     Date date;
                     try {
-                        date = DateUtils.parseWebFormat(matcher.group(1));
+                        if (format==null) {
+                            date = DateUtils.parseWebFormat(matcher.group(1));
+                        }else {
+                            date = DateUtils.parseDate(matcher.group(1),format);
+                        }
                     } catch (ParseException e) {
                         logger.error("filterIndex error 日志格式错误",e);
                         continue;
@@ -642,11 +646,13 @@ public class ElasticSearchServiceImpl extends BaseService implements ElasticSear
         return propertiesVOList;
     }
 
-    public static void main(String[] args) {
-        String index = "php-error-2018.01.31";
+    public static void main(String[] args) throws ParseException {
+        String index = "php-error-2018.02.06";
         Pattern pattern = Pattern.compile("(\\d\\d\\d\\d.\\d\\d.\\d\\d)");
         Matcher matcher = pattern.matcher(index);
         System.out.println(matcher.find());
         System.out.println(matcher.group(1));
+        Date date = DateUtils.parseDate(matcher.group(1),"yyyy.MM.dd");
+        System.out.println(date);
     }
 }
