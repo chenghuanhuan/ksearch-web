@@ -508,7 +508,7 @@ public class ElasticSearchServiceImpl extends BaseService implements ElasticSear
 
         /*******************删除nginx日志******************/
 
-        // 过滤出需要删除的index
+     /*   // 过滤出需要删除的index
         if (indicesVOList!=null&& indicesVOList.size()>0){
             // 删除小于此月份的所有索引
             List<String> deleteIndexList = new ArrayList<>();
@@ -531,7 +531,7 @@ public class ElasticSearchServiceImpl extends BaseService implements ElasticSear
                 TransportClient client = ElasticClient.getClient(clusterName);
                 client.admin().indices().prepareDelete(deleteIndexList.toArray(new String[]{})).get();
             }
-        }
+        }*/
         /*********************删除系统日志**************************/
 
         //ksearch-api.ksearch-api-biz-service.2017-11-20
