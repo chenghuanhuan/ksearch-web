@@ -4,11 +4,11 @@
  */
 package com.youqianhuan.ksearch.model.vo.node;
 
-import com.youqianhuan.ksearch.util.annotations.ESQuery;
 import com.youqianhuan.ksearch.model.validate.Validate;
 import com.youqianhuan.ksearch.model.vo.PageVO;
+import com.youqianhuan.ksearch.util.annotations.ESQuery;
 import com.youqianhuan.ksearch.util.annotations.ESQueryVO;
-import la.kaike.ksearchclient.annotations.FieldType;
+import com.youqianhuan.ksearch.util.annotations.FieldType;
 
 /**
  * @author chenghuanhuan@kaike.la

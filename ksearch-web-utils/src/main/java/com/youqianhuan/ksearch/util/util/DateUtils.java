@@ -1,7 +1,6 @@
 package com.youqianhuan.ksearch.util.util;
 
 import org.slf4j.LoggerFactory;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 
 import java.text.DateFormat;
@@ -11,13 +10,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import static org.apache.commons.lang3.time.DateUtils.MILLIS_PER_DAY;
+import static org.apache.commons.lang3.time.DateUtils.MILLIS_PER_HOUR;
+import static org.apache.commons.lang3.time.DateUtils.MILLIS_PER_MINUTE;
+
 /**
  * 日期工具类
  *
  * @author kunpeng.Liu
  * @version $Id: DateUtils.java, v 0.1 2016年10月12日 下午9:03:46 kunpeng.Liu Exp $
  */
-public class DateUtils extends org.apache.commons.lang.time.DateUtils {
+public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
     public static final DateUtils INSTANCE                 = new DateUtils();
 

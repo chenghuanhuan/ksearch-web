@@ -4,7 +4,8 @@
  */
 package com.youqianhuan.ksearch.model.bo.common;
 
-import la.kaike.ksearchclient.annotations.FieldType;
+
+import com.youqianhuan.ksearch.util.annotations.FieldType;
 
 /**
  * @author chenghuanhuan@kaike.la

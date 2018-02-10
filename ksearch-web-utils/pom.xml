@@ -111,12 +111,6 @@
 		</dependency>
 
 
-
-		<dependency>
-			<groupId>la.kaike</groupId>
-			<artifactId>ksearch-client</artifactId>
-		</dependency>
-
 		<!--============================ apache commons ==================== -->
 		<dependency>
 			<groupId>commons-codec</groupId>
@@ -192,6 +186,12 @@
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
+		</dependency>
+
+		<!-- fastjson -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
 		</dependency>
     </dependencies>
     

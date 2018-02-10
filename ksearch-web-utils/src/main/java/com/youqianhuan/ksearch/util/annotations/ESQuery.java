@@ -4,7 +4,6 @@
  */
 package com.youqianhuan.ksearch.util.annotations;
 
-import la.kaike.ksearchclient.annotations.FieldType;
 
 import java.lang.annotation.*;
 
