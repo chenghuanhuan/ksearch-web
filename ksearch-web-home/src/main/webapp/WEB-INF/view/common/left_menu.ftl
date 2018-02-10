@@ -34,58 +34,6 @@
     </li>
 
     <li>
-        <a href="/tomcat" class="left-menu">
-            <i class="icon-list-alt"></i>
-            <span class="menu-text"> 应用日志 </span>
-        </a>
-    </li>
-
-    <li>
-        <a href="/applog" class="left-menu">
-            <i class="icon-list-alt"></i>
-            <span class="menu-text"> 手机app日志 </span>
-        </a>
-    </li>
-    <li>
-        <a href="/nginx/access" class="left-menu">
-            <i class="icon-list-alt"></i>
-            <span class="menu-text"> nginx access日志 </span>
-        </a>
-    </li>
-    <li>
-        <a href="/nginx/error" class="left-menu">
-            <i class="icon-list-alt"></i>
-            <span class="menu-text"> nginx error日志 </span>
-        </a>
-    </li>
-
-    <li>
-        <a href="/phplog" class="left-menu">
-            <i class="icon-list-alt"></i>
-            <span class="menu-text"> php 日志 </span>
-        </a>
-    </li>
-
-    <li>
-        <a href="/ewtlog" class="left-menu">
-            <i class="icon-list-alt"></i>
-            <span class="menu-text"> ewt 日志 </span>
-        </a>
-    </li>
-
-    <li>
-        <a href="/hotfix" class="left-menu">
-            <i class="icon-list-alt"></i>
-            <span class="menu-text"> 热修复 日志 </span>
-        </a>
-    </li>
-    <li>
-        <a href="/node" class="left-menu">
-            <i class="icon-list-alt"></i>
-            <span class="menu-text"> node 日志 </span>
-        </a>
-    </li>
-    <li>
         <a href="/user" class="left-menu">
             <i class="icon-calendar"></i>
 
