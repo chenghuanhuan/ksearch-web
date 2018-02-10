@@ -150,16 +150,9 @@
 	<!--</logger>-->
 
 	<!-- 业务服务层日志 -->
-	<logger name="la.kaike.service.biz" level="${sys_loggingLevel}" additivity="false">
+	<logger name="com.youqianhuan.ksearch.biz" level="${sys_loggingLevel}" additivity="false">
 		<appender-ref ref="SYS-BIZ-SERVICE-APPENDER" />
 		<appender-ref ref="SYS-ERROR-APPENDER" />
-	</logger>
-
-	
-	<!-- 组件层日志 -->
-	<logger name="la.kaike.service.iface.impl" level="${sys_loggingLevel}" additivity="false">
-		<appender-ref ref="SYS-CORE-SERVICE-APPENDER" />
-	    <appender-ref ref="SYS-ERROR-APPENDER" />
 	</logger>
 
 	<!-- 控制台输出 -->

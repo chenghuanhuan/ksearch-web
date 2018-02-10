@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="la.kaike.ksearch.biz.dal.mapper.UserMapper">
+<mapper namespace="com.youqianhuan.ksearch.biz.dal.mapper.UserMapper">
 
 	<!-- 通用查询映射结果 -->
-	<resultMap id="BaseResultMap" type="la.kaike.ksearch.model.dbo.user.User">
+	<resultMap id="BaseResultMap" type="com.youqianhuan.ksearch.model.dbo.user.User">
 		<id column="user_id" property="userId" />
 		<result column="username" property="username" />
 		<result column="password" property="password" />
@@ -13,7 +13,7 @@
 		<result column="update_time" property="updateTime" />
 		<result column="create_by" property="createBy" />
 		<result column="update_by" property="updateBy" />
-		<association property="role" column="role_id" javaType="la.kaike.ksearch.model.dbo.user.Role">
+		<association property="role" column="role_id" javaType="com.youqianhuan.ksearch.model.dbo.user.Role">
 			<result column="role_id" property="roleId" />
 			<result column="role_name" property="roleName" />
 			<result column="permissions" property="permissions" />
@@ -21,7 +21,7 @@
 	</resultMap>
 
 
-	<select id="selectListPage" parameterType="la.kaike.ksearch.model.vo.user.UserPageReqVO" resultMap="BaseResultMap">
+	<select id="selectListPage" parameterType="com.youqianhuan.ksearch.model.vo.user.UserPageReqVO" resultMap="BaseResultMap">
 		SELECT t1.user_id,
 		t1.username,
 		t1.role_id,

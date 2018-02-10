@@ -18,7 +18,7 @@
 
 
 	<aop:aspectj-autoproxy expose-proxy="true"/>
-	<context:component-scan base-package="la.kaike.ksearch.home" />
+	<context:component-scan base-package="com.youqianhuan.ksearch.home" />
 
 
 	<mvc:default-servlet-handler />
@@ -103,7 +103,7 @@
 
 	<!-- freemarker --><!-- 自定义的FreeMarkerConfigurer，自动带上escape标签，防止xss -->
 	<bean id="freemarkerConfig"
-		  class="la.kaike.ksearch.home.freemarker.CustomFreeMarkerConfigurer">
+		  class="com.youqianhuan.ksearch.home.freemarker.CustomFreeMarkerConfigurer">
 		<property name="templateLoaderPath" value="/WEB-INF/view" />
 		<property name="freemarkerSettings">
 			<props>
