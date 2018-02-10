@@ -18,11 +18,21 @@ public class QueryConditionBO{
 
     private String field;
 
+    private String dbField;
+
     private int order;
 
     private boolean show;
 
     private boolean sortable;
+
+    public String getDbField() {
+        return dbField;
+    }
+
+    public void setDbField(String dbField) {
+        this.dbField = dbField;
+    }
 
     public boolean isSortable() {
         return sortable;

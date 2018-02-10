@@ -23,9 +23,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
 import java.util.*;
 
-import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
-import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
-import static org.elasticsearch.index.query.QueryBuilders.termQuery;
+import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * @author chenghuanhuan@kaike.la
@@ -38,8 +36,10 @@ public class BaseService {
         PageResponse pageResponse = new PageResponse();
         try {
 
+
             // 查询总条数
             SearchResponse countRes = builder.setSize(0).get();
+            logger.info("查询语句：{}",builder.toString());
             if (StringUtils.isNotEmpty(pageVO.getSort())) {
                 builder.addSort(pageVO.getSort(), SortOrder.valueOf(pageVO.getOrder().toUpperCase()));
             }
@@ -50,7 +50,7 @@ public class BaseService {
                 // 查询真实数据
                 builder.setFrom(pageVO.getOffset())
                         .setSize(pageVO.getLimit());
-
+                logger.info("完整查询语句：{}",builder.toString());
                 SearchResponse searchResponse = builder.get();
                 SearchHits searchHits = searchResponse.getHits();
 
@@ -96,7 +96,11 @@ public class BaseService {
                     case text:
                         value = ClassUtils.getFieldValue(request,field.getName());
                         if (!StringUtils.isBlank((String)value)) {
-                            boolQueryBuilder.must(QueryBuilders.matchQuery(fieldName, value));
+                            if (request.isAnalyzer()) {
+                                boolQueryBuilder.must(QueryBuilders.matchQuery(fieldName, value));
+                            }else {
+                                boolQueryBuilder.must(QueryBuilders.matchPhraseQuery(fieldName, value));
+                            }
                         }
                         break;
 

@@ -48,6 +48,9 @@
                 /phplog/**=authc
                 /query/**=authc
                 /user/**=authc
+                /node/**=authc
+                /hotfix/**=authc
+                /ewtlog/**=authc
                 /edit=authc,roles["edit"],perms["delete1"]
             </value>
         </property>

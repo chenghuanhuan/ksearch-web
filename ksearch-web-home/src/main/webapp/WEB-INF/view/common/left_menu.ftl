@@ -79,7 +79,12 @@
             <span class="menu-text"> 热修复 日志 </span>
         </a>
     </li>
-
+    <li>
+        <a href="/node" class="left-menu">
+            <i class="icon-list-alt"></i>
+            <span class="menu-text"> node 日志 </span>
+        </a>
+    </li>
     <li>
         <a href="/user" class="left-menu">
             <i class="icon-calendar"></i>

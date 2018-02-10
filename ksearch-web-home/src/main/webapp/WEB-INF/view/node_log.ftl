@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>热修复 日志查询</title>
+    <title>node 日志查询</title>
     <meta name="keywords" content="" />
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -163,11 +163,26 @@
                                             '<div class="form-group">';
                         }
                         line +='<label class="control-label col-xs-12 col-sm-1 no-padding-right" for="'+item.field+'">'+item.field+':</label>';
-                                line+='<div class="col-xs-12 col-sm-3">';
-                                    line+='<div class="clearfix">';
-                                        line+='<input type="text" id="'+item.field+'" name="'+item.field+'" placeholder="" class="col-xs-12 col-sm-12" />';
+                        if(item.type=="text"){
+                            line+='<div class="col-xs-12 col-sm-1" style="width: 10px;">';
+                                        line+='<input type="checkbox" value="false" name="analyzer" style="margin-top:10px;" title="是否分词，勾选后不分词">';
                                     line+='</div>';
-                                line+='</div>';
+                            line+='<div class="col-xs-12 col-sm-2" style="width: 23%;">';
+                            line+='<div class="clearfix">';
+                            line+='<input type="text" id="'+item.field+'" name="'+item.field+'" placeholder="勾选前面选项将不分词" class="col-xs-12 col-sm-12" />';
+                            line+='</div>';
+                            line+='</div>';
+                        }else {
+                            line+='<div class="col-xs-12 col-sm-3">';
+                            line+='<div class="clearfix">';
+                            line+='<input type="text" id="'+item.field+'" name="'+item.field+'" placeholder="" class="col-xs-12 col-sm-12" />';
+                            line+='</div>';
+                            line+='</div>';
+                        }
+
+
+
+
                         if (((i+1)%3)==0||i==data.length-1){
                                 line+='</div>';
                             line+='</div>';
@@ -178,7 +193,8 @@
                         }
                     // 初始化表头
                     if(item.show){
-                        var column = {field: item.field, title: item.field,sortable:item.sortable};
+                        var field = item.dbField==""?item.field:item.dbField;
+                        var column = {field: field, title: item.field,sortable:item.sortable};
                         if (item.sort) {
                             column.sortable = true;
                         }
@@ -193,7 +209,7 @@
             }
 
         });
-        ajax.set("conditionKey","la.kaike.ksearch.model.vo.hotfix.HotFixVO")
+        ajax.set("conditionKey","la.kaike.ksearch.model.vo.node.NodeLogVO")
         ajax.start();
 
 
@@ -225,7 +241,7 @@
     function initDateInput() {
         $('input[name=datetime]').daterangepicker({
             timePicker : true,
-            format : 'YYYY/MM/DD HH:mm:ss',
+            format : 'YYYY-MM-DD HH:mm:ss.SSS',
             timePickerIncrement : 1, //时间的增量，单位为分钟
             timePicker12Hour : false,
             dateLimit : {
@@ -266,7 +282,7 @@
             sidePagination:'server',
             method:"post",
             contentType:"application/x-www-form-urlencoded; charset=UTF-8",
-            url:"/hotfix/query",
+            url:"/node/query",
             pageList:[10,20,30],
             pagination:true,
             //detailView:true,

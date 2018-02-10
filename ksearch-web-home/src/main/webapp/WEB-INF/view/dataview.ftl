@@ -10,6 +10,7 @@
     <!-- basic styles -->
     <#include "/common/head_css.ftl"/>
     <link rel="stylesheet" href="/assets/css/jsonFormater.css" />
+    <link rel="stylesheet" href="assets/css/daterangepicker.css" />
     <style>
         .modal-optimize .modal-dialog{
             width: 500px;
@@ -91,108 +92,61 @@
                         <!-- PAGE CONTENT BEGINS -->
 
                         <div class="row">
-                            <div class="col-xs-12">
-                                <div class="form-group">
-                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="select_index">索引（index）:</label>
+                            <form id="queryForm">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="select_index">索引（index）:</label>
 
-                                    <div class="col-xs-12 col-sm-3">
-                                        <div class="clearfix">
-                                            <input type="hidden" id="select_index" class="width-100 select2">
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="clearfix">
+                                                <input type="hidden" id="select_index" class="width-100 select2">
+                                                </input>
+                                            </div>
+                                        </div>
+                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="select_type">类型（type）:</label>
+
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="clearfix">
+                                                <input type="hidden" id="select_type" class="width-100 select2">
+                                                </input>
+                                            </div>
+                                        </div>
+
+                                        <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">关键字:</label>
+
+                                        <div class="col-xs-12 col-sm-3">
+                                            <div class="clearfix">
+                                                <input type="text" id="keyword"  class="col-xs-12 col-sm-12" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="col-xs-5" style="width: 47.5%;">
+                                    <div class="hr hr32 hr-dotted" style="margin:12px 0"></div>
+                                </div>
+                                <div class="col-xs-2" style="width: 5%;">
+                                    <div><a href="javascript:void (0);" style="color:#a7a6a6;text-decoration:none;" id="more">更多...</a></div>
+                                </div>
+                                <div class="col-xs-5" style="width: 47.5%;">
+                                    <div class="hr hr32 hr-dotted" style="margin:12px 0"></div>
+                                </div>
+
+                                <div class="col-xs-12 hide-form" id="detail_query" style="display: none;">
+                                </div>
+
+
+                                <div class="col-xs-12" id="query-btn">
+                                    <div class="form-group">
+                                        <div class="col-xs-13 col-sm-11" style="width: 94%;">
+                                        </div>
+                                        <div class="col-xs-13 col-sm-1" style="width: 6%;">
+                                            <input type="button" id="btn-query" value="查询" class="btn btn-success btn-query">
                                             </input>
                                         </div>
                                     </div>
-                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="select_type">类型（type）:</label>
-
-                                    <div class="col-xs-12 col-sm-3">
-                                        <div class="clearfix">
-                                            <input type="hidden" id="select_type" class="width-100 select2">
-                                            </input>
-                                        </div>
-                                    </div>
-
-                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">关键字:</label>
-
-                                    <div class="col-xs-12 col-sm-3">
-                                        <div class="clearfix">
-                                            <input type="text" id="keyword"  class="col-xs-12 col-sm-12" />
-                                        </div>
-                                    </div>
                                 </div>
-                            </div>
-                            <hr>
-                            <#--<div class="col-xs-12">
-                                <div class="form-group">
-                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">关键字:</label>
-
-                                    <div class="col-xs-12 col-sm-4">
-                                        <div class="clearfix">
-                                            <input type="text" id="keyword"  class="col-xs-12 col-sm-12" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>-->
-                            <div class="col-xs-5" style="width: 47.5%;">
-                                <div class="hr hr32 hr-dotted" style="margin:12px 0"></div>
-                            </div>
-                            <div class="col-xs-2" style="width: 5%;">
-                                <div><a href="javascript:void (0);" style="color:#a7a6a6;text-decoration:none;" id="more">更多...</a></div>
-                            </div>
-                            <div class="col-xs-5" style="width: 47.5%;">
-                                <div class="hr hr32 hr-dotted" style="margin:12px 0"></div>
-                            </div>
-
-                            <div class="col-xs-12 hide-form" id="detail_query" style="display: none">
-                                <div class="form-group" id="query_1">
-                                    <label class="control-label col-xs-12 col-sm-1 no-padding-right" for="keyword">条件:</label>
-                                    <div class="col-xs-12 col-sm-2">
-                                        <div class="clearfix">
-                                            <select name="bool" class="width-100 select2" data-placeholder="Click to Choose...">
-                                                <option value="must">must</option>
-                                                <option value="must_not">must_not</option>
-                                                <option value="should">should</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-2">
-                                        <div class="clearfix">
-                                            <select name="field" class="width-100 select2" data-placeholder="Click to Choose...">
-                                                <option value="_all">_all</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-2">
-                                        <div class="clearfix">
-                                            <select name="op" class="width-100 select2" data-placeholder="Click to Choose...">
-                                                <option value="query_string">query_string</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-2">
-                                        <div class="clearfix">
-                                            <input type="text" name="query_value"  class="col-xs-12 col-sm-12" placeholder="请填写查询字符串"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-1">
-                                        <div class="clearfix">
-                                            <button class="btn btn-xs add-query">+</button>
-                                            <button class="btn btn-xs del-query">-</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            
-                            <div class="col-xs-12" id="query-btn">
-                                <div class="form-group">
-                                    <div class="col-xs-13 col-sm-11" style="width: 94%;">
-                                    </div>
-                                    <div class="col-xs-13 col-sm-1" style="width: 6%;">
-                                        <button class="btn btn-success btn-query">
-                                           查询
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                         <div class="hr hr32 hr-dotted"></div>
                         <div class="row">
@@ -227,39 +181,15 @@
 
 <#include "/common/foot_js.ftl"/>
 <script src="/assets/js/jsonFormater.js"></script>
+<script src="/assets/js/date-time/daterangepicker.min.js"></script>
+<script src="/assets/js/date-time/moment.min.js"></script>
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
     var columns=[];
     var clusterName = Util.cookie.get("cluster-name");
-    var template = "";
-
 
     jQuery(function($) {
-        template = $("#query_1").html();
 
-        $(document).on("click",".add-query",function () {
-            var af = $('<div class="col-xs-12 hide-form" style="padding-top: 10px;"><div class="form-group"></div></div>');
-            af.html(template);
-            $("#query-btn").before(af);
-            // 更新下拉框
-            var select = $("#query-btn").prev().find('select[name="field"]');
-            initFieldSelect(select);
-        });
-
-        $(document).on("click",".del-query",function () {
-            if($(".del-query").length===1){
-                return;
-            }
-           $(this).parent().parent().parent().remove();
-        });
-
-        $(document).on("change","select[name='field']",function () {
-            if($(this).val()==="_all"){
-                $($(this).parent().parent().parent().find("select[name='op']")[0]).html("<option value='query_string'>query_string</option>");
-            }else {
-                $($(this).parent().parent().parent().find("select[name='op']")[0]).html('<option value="term">term</option> <option value="prefix">prefix</option> <option value="query_string">query_string</option>');
-            }
-        });
 
 
         var ajIndex = new $ax("/common/index/select", function (data) {
@@ -291,7 +221,6 @@
                                     if (data.status){
                                         fieldData = [{id:"_all",text:"_all"}];
                                         getFieldData(data.data,"");
-                                        initFieldSelect($($("#query_1").find("select[name='field']")[0]));
 
                                         // 初始化表格信息
                                         columns=[];
@@ -339,7 +268,7 @@
         /**
          * 查询
          */
-        $(".btn-query").on("click",function () {
+        $("#btn-query").on("click",function () {
 
             var type = $("#select_type").select2("val");
 
@@ -354,10 +283,7 @@
             }
 
             var keyword = $("#keyword").val();
-            var source = null;
-            if($(".hide-form").css("display")=="block"){
-                source = JSON.stringify(getDetailValue());
-            }
+
                     // 初始化表格
 
                     $('#indices_table').bootstrapTable("destroy");
@@ -370,6 +296,10 @@
                         search:false,
                         //toolbar:"#toolbar",
                         sidePagination:'server',
+                        //method: 'post',
+                        //dataType: "json",
+                        method:"post",
+                        contentType:"application/x-www-form-urlencoded; charset=UTF-8",
                         url:"/dataview/query",
                         pageList:[10, 20, 40, 60],
                         pagination:true,
@@ -386,7 +316,22 @@
                             params.types = type;
                             params.keyword = keyword;
                             params.clusterName = clusterName;
-                            params.source = source;
+
+                            var t = $('#queryForm').serializeArray();
+                            var jsonString = {};
+                            if (t.length>0) {
+                                var has = false;
+                                $.each(t, function () {
+                                    var value = this.value.trim();
+                                    if(value){
+                                        jsonString[this.name] = value;
+                                        has = true;
+                                    }
+                                });
+                                if (has){
+                                    params["source"] = JSON.stringify(jsonString);
+                                }
+                            }
                             return params;
                         },
                         onExpandRow: function (index, row, $detail) {
@@ -416,6 +361,9 @@
             if($(".hide-form").css("display")=="none") {
                 $(".hide-form").show();
                 $(this).text("收起...");
+                $("#detail_query").html("");
+                // 初始化查询条件
+                initQueryCondition();
             }else {
                 $(".hide-form").hide();
                 $(this).text("更多...");
@@ -425,6 +373,84 @@
 
     });
 
+
+
+
+    /**
+     * 初始化查询条件
+     */
+    function initQueryCondition() {
+        // 获取查询条件
+        var ajax = new $ax({url:"/common/getQueryCondition",async:true}, function (data) {
+            if (data.status){
+                var data = data.data;
+                var html = "";
+                var line = "";
+                $.each(data,function (i,item) {
+                    if((i%3)==0){
+                        line =  '<div class="col-xs-12">'+
+                                '<div class="form-group">';
+                    }
+                    line +='<label class="control-label col-xs-12 col-sm-1 no-padding-right" for="'+item.field+'">'+item.field+':</label>';
+                    line+='<div class="col-xs-12 col-sm-3">';
+                    line+='<div class="clearfix">';
+                    line+='<input type="text" id="'+item.field+'" name="'+item.field+'" placeholder="" class="col-xs-12 col-sm-12" />';
+                    line+='</div>';
+                    line+='</div>';
+                    if (((i+1)%3)==0||i==data.length-1){
+                        line+='</div>';
+                        line+='</div>';
+                        if (i!=data.length-1){
+                            line +='<div class="space"></div>';
+                        }
+                        html+=line;
+                    }
+                });
+
+                $("#detail_query").append(html);
+                initDateInput();
+            }
+
+        });
+
+        var type = $("#select_type").select2("val");
+        var index = $("#select_index").select2("val");
+        ajax.set("index",index);
+        ajax.set("type",type);
+        ajax.start();
+    }
+
+    function initDateInput() {
+        $('input[name=datetime]').daterangepicker({
+            timePicker : true,
+            format : 'YYYY/MM/DD HH:mm:ss',
+            timePickerIncrement : 1, //时间的增量，单位为分钟
+            timePicker12Hour : false,
+            dateLimit : {
+                days : 7
+            }, //起止时间的最大间隔
+            ranges : {
+                //'最近1小时': [moment().subtract('hours',1), moment()],
+                '今日': [moment().startOf('day'), moment()],
+                '昨日': [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
+                '最近7日': [moment().subtract('days', 6), moment()]//,
+                //'最近30日': [moment().subtract('days', 29), moment()]
+            },
+            locale : {
+                applyLabel : '确定',
+                cancelLabel : '取消',
+                fromLabel : '起始时间',
+                toLabel : '结束时间',
+                customRangeLabel : '自定义',
+                daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],
+                monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月',
+                    '七月', '八月', '九月', '十月', '十一月', '十二月' ],
+                firstDay : 1
+            }
+        }).prev().on(ace.click_event, function(){
+            $(this).next().focus();
+        });
+    }
 
     /**
      * 解析字段
@@ -472,13 +498,6 @@
     }
 
 
-    function initFieldSelect(dom) {
-        var fieldSelectOption = '';
-        $.each(fieldData,function (i,data) {
-            fieldSelectOption+="<option value='"+data.id+"'>"+data.text+"</option>";
-        });
-        dom.html(fieldSelectOption);
-    }
 
 
     /**

@@ -5,15 +5,16 @@
 package la.kaike.ksearch.biz.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.toolkit.CollectionUtils;
 import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
+import la.kaike.ksearch.BaseRequest;
 import la.kaike.ksearch.biz.es.ElasticClient;
 import la.kaike.ksearch.biz.es.ElasticClientUtil;
 import la.kaike.ksearch.biz.es.IndexExt;
 import la.kaike.ksearch.biz.es.SearchExt;
 import la.kaike.ksearch.biz.service.ElasticSearchService;
+import la.kaike.ksearch.biz.support.ESQueryVOStore;
 import la.kaike.ksearch.model.PageResponse;
 import la.kaike.ksearch.model.bo.ClusterHealthBO;
 import la.kaike.ksearch.model.vo.elastic.ClusterStatisticsVO;
@@ -24,7 +25,9 @@ import la.kaike.ksearch.model.vo.query.SortFieldVO;
 import la.kaike.ksearch.util.constant.IndexSettingConstant;
 import la.kaike.ksearch.util.constant.MethodNameEnum;
 import la.kaike.ksearch.util.exception.BussinessException;
+import la.kaike.platform.common.lang.DateUtils;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
@@ -48,6 +51,7 @@ import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.unit.ByteSizeValue;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -68,7 +72,7 @@ import java.util.regex.Pattern;
  * @since $Revision:1.0.0, $Date: 2017年07月14日 下午7:21 $
  */
 @Service
-public class ElasticSearchServiceImpl implements ElasticSearchService {
+public class ElasticSearchServiceImpl extends BaseService implements ElasticSearchService {
     private static final Logger logger = LoggerFactory.getLogger(ElasticSearchServiceImpl.class);
 
     @Override
@@ -366,19 +370,30 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     }
 
     @Override
-    public PageResponse simpleQuery(SimpleQueryReqVO simpleQueryReqVO) {
+    public PageResponse simpleQuery(SimpleQueryReqVO simpleQueryReqVO) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+
+        Object pageVO = null;
+        Class<?> clazz = null;
+        // 参数转换
+        if (StringUtils.isNotEmpty(simpleQueryReqVO.getSource())){
+            String className = ESQueryVOStore.getClassName(simpleQueryReqVO.getIndices().get(0),simpleQueryReqVO.getTypes().get(0));
+            clazz = Class.forName(className);
+            pageVO = JSON.parseObject(simpleQueryReqVO.getSource(),clazz);
+        }
+
+
+
+
         PageResponse pageResponse = new PageResponse();
 
         TransportClient client = ElasticClient.getClient(simpleQueryReqVO.getClusterName());
 
         SearchRequestBuilder builder = builder(client,simpleQueryReqVO);
 
-        // TODO 查询指定字段
-/*
-        QueryBuilder queryBuilder = QueryBuilders.disMaxQuery();
-        builder.setQuery(queryBuilder);*/
-        //SearchSourceBuilder sourceBuilder = SearchSourceBuilder.searchSource();
-        //builder.setSource(sourceBuilder);
+        if (StringUtils.isNotEmpty(simpleQueryReqVO.getSource())) {
+            BoolQueryBuilder boolQueryBuilder = super.query((BaseRequest) pageVO, clazz);
+            builder.setQuery(boolQueryBuilder);
+        }
 
         SearchResponse countRes = builder.setSize(0).get();
         pageResponse.setTotal(countRes.getHits().getTotalHits());
@@ -493,7 +508,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
         /*******************删除nginx日志******************/
 
-        // 过滤出需要删除的index
+     /*   // 过滤出需要删除的index
         if (indicesVOList!=null&& indicesVOList.size()>0){
             // 删除小于此月份的所有索引
             List<String> deleteIndexList = new ArrayList<>();
@@ -516,12 +531,12 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
                 TransportClient client = ElasticClient.getClient(clusterName);
                 client.admin().indices().prepareDelete(deleteIndexList.toArray(new String[]{})).get();
             }
-        }
+        }*/
         /*********************删除系统日志**************************/
 
         //ksearch-api.ksearch-api-biz-service.2017-11-20
-        String reg = "^[a-zA-Z0-9-]+\\.[a-zA-Z0-9-]+\\.(\\d\\d\\d\\d-\\d\\d-\\d\\d)";
-        List<String> delSysLogIndexList = filterIndex(indicesVOList,reg);
+        String reg = "(\\d\\d\\d\\d-\\d\\d-\\d\\d)";
+        List<String> delSysLogIndexList = filterIndex(indicesVOList,reg,null);
 
         logger.info("删除索引："+delSysLogIndexList);
         if (CollectionUtils.isNotEmpty(delSysLogIndexList)) {
@@ -530,10 +545,19 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
             client.admin().indices().prepareDelete(indexes).get();
         }
 
+        String reg2 = "(\\d\\d\\d\\d.\\d\\d.\\d\\d)";
+        List<String> delSysLogIndexList2 = filterIndex(indicesVOList,reg2,"yyyy.MM.dd");
+
+        logger.info("删除索引："+delSysLogIndexList2);
+        if (CollectionUtils.isNotEmpty(delSysLogIndexList2)) {
+            TransportClient client = ElasticClient.getClient(clusterName);
+            String [] indexes = delSysLogIndexList2.toArray(new String[]{});
+            client.admin().indices().prepareDelete(indexes).get();
+        }
     }
 
     // 过滤出需要删除的索引
-    private List<String> filterIndex(List<IndicesVO> indicesVOList,String regix){
+    private List<String> filterIndex(List<IndicesVO> indicesVOList,String regix,String format){
         List<String> deleteIndexList = new ArrayList<>();
 
 
@@ -548,14 +572,18 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
                 IndicesVO indicesVO = indicesVOList.get(i);
                 String index = indicesVO.getIndex();
                 Matcher matcher = pattern.matcher(index);
-                if (matcher.matches()&&matcher.groupCount()>0) {
-                    Date date =null;
-                    /*try {
-                        // TODO date = DateUtils.parseWebFormat(matcher.group(1));
+                if (matcher.find()&&matcher.groupCount()>0) {
+                    Date date;
+                    try {
+                        if (format==null) {
+                            date = DateUtils.parseDate(matcher.group(1),"yyyy-MM-dd");
+                        }else {
+                            date = DateUtils.parseDate(matcher.group(1),format);
+                        }
                     } catch (ParseException e) {
                         logger.error("filterIndex error 日志格式错误",e);
                         continue;
-                    }*/
+                    }
                     if (date.getTime() <= nowC.getTimeInMillis()) {
                         deleteIndexList.add(index);
                         indicesVOList.remove(indicesVO);
@@ -618,4 +646,13 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         return propertiesVOList;
     }
 
+    public static void main(String[] args) throws ParseException {
+        String index = "php-error-2018.02.06";
+        Pattern pattern = Pattern.compile("(\\d\\d\\d\\d.\\d\\d.\\d\\d)");
+        Matcher matcher = pattern.matcher(index);
+        System.out.println(matcher.find());
+        System.out.println(matcher.group(1));
+        Date date = DateUtils.parseDate(matcher.group(1),"yyyy.MM.dd");
+        System.out.println(date);
+    }
 }

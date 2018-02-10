@@ -38,7 +38,7 @@ public class CacheManager {
         }
     }
 
-    public synchronized static void init(ElasticSearchService elasticSearchService,String clusterName){
+    public synchronized static void init(ElasticSearchService elasticSearchService){
         CacheManager.cache = CacheBuilder.newBuilder()
                 //设置cache的初始大小为10，要合理设置该值
                 .initialCapacity(10)
@@ -50,6 +50,7 @@ public class CacheManager {
                 .build(new CacheLoader<String, List<IndicesVO>>() {
                     @Override
                     public List<IndicesVO> load(String key) throws Exception {
+                        String clusterName = key.replace("_indeices","");
                         List<IndicesVO> indicesVOList = elasticSearchService.getIndicesVO(clusterName);
                         return indicesVOList;
                     }

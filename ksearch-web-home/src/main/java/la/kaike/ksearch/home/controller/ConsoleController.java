@@ -145,7 +145,7 @@ public class ConsoleController extends BaseController{
         String key = request.getClusterName()+"_indeices";
         // 添加缓存
         if (CacheManager.cache==null) {
-            CacheManager.init(elasticSearchService,request.getClusterName());
+            CacheManager.init(elasticSearchService);
         }
         List<IndicesVO> indices = CacheManager.get(key);
         return succeed(indices);
