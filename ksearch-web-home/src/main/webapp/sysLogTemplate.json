@@ -1,0 +1,94 @@
+/*PUT /_template/sys_log_template*/
+{
+  "template" : "syslog*",
+  "order" : 1,
+  "settings" : {
+    "number_of_shards" : 2,
+    "number_of_replicas": 0,
+    "analysis": {
+      "analyzer": {
+        "custom_pattern_point": {
+          "type": "pattern",
+          "pattern":"([a-zA-Z0-9]+)\\."
+        },
+        "ik_en_max_word": {
+          "filter": [
+            "stemmer",
+            "stop"
+          ],
+          "char_filter": [
+            "html_strip"
+          ],
+          "type": "custom",
+          "tokenizer": "ik_max_word"
+        },
+        "ik_en_smart": {
+          "filter": [
+            "stemmer",
+            "stop"
+          ],
+          "char_filter": [
+            "html_strip"
+          ],
+          "type": "custom",
+          "tokenizer": "ik_smart"
+        },
+        "keyword_lowercase": {
+          "filter": [
+            "lowercase"
+          ],
+          "type": "custom",
+          "tokenizer": "keyword"
+        }
+      }
+    }
+  },
+  "mappings" : {
+    "log" : {
+      "_source" : { "enabled" : true },
+      "properties": {
+        "appName": {
+          "type": "keyword"
+        },
+        "className": {
+          "type": "keyword"
+        },
+        "datetime": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss.SSS"
+        },
+        "fileName": {
+          "type": "keyword"
+        },
+        "host": {
+          "type": "keyword"
+        },
+        "keyword": {
+          "type": "text"
+        },
+        "level": {
+          "type": "keyword"
+        },
+        "contextId": {
+          "type": "keyword"
+        },
+        "message": {
+          "type": "text",
+          "analyzer": "ik_en_max_word"
+        },
+        "remoteAddr": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "userId": {
+          "type": "keyword"
+        }
+      }
+    }
+  }
+}

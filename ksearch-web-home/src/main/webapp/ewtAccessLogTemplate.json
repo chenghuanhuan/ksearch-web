@@ -1,0 +1,121 @@
+/*PUT _template/ewt_access_log_template*/
+{
+  "mappings": {
+    "log": {
+      "date_detection": false,
+      "dynamic_templates": [
+        {
+          "strings_as_keyword": {
+            "mapping": {
+              "ignore_above": 1024,
+              "type": "keyword"
+            },
+            "match_mapping_type": "string"
+          }
+        }
+      ],
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "beat": {
+          "properties": {
+            "hostname": {
+              "ignore_above": 1024,
+              "type": "keyword"
+            },
+            "name": {
+              "ignore_above": 1024,
+              "type": "keyword"
+            },
+            "version": {
+              "ignore_above": 1024,
+              "type": "keyword"
+            }
+          }
+        },
+        "userId": {
+          "type": "long"
+        },
+        "remoteIp": {
+          "type": "keyword"
+        },
+        "method": {
+          "type": "keyword"
+        },
+        "params": {
+          "type": "text",
+          "analyzer": "ik_en_max_word"
+        },
+        "url": {
+          "type": "text",
+          "analyzer": "ik_en_max_word"
+        },
+        "datetime": {
+          "type": "date",
+          "format": "yyyy/MM/dd HH:mm:ss"
+        },
+        "input_type": {
+          "ignore_above": 1024,
+          "type": "keyword"
+        },
+        "offset": {
+          "type": "long"
+        },
+        "source": {
+          "ignore_above": 1024,
+          "type": "keyword"
+        },
+        "type": {
+          "ignore_above": 1024,
+          "type": "keyword"
+        }
+      }
+    }
+  },
+  "order": 1,
+  "settings": {
+    "index.mapping.total_fields.limit": 10000,
+    "index.refresh_interval": "5s",
+    "number_of_shards" : 2,
+    "number_of_replicas": 0,
+    "analysis": {
+      "analyzer": {
+        "custom_pattern_point": {
+          "type": "pattern",
+          "pattern":"([a-zA-Z0-9]+)\\."
+        },
+        "ik_en_max_word": {
+          "filter": [
+            "stemmer",
+            "stop"
+          ],
+          "char_filter": [
+            "html_strip"
+          ],
+          "type": "custom",
+          "tokenizer": "ik_max_word"
+        },
+        "ik_en_smart": {
+          "filter": [
+            "stemmer",
+            "stop"
+          ],
+          "char_filter": [
+            "html_strip"
+          ],
+          "type": "custom",
+          "tokenizer": "ik_smart"
+        },
+        "keyword_lowercase": {
+          "filter": [
+            "lowercase"
+          ],
+          "type": "custom",
+          "tokenizer": "keyword"
+        }
+      }
+    }
+  },
+  "template": "ewt.access.*"
+}

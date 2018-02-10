@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youqianhuan.ksearch.biz.dal.mapper.UserMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.youqianhuan.ksearch.model.dbo.user.User">
+		<id column="user_id" property="userId" />
+		<result column="username" property="username" />
+		<result column="password" property="password" />
+		<result column="role_id" property="roleId" />
+		<result column="status" property="status" />
+		<result column="create_time" property="createTime" />
+		<result column="update_time" property="updateTime" />
+		<result column="create_by" property="createBy" />
+		<result column="update_by" property="updateBy" />
+		<association property="role" column="role_id" javaType="com.youqianhuan.ksearch.model.dbo.user.Role">
+			<result column="role_id" property="roleId" />
+			<result column="role_name" property="roleName" />
+			<result column="permissions" property="permissions" />
+		</association>
+	</resultMap>
+
+
+	<select id="selectListPage" parameterType="com.youqianhuan.ksearch.model.vo.user.UserPageReqVO" resultMap="BaseResultMap">
+		SELECT t1.user_id,
+		t1.username,
+		t1.role_id,
+		t1.status,
+		t1.create_time,
+		t1.update_time,
+		t1.create_by,
+		t1.update_by,
+		t2.role_id,
+		t2.role_name,
+		t2.permissions
+		FROM user t1,role t2
+		WHERE t1.role_id = t2.role_id and t1.status = 1
+		  <if test="userId != null and userId !=''">
+			AND t1.user_id = #{userId}
+		  </if>
+		<if test="username != null and username !=''">
+			AND t1.username  LIKE CONCAT('%',#{username},'%')
+		</if>
+		<if test="search != null and search !=''">
+			AND (t1.username LIKE CONCAT('%',#{search},'%') OR t1.user_id LIKE CONCAT('%',#{search},'%'))
+		</if>
+	  	limit #{offset},#{limit}
+	</select>
+
+
+</mapper>

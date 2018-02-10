@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-autowire="byName" xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:task="http://www.springframework.org/schema/task"
+	   xsi:schemaLocation="
+	   	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+	<aop:aspectj-autoproxy expose-proxy="true"/>
+	<context:component-scan base-package="com.youqianhuan.ksearch.home" />
+
+
+	<mvc:default-servlet-handler />
+
+
+	<mvc:annotation-driven validator="validator" conversion-service="conversion-service">
+		<mvc:message-converters>
+			<bean id="fastJsonHttpMessageConverter"
+				  class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+				<property name="features">
+					<list>
+						<value>WriteMapNullValue</value>
+						<value>WriteDateUseDateFormat</value>
+						<!--<value>WriteNullStringAsEmpty</value>-->
+						<value>DisableCircularReferenceDetect</value>
+					</list>
+				</property>
+				<property name="supportedMediaTypes">
+					<list>
+						<!-- IE10以下不支持application/json,会导致认为是流处理,因而进行下载 -->
+						<value>text/html;charset=UTF-8</value>
+						<value>application/json;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+			<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>image/jpeg</value>
+						<value>image/png</value>
+						<value>image/x-icon</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	<!-- 注册conversion-service 实现和自定义的类型转换器 -->
+	<bean id="conversion-service" class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
+	<bean id="DisableCircularReferenceDetect" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+		<property name="staticField" value="com.alibaba.fastjson.serializer.SerializerFeature.DisableCircularReferenceDetect"></property>
+	</bean>
+
+
+
+
+
+	<bean id="multipartResolver"
+		  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设置上传文件的最大尺寸为5MB -->
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="maxUploadSize" value="10428800" />
+	</bean>
+
+
+
+	<!-- 添加验证器 -->
+	<!--<mvc:annotation-driven validator="validator" />-->
+	<!-- 以下 validator  ConversionService 在使用 mvc:annotation-driven 会 自动注册-->
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+		<!-- 如果不加默认到 使用classpath下的 ValidationMessages.properties -->
+		<property name="validationMessageSource" ref="messageSource"/>
+	</bean>
+
+	<!-- 国际化的消息资源文件（本系统中主要用于显示/错误消息定制） -->
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="useCodeAsDefaultMessage" value="true"/>
+		<property name="defaultEncoding" value="UTF-8"/>
+		<!--<property name="cacheSeconds" value="60"/>-->
+	</bean>
+
+
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="suffix" value=".ftl" />
+		<property name="contentType" value="text/html;charset=UTF-8"></property>
+	</bean>
+
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/view/" />
+		<property name="suffix" value=".ftl" />
+	</bean>
+
+	<!-- freemarker --><!-- 自定义的FreeMarkerConfigurer，自动带上escape标签，防止xss -->
+	<bean id="freemarkerConfig"
+		  class="com.youqianhuan.ksearch.home.freemarker.CustomFreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="/WEB-INF/view" />
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="template_update_delay">0</prop>
+				<prop key="default_encoding">UTF-8</prop>
+				<prop key="number_format">0.##########</prop>
+				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+				<prop key="classic_compatible">true</prop>
+				<prop key="template_exception_handler">ignore</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!--开启这个配置，spring才能识别@Scheduled注解   -->
+	<task:annotation-driven scheduler="indexScheduler" mode="proxy"/>
+	<task:scheduler id="indexScheduler" pool-size="10"/>
+
+</beans>
