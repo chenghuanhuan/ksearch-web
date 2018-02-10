@@ -25,7 +25,7 @@ import la.kaike.ksearch.model.vo.query.SortFieldVO;
 import la.kaike.ksearch.util.constant.IndexSettingConstant;
 import la.kaike.ksearch.util.constant.MethodNameEnum;
 import la.kaike.ksearch.util.exception.BussinessException;
-import la.kaike.platform.common.lang.DateUtils;
+import la.kaike.ksearch.util.util.DateUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -644,15 +644,5 @@ public class ElasticSearchServiceImpl extends BaseService implements ElasticSear
             }
         }
         return propertiesVOList;
-    }
-
-    public static void main(String[] args) throws ParseException {
-        String index = "php-error-2018.02.06";
-        Pattern pattern = Pattern.compile("(\\d\\d\\d\\d.\\d\\d.\\d\\d)");
-        Matcher matcher = pattern.matcher(index);
-        System.out.println(matcher.find());
-        System.out.println(matcher.group(1));
-        Date date = DateUtils.parseDate(matcher.group(1),"yyyy.MM.dd");
-        System.out.println(date);
     }
 }
