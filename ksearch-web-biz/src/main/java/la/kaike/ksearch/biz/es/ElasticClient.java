@@ -15,7 +15,7 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.xpack.client.PreBuiltXPackTransportClient;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,8 +101,8 @@ public class ElasticClient {
             return new Builder();
         }
         public ElasticClient.Builder setClusterName(String clusterName) {
-            //this._client = new PreBuiltTransportClient(getSettings(clusterName));;
-            this._client = new PreBuiltXPackTransportClient(getSettings(clusterName));
+            this._client = new PreBuiltTransportClient(getSettings(clusterName));;
+            //this._client = new PreBuiltXPackTransportClient(getSettings(clusterName));
             return this;
         }
 

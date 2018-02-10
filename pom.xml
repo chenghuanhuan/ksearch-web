@@ -103,29 +103,6 @@
                 <scope>test</scope>
             </dependency>
 
-            <dependency>
-                <groupId>la.kaike</groupId>
-                <artifactId>kcore</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>la.kaike.platform</groupId>
-                        <artifactId>platform-pom</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            
-            <dependency>
-                <groupId>com.kaikela</groupId>
-                <artifactId>commons</artifactId>
-                <version>1.0.0.20170222</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.alibaba</groupId>
-                        <artifactId>dubbo</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
 
             <!--============================ jackson =========================== -->
     <!--        <dependency>
@@ -462,11 +439,13 @@
                 <version>${shiro.version}</version>
             </dependency>
 
+            <!-- https://mvnrepository.com/artifact/org.elasticsearch.client/transport -->
             <dependency>
                 <groupId>org.elasticsearch.client</groupId>
-                <artifactId>x-pack-transport</artifactId>
-                <version>${elastic.version}</version>
+                <artifactId>transport</artifactId>
+                <version>5.5.1</version>
             </dependency>
+
 
             <dependency>
                 <groupId>la.kaike</groupId>
@@ -511,39 +490,6 @@
             </plugin>
         </plugins>
     </build>
-    
-    <repositories>
-        <repository>
-            <id>nexus</id>
-            <name>nexus</name>
-            <url>http://maven.ikuko.com/nexus/content/groups/public/</url>
-            <releases>
-            </releases>
-            <snapshots>
-            </snapshots>
-        </repository>
-    </repositories>
-
-    <!-- <distributionManagement> <repository> <id>ikuko-releases</id> <name>Nexus
-        Releases Repository</name> <url>http://10.0.0.237:8081/nexus/content/repositories/ikuko/</url>
-        </repository> <snapshotRepository> <id>ikuko-snapshots</id> <name>Nexus Snapshots
-        Repository</name> <url>http://10.0.0.237:8081/nexus/content/repositories/ikuko/</url>
-        </snapshotRepository> </distributionManagement> -->
-
-    <!-- maven nexus 用户名密码,如果需要deploy 请修改settings文件 <server> <id>ikuko</id>
-        <username>admin</username> <password>admin123</password> </server> -->
-    <distributionManagement>
-        <repository> 
-            <id>releases</id> 
-            <name>releases</name> 
-            <url>http://maven.ikuko.com/nexus/content/repositories/releases/</url>
-        </repository> 
-        <snapshotRepository> 
-            <id>snapshots</id> 
-            <name>SnapShots</name> 
-            <url>http://maven.ikuko.com/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 
   <modules>
     <module>ksearch-web-home</module>
