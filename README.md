@@ -1,3 +1,3 @@
 # ksearch-web
-ElasticSearch 搜索引擎控制台
+ElasticSearch 搜索引擎可视化控制台
 
