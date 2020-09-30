@@ -1,5 +1,5 @@
 /**
- * kaike.la Inc.
+ * youqianhuan.com Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
 package com.youqianhuan.ksearch.home.filter;
@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.security.Principal;
 
 /**
- * @author chenghuanhuan@kaike.la
+ * @author chenghuanhuan@youqianhuan.com
  * @since $Revision:1.0.0, $Date: 2017年08月07日 上午10:27 $
  */
 public class ShiroFilter implements Filter {

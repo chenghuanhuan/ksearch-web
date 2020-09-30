@@ -1,5 +1,5 @@
 /**
- * kaike.la Inc.
+ * youqianhuan.com Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
 package com.youqianhuan.ksearch.home.aop;
@@ -14,7 +14,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 /**
- * @author chenghuanhuan@kaike.la
+ * @author chenghuanhuan@youqianhuan.com
  * @since $Revision:1.0.0, $Date: 2016年08月16日 下午4:37 $
  */
 @Aspect

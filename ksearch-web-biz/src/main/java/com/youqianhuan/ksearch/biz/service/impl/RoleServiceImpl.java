@@ -1,5 +1,5 @@
 /**
- * kaike.la Inc.
+ * youqianhuan.com Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
 package com.youqianhuan.ksearch.biz.service.impl;
@@ -11,7 +11,7 @@ import com.youqianhuan.ksearch.model.dbo.user.Role;
 import org.springframework.stereotype.Service;
 
 /**
- * @author chenghuanhuan@kaike.la
+ * @author chenghuanhuan@youqianhuan.com
  * @since $Revision:1.0.0, $Date: 2017年08月07日 下午7:22 $
  */
 @Service

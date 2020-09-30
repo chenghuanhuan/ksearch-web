@@ -1,5 +1,5 @@
 /**
- * kaike.la Inc.
+ * youqianhuan.com Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
 package com.youqianhuan.ksearch.biz.es;
@@ -14,7 +14,7 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.metadata.MetaData;
 
 /**
- * @author chenghuanhuan@kaike.la
+ * @author chenghuanhuan@youqianhuan.com
  * @since $Revision:1.0.0, $Date: 2017年08月01日 下午6:12 $
  */
 public class ElasticClientUtil {

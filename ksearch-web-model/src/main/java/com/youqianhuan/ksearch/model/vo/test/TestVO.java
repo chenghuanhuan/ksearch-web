@@ -1,5 +1,5 @@
 /**
- * kaike.la Inc.
+ * youqianhuan.com Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
 package com.youqianhuan.ksearch.model.vo.test;
@@ -8,7 +8,7 @@ import com.youqianhuan.ksearch.model.ClusterRequest;
 import com.youqianhuan.ksearch.model.validate.Validate;
 
 /**
- * @author chenghuanhuan@kaike.la
+ * @author chenghuanhuan@youqianhuan.com
  * @since $Revision:1.0.0, $Date: 2017年07月14日 上午11:47 $
  */
 public class TestVO extends ClusterRequest {

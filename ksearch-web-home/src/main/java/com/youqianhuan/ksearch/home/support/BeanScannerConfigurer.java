@@ -1,5 +1,5 @@
 /**
- * kaike.la Inc.
+ * youqianhuan.com Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
 package com.youqianhuan.ksearch.home.support;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
  * Spring会读取ApplicationContextAware类型的的JavaBean，
  * 并调用setApplicationContext(ApplicationContext applicationContext)传入Spring的applicationContext。
  * 同样继承BeanFactoryPostProcessor接口，Spring会在BeanFactory的相关处理完成后调用postProcessBeanFactory方法，进行定制的功能。
- * @author chenghuanhuan@kaike.la
+ * @author chenghuanhuan@youqianhuan.com
  * @since $Revision:1.0.0, $Date: 2018年01月29日 下午3:12 $
  */
 @Component

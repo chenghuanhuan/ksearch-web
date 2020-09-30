@@ -1,5 +1,5 @@
 /**
- * kaike.la Inc.
+ * youqianhuan.com Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
 package com.youqianhuan.ksearch.model.vo.query;
@@ -10,7 +10,7 @@ import com.youqianhuan.ksearch.model.vo.PageVO;
 import java.util.List;
 
 /**
- * @author chenghuanhuan@kaike.la
+ * @author chenghuanhuan@youqianhuan.com
  * @since $Revision:1.0.0, $Date: 2017年07月28日 上午9:49 $
  */
 public class SimpleQueryReqVO extends PageVO {

@@ -1,5 +1,5 @@
 /**
- * kaike.la Inc.
+ * youqianhuan.com Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
 package com.youqianhuan.ksearch.model.vo.index;
@@ -10,7 +10,7 @@ import com.youqianhuan.ksearch.model.ClusterRequest;
 import java.util.List;
 
 /**
- * @author chenghuanhuan@kaike.la
+ * @author chenghuanhuan@youqianhuan.com
  * @since $Revision:1.0.0, $Date: 2017年07月21日 上午11:33 $
  */
 public class CreateAliasReqVO extends ClusterRequest {

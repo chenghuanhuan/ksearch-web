@@ -1,5 +1,5 @@
 /**
- * kaike.la Inc.
+ * youqianhuan.com Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
 package com.youqianhuan.ksearch.biz.support;
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import java.util.Properties;
 
 /**
- * @author chenghuanhuan@kaike.la
+ * @author chenghuanhuan@youqianhuan.com
  * @since $Revision:1.0.0, $Date: 2018年02月10日 下午3:29 $
  */
 public class CustomPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigurer {

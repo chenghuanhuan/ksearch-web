@@ -1,5 +1,5 @@
 /**
- * kaike.la Inc.
+ * youqianhuan.com Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
 package com.youqianhuan.ksearch.home.realm;
@@ -26,7 +26,7 @@ import java.util.List;
 
 /**
  * 该类从principals中取得用户名称进行匹配,在principals中默认保存了当前登陆人的用户名称,从而将该用户的角色加入到作用域中;
- * @author chenghuanhuan@kaike.la
+ * @author chenghuanhuan@youqianhuan.com
  * @since $Revision:1.0.0, $Date: 2017年08月07日 上午10:31 $
  */
 public class ShiroRealm extends AuthorizingRealm {

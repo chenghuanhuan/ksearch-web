@@ -1,5 +1,5 @@
 /**
- * kaike.la Inc.
+ * youqianhuan.com Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
 package com.youqianhuan.ksearch.model.vo.nginx;
@@ -10,7 +10,7 @@ import com.youqianhuan.ksearch.model.vo.PageVO;
 import java.util.List;
 
 /**
- * @author chenghuanhuan@kaike.la
+ * @author chenghuanhuan@youqianhuan.com
  * @since $Revision:1.0.0, $Date: 2017年10月25日 下午2:58 $
  */
 public class NginxErrorLogVO extends PageVO{

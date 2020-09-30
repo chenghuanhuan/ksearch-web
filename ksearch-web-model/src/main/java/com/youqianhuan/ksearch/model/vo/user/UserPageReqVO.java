@@ -1,5 +1,5 @@
 /**
- * kaike.la Inc.
+ * youqianhuan.com Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
 package com.youqianhuan.ksearch.model.vo.user;
@@ -7,7 +7,7 @@ package com.youqianhuan.ksearch.model.vo.user;
 import com.youqianhuan.ksearch.model.vo.PageVO;
 
 /**
- * @author chenghuanhuan@kaike.la
+ * @author chenghuanhuan@youqianhuan.com
  * @since $Revision:1.0.0, $Date: 2017年08月07日 下午6:07 $
  */
 public class UserPageReqVO extends PageVO {

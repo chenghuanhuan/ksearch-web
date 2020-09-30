@@ -1,5 +1,5 @@
 /**
- * kaike.la Inc.
+ * youqianhuan.com Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
 package com.youqianhuan.ksearch.biz.service.impl;
@@ -26,7 +26,7 @@ import java.util.*;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
- * @author chenghuanhuan@kaike.la
+ * @author chenghuanhuan@youqianhuan.com
  * @since $Revision:1.0.0, $Date: 2017年12月15日 下午12:04 $
  */
 public class BaseService {

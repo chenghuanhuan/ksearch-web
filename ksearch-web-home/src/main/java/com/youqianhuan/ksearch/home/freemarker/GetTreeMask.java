@@ -1,5 +1,5 @@
 /**
- * kaike.la Inc.
+ * youqianhuan.com Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
 package com.youqianhuan.ksearch.home.freemarker;
@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * 
- * @author chenghuanhuan@kaike.la
+ * @author chenghuanhuan@youqianhuan.com
  * @version $Id: GetTreeMask.java, v 0.1 2016年4月15日 下午5:42:53 user Exp $
  */
 @SuppressWarnings("deprecation")

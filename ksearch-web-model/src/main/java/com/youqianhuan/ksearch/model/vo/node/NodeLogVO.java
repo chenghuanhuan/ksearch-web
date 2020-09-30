@@ -1,5 +1,5 @@
 /**
- * kaike.la Inc.
+ * youqianhuan.com Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
 package com.youqianhuan.ksearch.model.vo.node;
@@ -11,7 +11,7 @@ import com.youqianhuan.ksearch.util.annotations.ESQueryVO;
 import com.youqianhuan.ksearch.util.annotations.FieldType;
 
 /**
- * @author chenghuanhuan@kaike.la
+ * @author chenghuanhuan@youqianhuan.com
  * @since $Revision:1.0.0, $Date: 2018年01月31日 上午11:54 $
  */
 @ESQueryVO(indexRegular = "^nodejs.log.[A-Za-Z\\-]\\d\\d\\d\\d-\\d\\d",type = "log")

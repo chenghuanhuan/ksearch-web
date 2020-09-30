@@ -1,5 +1,5 @@
 /**
- * kaike.la Inc.
+ * youqianhuan.com Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
 package com.youqianhuan.ksearch.util.annotations;
@@ -7,7 +7,7 @@ package com.youqianhuan.ksearch.util.annotations;
 import java.lang.annotation.*;
 
 /**
- * @author chenghuanhuan@kaike.la
+ * @author chenghuanhuan@youqianhuan.com
  * @since $Revision:1.0.0, $Date: 2018年01月29日 上午10:51 $
  */
 @Retention(RetentionPolicy.RUNTIME)

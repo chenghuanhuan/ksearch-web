@@ -1,5 +1,5 @@
 /**
- * kaike.la Inc.
+ * youqianhuan.com Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
 package com.youqianhuan.ksearch.home.freemarker;
@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * 自定义的FreeMarkerConfigurer
- * @author chenghuanhuan@kaike.la
+ * @author chenghuanhuan@youqianhuan.com
  * @version $Id: CustomFreeMarkerConfigurer.java, v 0.1 2016年5月4日 上午9:38:15 user Exp $
  */
 public class CustomFreeMarkerConfigurer extends FreeMarkerConfigurer {

@@ -1,5 +1,5 @@
 /**
- * kaike.la Inc.
+ * youqianhuan.com Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
 package com.youqianhuan.ksearch.model.vo.login;
@@ -8,7 +8,7 @@ import com.youqianhuan.ksearch.model.validate.Validate;
 import com.youqianhuan.ksearch.BaseRequest;
 
 /**
- * @author chenghuanhuan@kaike.la
+ * @author chenghuanhuan@youqianhuan.com
  * @since $Revision:1.0.0, $Date: 2017年08月07日 下午2:09 $
  */
 public class LoginReqVO extends BaseRequest {

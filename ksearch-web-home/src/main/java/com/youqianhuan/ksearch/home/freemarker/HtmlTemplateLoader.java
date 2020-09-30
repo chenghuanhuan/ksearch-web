@@ -1,5 +1,5 @@
 /**
- * kaike.la Inc.
+ * youqianhuan.com Inc.
  * Copyright (c) 2014-2016 All Rights Reserved.
  */
 package com.youqianhuan.ksearch.home.freemarker;
@@ -13,7 +13,7 @@ import java.io.StringReader;
 
 /**
  * freemarker防止xss
- * @author chenghuanhuan@kaike.la
+ * @author chenghuanhuan@youqianhuan.com
  * @version $Id: HtmlTemplateLoader.java, v 0.1 2016年5月4日 上午9:33:20 user Exp $
  */
 public class HtmlTemplateLoader implements TemplateLoader {
