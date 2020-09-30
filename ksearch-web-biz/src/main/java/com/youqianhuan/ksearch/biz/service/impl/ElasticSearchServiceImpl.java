@@ -29,7 +29,6 @@ import com.youqianhuan.ksearch.util.util.DateUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
 import org.elasticsearch.action.admin.cluster.node.stats.NodesStatsResponse;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
@@ -473,8 +472,6 @@ public class ElasticSearchServiceImpl extends BaseService implements ElasticSear
         JestResult jestResult = null;
         JestClient client = ElasticClient.getHttpClient(clusterName);
         if (MethodNameEnum.PUT.getValue().equals(method)||MethodNameEnum.POST.getValue().equals(method)){
-            // 校验权限
-            SecurityUtils.getSecurityManager().checkPermission(SecurityUtils.getSubject().getPrincipals(),"edit");
             jestResult = postAndPut(dsl,uri,client);
         }else {
             SearchExt searchExt = new SearchExt.Builder(dsl).setURI(uri).setRestMethod(method).build();

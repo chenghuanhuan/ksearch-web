@@ -7,9 +7,6 @@ import com.youqianhuan.ksearch.model.PageResponse;
 import com.youqianhuan.ksearch.model.dbo.user.User;
 import com.youqianhuan.ksearch.model.page.PageInfoBT;
 import com.youqianhuan.ksearch.util.util.FileUtil;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -194,17 +191,4 @@ public class BaseController {
         return failed(SYSTEM_ERROR + "，原因:" + ex.getMessage());
     }
 
-    /**
-     * 获取当前登录用户信息
-     * @return
-     */
-    public User getLoginUser(){
-        Subject currentUser = SecurityUtils.getSubject();
-        User user = null;
-        if (null != currentUser) {
-            Session session = currentUser.getSession();
-            user = (User) session.getAttribute("user");
-        }
-        return user;
-    }
 }

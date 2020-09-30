@@ -17,7 +17,6 @@ import com.youqianhuan.ksearch.model.vo.user.UserSaveReqVO;
 import com.youqianhuan.ksearch.util.util.MD5Util;
 import com.youqianhuan.ksearch.model.dbo.user.User;
 import com.youqianhuan.ksearch.model.vo.user.UserPageReqVO;
-import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +38,6 @@ public class UserController extends BaseController {
     private UserService userService;
     @Resource
     private RoleService roleService;
-    @RequiresRoles({"2"})
     @RequestMapping
     public String index(){
         return "user_manager";
@@ -52,7 +50,6 @@ public class UserController extends BaseController {
      */
     @RequestMapping("/list")
     @ResponseBody
-    @RequiresRoles({"2"})
     public Response user(UserPageReqVO userPageReqVO){
 
         Page<User> query = new Page<>();
@@ -83,25 +80,9 @@ public class UserController extends BaseController {
      * @param userSaveReqVO
      * @return
      */
-    @RequiresRoles({"2"})
     @RequestMapping("/save")
     @ResponseBody
     public Response save(UserSaveReqVO userSaveReqVO){
-        User user = new User();
-        BeanUtils.copyProperties(userSaveReqVO,user);
-        User operator = getLoginUser();
-        if (user.getUserId()!=null) {
-            user.setCreateBy(operator.getUserId());
-            user.setCreateTime(new Date());
-        }
-        if (userService.selectById(userSaveReqVO.getUserId())==null) {
-            // 设置初始密码
-            String pwd = MD5Util.encrypt("123456");
-            user.setPassword(pwd);
-        }
-        user.setUpdateBy(operator.getUserId());
-        user.setUpdateTime(new Date());
-        userService.insertOrUpdate(user);
         return succeed();
     }
 
@@ -110,7 +91,6 @@ public class UserController extends BaseController {
      * @param delReqVO
      * @return
      */
-    @RequiresRoles({"2"})
     @RequestMapping("/delete")
     @ResponseBody
     public Response delete(UserDelReqVO delReqVO){
@@ -126,7 +106,6 @@ public class UserController extends BaseController {
      * @param delReqVO
      * @return
      */
-    @RequiresRoles({"2"})
     @RequestMapping("/get")
     @ResponseBody
     public Response get(UserDelReqVO delReqVO){
@@ -142,7 +121,6 @@ public class UserController extends BaseController {
      * @param modifyPwdReqVO
      * @return
      */
-    //@RequiresRoles({"2"})
     @RequestMapping("/password")
     @ResponseBody
     public Response password(ModifyPwdReqVO modifyPwdReqVO){
@@ -150,7 +128,7 @@ public class UserController extends BaseController {
             return failed("两次输入的密码不相同！");
         }
         //User user = userService.selectById(modifyPwdReqVO.getUserId());
-        User user = this.getLoginUser();
+        User user = new User();
         String currPwd = modifyPwdReqVO.getCurrPwd();
         if (!MD5Util.encrypt(currPwd).equals(user.getPassword())){
             return failed("原密码不正确");
